@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 set -ex
 
-echo '--- debug ---'
-pwd
-echo '--- debug ---'
-ls -lah
-echo '--- debug ---'
-
-env
-
 mkdir -p ~/.ssh
 chmod 0700 ~/.ssh
 
@@ -19,10 +11,10 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 
 sshpass -p "${INPUT_PASS}" \
-    ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" \
+    ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa \
         "${INPUT_USER}@${INPUT_HOST}"
 
-ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
+ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" docker info
 
 docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 docker context ls
