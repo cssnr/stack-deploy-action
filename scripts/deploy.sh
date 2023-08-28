@@ -19,9 +19,11 @@ echo "INPUT_FILE: ${INPUT_FILE}"
 
 mkdir -p ~/.ssh
 chmod 0700 ~/.ssh
-echo -e "Host *\n    IdentityFile ~/.ssh/id_rsa\n    StrictHostKeyChecking no" > ~/.ssh/config
+
+#echo -e "Host *\n    IdentityFile ~/.ssh/id_rsa\n    StrictHostKeyChecking no" > ~/.ssh/config
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -f ~/.ssh/id_rsa -N "" -C "stack-deploy-action"
+
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 
@@ -39,4 +41,5 @@ export DOCKER_HOST="ssh://${REMOTE}"
 docker context create remote --docker "host=ssh://${REMOTE}"
 
 docker context ls
-docker --context remote ps
+docker context use remote
+docker ps
