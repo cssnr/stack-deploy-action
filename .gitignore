@@ -1,0 +1,7 @@
+.idea/
+*.iml
+build/
+node_modules/
+playwright-report/
+screenshots/
+web-ext-artifacts/
