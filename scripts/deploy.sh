@@ -47,8 +47,6 @@ sshpass -p "${INPUT_PASS}" \
     ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" \
         "${INPUT_USER}@${INPUT_HOST}"
 
-ssh-add ~/.ssh/nameofkey
-
 echo "--- 3 ---"
 ssh -vv -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
