@@ -20,7 +20,7 @@ For more details see: [action.yaml](action.yaml)
 ### Example
 
 ```yaml
-name: "Test Docker Stack Push"
+name: "Test Docker Stack Deploy"
 
 on:
   push:
@@ -35,13 +35,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
 
-      - name: "Docker Stack Push"
-        uses: hosted-domains/stack-push-action@master
+      - name: "Docker Stack Deploy"
+        uses: hosted-domains/stack-deploy-action@master
         with:
-          host: ${{ secrets.RSYNC_HOST }}
-          user: ${{ secrets.RSYNC_USER }}
-          pass: ${{ secrets.RSYNC_PASS }}
-          port: ${{ secrets.RSYNC_PORT }}
+          host: ${{ secrets.DOCKER_HOST }}
+          user: ${{ secrets.DOCKER_USER }}
+          pass: ${{ secrets.DOCKER_PASS }}
+          port: ${{ secrets.DOCKER_PORT }}
           name: "awesome-stack"
           file: "docker-compose-swarm.yaml"
 ```
