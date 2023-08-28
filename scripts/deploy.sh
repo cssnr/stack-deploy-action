@@ -23,13 +23,20 @@ ssh-keygen -q -N "" -C "stack-deploy-action" -f ./ssh_key
 sshpass -p "${INPUT_PASS}" \
     ssh-copy-id -p "${INPUT_PORT}" -i "./ssh_key.pub" -o "StrictHostKeyChecking=no" \
         "${INPUT_USER}@${INPUT_HOST}"
-ssh -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}"
 
+echo "--- 1 ---"
+ssh -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
+echo "--- 2 ---"
+ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
+
+echo "--- 3 ---"
 export REMOTE="${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 echo "REMOTE: ${REMOTE}"
 
+echo "--- 4 ---"
 export DOCKER_HOST="ssh://${REMOTE}"
 docker context create remote --docker "host=ssh://${REMOTE}"
 
+echo "--- 5 ---"
 docker context ls
 docker --context remote ps
