@@ -24,28 +24,40 @@ ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -f ~/.ssh/id_rsa -N "" -C "stack-deploy-action"
 
 echo "--- 0 ---"
+echo "HOME: ${HOME}"
+echo -n "~: "
+echo ~
+echo "--- 0 ---"
 cat ~/.ssh/config
 echo "--- 0 ---"
 stat ~/.ssh
 echo "--- 0 ---"
 stat ~/.ssh/id_rsa
 
-sleep 5
+sleep 3
 
 echo "--- 1 ---"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+sleep 3
+
+echo "--- 2 ---"
 sshpass -p "${INPUT_PASS}" \
     ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" \
         "${INPUT_USER}@${INPUT_HOST}"
 
-echo "--- 2 ---"
+ssh-add ~/.ssh/nameofkey
+
+echo "--- 3 ---"
 ssh -vv -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
 
-echo "--- 3 ---"
+echo "--- 5 ---"
 export REMOTE="${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 echo "REMOTE: ${REMOTE}"
 
-echo "--- 4 ---"
+echo "--- 5 ---"
 export DOCKER_HOST="ssh://${REMOTE}"
 docker context create remote --docker "host=ssh://${REMOTE}"
 
