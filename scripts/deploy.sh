@@ -17,7 +17,7 @@ echo "INPUT_PORT: ${INPUT_PORT}"
 echo "INPUT_NAME: ${INPUT_NAME}"
 echo "INPUT_FILE: ${INPUT_FILE}"
 
-export REMOTE="${INPUT_USER}@${REMOTE_HOST}:${REMOTE_PORT}"
+export REMOTE="${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 echo "REMOTE: ${REMOTE}"
 
 echo "--- whoami ---"
