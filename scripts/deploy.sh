@@ -19,8 +19,10 @@ echo "INPUT_FILE: ${INPUT_FILE}"
 
 mkdir -p ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
-ssh-keygen -q -N "" -f ./ssh_key
-sshpass -p "${INPUT_PASS}" ssh-copy-id -o "StrictHostKeyChecking=no" -i ./ssh_key.pub "${INPUT_USER}@${INPUT_HOST}"
+ssh-keygen -q -N "" -C "stack-deploy-action" -f ./ssh_key
+sshpass -p "${INPUT_PASS}" \
+    ssh-copy-id -p "${INPUT_PORT}" -i "./ssh_key.pub" -o "StrictHostKeyChecking=no" \
+        "${INPUT_USER}@${INPUT_HOST}"
 ssh -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}"
 
 export REMOTE="${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
