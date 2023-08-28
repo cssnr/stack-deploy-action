@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 echo "GITHUB_REF: ${GITHUB_REF}"
 echo "GITHUB_REF_TYPE: ${GITHUB_REF_TYPE}"
@@ -31,7 +31,7 @@ mkdir -p ~/.ssh
 echo "--- DEBUG ---"
 docker context ls
 
-ssh-keyscan -H "${INPUT_HOST}" -p "${INPUT_PORT}" >> ~/.ssh/known_hosts
+ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -N "" -f ./ssh_key
 sshpass -p "${INPUT_PASS}" ssh-copy-id -o "StrictHostKeyChecking=no" -i ./ssh_key.pub "${REMOTE}"
 ssh -o "StrictHostKeyChecking=no" "${REMOTE}"
