@@ -25,9 +25,8 @@ whoami
 echo "--- pwd ---"
 pwd
 echo "--- ls ---"
-ls
-echo "--- cat ~/.ssh/config ---"
-cat ~/.ssh/config
+ls -a ~/
+mkdir -p ~/.ssh
 
 echo "--- DEBUG ---"
 docker context ls
