@@ -18,7 +18,7 @@ echo "INPUT_NAME: ${INPUT_NAME}"
 echo "INPUT_FILE: ${INPUT_FILE}"
 
 mkdir -p ~/.ssh
-#echo "IdentityFile /ssh_key" > ~/.ssh/config
+#echo "IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -f ~/.ssh/id_rsa -N "" -C "stack-deploy-action"
 sshpass -p "${INPUT_PASS}" \
@@ -26,7 +26,7 @@ sshpass -p "${INPUT_PASS}" \
         "${INPUT_USER}@${INPUT_HOST}"
 
 echo "--- 1 ---"
-ssh -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
+ssh -vvv -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
 echo "--- 2 ---"
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
 
