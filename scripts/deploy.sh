@@ -17,26 +17,16 @@ echo "INPUT_PORT: ${INPUT_PORT}"
 echo "INPUT_NAME: ${INPUT_NAME}"
 echo "INPUT_FILE: ${INPUT_FILE}"
 
+ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
+ssh-keygen -q -N "" -f ./ssh_key
+sshpass -p "${INPUT_PASS}" ssh-copy-id -o "StrictHostKeyChecking=no" -i ./ssh_key.pub "${INPUT_USER}@${INPUT_HOST}"
+ssh -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}"
+
 export REMOTE="${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 echo "REMOTE: ${REMOTE}"
 
-echo "--- whoami ---"
-whoami
-echo "--- pwd ---"
-pwd
-echo "--- ls ---"
-ls -a ~/
-mkdir -p ~/.ssh
-
-echo "--- DEBUG ---"
-docker context ls
-
-ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
-ssh-keygen -q -N "" -f ./ssh_key
-sshpass -p "${INPUT_PASS}" ssh-copy-id -o "StrictHostKeyChecking=no" -i ./ssh_key.pub "${REMOTE}"
-ssh -o "StrictHostKeyChecking=no" "${REMOTE}"
-
 export DOCKER_HOST="ssh://${REMOTE}"
 docker context create remote --docker "host=ssh://${REMOTE}"
+
 docker context ls
 docker --context remote ps
