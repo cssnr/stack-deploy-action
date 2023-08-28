@@ -27,7 +27,7 @@ ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
 docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
 docker context ls
 docker context use remote
-docker stack deploy -f "${INPUT_FILE}" "${INPUT_NAME}"
+docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}"
 
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
     "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
