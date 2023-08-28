@@ -21,13 +21,18 @@ mkdir -p ~/.ssh
 #echo "IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -f ~/.ssh/id_rsa -N "" -C "stack-deploy-action"
+
+echo "--- 0 ---"
+stat ~/.ssh
+stat ~/.ssh/id_rsa
+
+echo "--- 1 ---"
 sshpass -p "${INPUT_PASS}" \
     ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" \
         "${INPUT_USER}@${INPUT_HOST}"
 
-echo "--- 1 ---"
-ssh -vvv -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
 echo "--- 2 ---"
+ssh -vv -p "${INPUT_PORT}" -o "StrictHostKeyChecking=no" "${INPUT_USER}@${INPUT_HOST}" whoami
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" whoami
 
 echo "--- 3 ---"
