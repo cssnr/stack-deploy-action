@@ -17,6 +17,7 @@ echo "INPUT_PORT: ${INPUT_PORT}"
 echo "INPUT_NAME: ${INPUT_NAME}"
 echo "INPUT_FILE: ${INPUT_FILE}"
 
+mkdir -p ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
 ssh-keygen -q -N "" -f ./ssh_key
 sshpass -p "${INPUT_PASS}" ssh-copy-id -o "StrictHostKeyChecking=no" -i ./ssh_key.pub "${INPUT_USER}@${INPUT_HOST}"
