@@ -18,10 +18,11 @@ echo "INPUT_NAME: ${INPUT_NAME}"
 echo "INPUT_FILE: ${INPUT_FILE}"
 
 mkdir -p ~/.ssh
+#echo "IdentityFile /ssh_key" > ~/.ssh/config
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> ~/.ssh/known_hosts
-ssh-keygen -q -N "" -C "stack-deploy-action" -f ./ssh_key
+ssh-keygen -q -N "" -C "stack-deploy-action"
 sshpass -p "${INPUT_PASS}" \
-    ssh-copy-id -p "${INPUT_PORT}" -i "./ssh_key.pub" -o "StrictHostKeyChecking=no" \
+    ssh-copy-id -p "${INPUT_PORT}" -i ~/.ssh/id_rsa -o "StrictHostKeyChecking=no" \
         "${INPUT_USER}@${INPUT_HOST}"
 
 echo "--- 1 ---"
