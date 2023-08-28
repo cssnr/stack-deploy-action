@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -ex
 
-mkdir -p ~/.ssh /root/.ssh
-chmod 0700 ~/.ssh /root/.ssh
+mkdir -p /root/.ssh
+chmod 0700 /root/.ssh
 
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> /root/.ssh/known_hosts
 ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
