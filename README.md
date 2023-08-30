@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: "Docker Stack Deploy"
-        uses: hosted-domains/stack-deploy-action@master
+        uses: cssnr/stack-deploy-action@master
         with:
           host: ${{ secrets.DOCKER_HOST }}
           user: ${{ secrets.DOCKER_USER }}
@@ -109,7 +109,7 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
 
       - name: "Docker Stack Deploy"
-        uses: hosted-domains/stack-deploy-action@master
+        uses: cssnr/stack-deploy-action@master
         with:
           host: ${{ secrets.DOCKER_HOST }}
           user: ${{ secrets.DOCKER_USER }}
