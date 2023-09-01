@@ -25,6 +25,7 @@ docker context use remote
 if [ -n "${INPUT_ENV_FILE}" ];then
     # shellcheck disable=SC1090
     source "${INPUT_ENV_FILE}"
+    export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
 docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}"
