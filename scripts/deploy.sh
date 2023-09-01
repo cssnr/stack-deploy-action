@@ -34,7 +34,9 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     # shellcheck disable=SC1090
     echo INPUT_ENV_FILE: "${INPUT_ENV_FILE}"
     stat "${INPUT_ENV_FILE}"
+    set -a
     source "${INPUT_ENV_FILE}"
+    echo TRAEFIK_HOST: "${TRAEFIK_HOST}"
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
