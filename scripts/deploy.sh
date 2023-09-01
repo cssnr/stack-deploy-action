@@ -7,14 +7,19 @@ mkdir -p /root/.ssh
 chmod 0700 /root/.ssh
 
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> /root/.ssh/known_hosts
-ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
+if [ -z "${INPUT_SSH_KEY}" ];then
+    ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
+    eval "$(ssh-agent -s)"
+    ssh-add /root/.ssh/id_rsa
 
-eval "$(ssh-agent -s)"
-ssh-add /root/.ssh/id_rsa
-
-sshpass -p "${INPUT_PASS}" \
-    ssh-copy-id -p "${INPUT_PORT}" -i /root/.ssh/id_rsa \
-        "${INPUT_USER}@${INPUT_HOST}"
+    sshpass -p "${INPUT_PASS}" \
+        ssh-copy-id -p "${INPUT_PORT}" -i /root/.ssh/id_rsa \
+            "${INPUT_USER}@${INPUT_HOST}"
+else
+    echo "${INPUT_SSH_KEY}" > /root/.ssh/id_rsa
+    eval "$(ssh-agent -s)"
+    ssh-add /root/.ssh/id_rsa
+fi
 
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" "docker info"
 
@@ -30,5 +35,7 @@ fi
 
 docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}"
 
-ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
-    "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
+if [ -z "${INPUT_SSH_KEY}" ];then
+    ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
+        "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
+fi

@@ -26,6 +26,9 @@ inputs:
   env_file:
     description: "Environment File"
     required: false
+  ssh_key:
+    description: "SSH Key File"
+    required: false
 
 runs:
   using: "docker"
