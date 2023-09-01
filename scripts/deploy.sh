@@ -28,8 +28,12 @@ docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${
 docker context ls
 docker context use remote
 
+ls -lah
+
 if [ -n "${INPUT_ENV_FILE}" ];then
     # shellcheck disable=SC1090
+    echo INPUT_ENV_FILE: "${INPUT_ENV_FILE}"
+    stat "${INPUT_ENV_FILE}"
     source "${INPUT_ENV_FILE}"
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
