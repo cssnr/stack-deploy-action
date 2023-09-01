@@ -23,6 +23,9 @@ inputs:
     description: "Docker Compose File"
     default: "docker-compose.yaml"
     required: false
+  env_file:
+    description: "Environment File"
+    required: false
 
 runs:
   using: "docker"
