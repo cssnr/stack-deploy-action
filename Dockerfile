@@ -1,4 +1,4 @@
-FROM docker:dind
+FROM docker:23-dind
 
 RUN apk add --update --no-cache bash openssh sshpass
 
