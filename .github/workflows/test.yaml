@@ -1,0 +1,47 @@
+name: "Test"
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Write YAML"
+        id: yaml-action
+        uses: teunmooij/yaml@v1
+        with:
+          data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
+          to-file: "docker-compose.yaml"
+
+      - name: "Test Local Action"
+        id: test
+        uses: ./
+        with:
+          host: ${{ secrets.DOCKER_HOST }}
+          user: ${{ secrets.DOCKER_USER }}
+          pass: ${{ secrets.DOCKER_PASS }}
+          port: ${{ secrets.DOCKER_PORT }}
+          name: "test-stack"
+          file: "docker-compose.yaml"
+
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "ShellCheck"
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: src

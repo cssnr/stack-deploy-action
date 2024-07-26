@@ -1,0 +1,17 @@
+name: "Tags"
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  tags:
+    name: "Tags"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Update Tags"
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

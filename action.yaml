@@ -1,6 +1,9 @@
 name: "Docker Stack Deploy"
 description: "Deploy a Docker Stack"
 author: "Shane"
+branding:
+  icon: "layers"
+  color: "green"
 
 inputs:
   host:
@@ -11,10 +14,13 @@ inputs:
     required: true
   pass:
     description: "Docker Pass"
-    required: true
+    required: false
   port:
     description: "Docker Port"
     default: "22"
+    required: false
+  ssh_key:
+    description: "SSH Key File"
     required: false
   name:
     description: "Docker Stack Name"
@@ -25,9 +31,6 @@ inputs:
     required: false
   env_file:
     description: "Environment File"
-    required: false
-  ssh_key:
-    description: "SSH Key File"
     required: false
 
 runs:
