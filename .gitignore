@@ -1,7 +1,9 @@
 .idea/
 *.iml
-build/
-node_modules/
-playwright-report/
-screenshots/
-web-ext-artifacts/
+.vscode/
+venv/
+__pycache__/
+*.pyc
+.env
+.secrets
+.vars

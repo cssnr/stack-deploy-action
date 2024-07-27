@@ -1,33 +1,36 @@
 name: "Docker Stack Deploy"
 description: "Deploy a Docker Stack"
 author: "Shane"
+branding:
+  icon: "layers"
+  color: "green"
 
 inputs:
   host:
     description: "Docker Host"
     required: true
+  port:
+    description: "Docker Port"
+    default: "22"
+    required: false
   user:
     description: "Docker User"
     required: true
   pass:
     description: "Docker Pass"
-    required: true
-  port:
-    description: "Docker Port"
-    default: "22"
     required: false
-  name:
-    description: "Docker Stack Name"
-    required: true
+  ssh_key:
+    description: "SSH Key File"
+    required: false
   file:
     description: "Docker Compose File"
     default: "docker-compose.yaml"
     required: false
+  name:
+    description: "Docker Stack Name"
+    required: true
   env_file:
     description: "Environment File"
-    required: false
-  ssh_key:
-    description: "SSH Key File"
     required: false
 
 runs:
