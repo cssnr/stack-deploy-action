@@ -8,9 +8,10 @@
 
 # Docker Stack Deploy Action
 
-Coming Soon...
+This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File
+Authentication.
 
-For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh)
+For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 * [Inputs](#Inputs)
 * [Examples](#Examples)
@@ -22,26 +23,26 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh)
 | input    | required | default               | description              |
 |----------|----------|-----------------------|--------------------------|
 | host     | **Yes**  | -                     | Remote Docker hostname   |
+| port     | No       | `22`                  | Remote Docker port       |
 | user     | **Yes**  | -                     | Remote Docker username   |
 | pass     | No       | -                     | Remote Docker password * |
-| port     | No       | `22`                  | Remote Docker port       |
 | ssh_key  | No       | -                     | Remote SSH Key file *    |
-| name     | No       | `docker-compose.yaml` | Docker Stack name        |
-| file     | **Yes**  | -                     | Docker Compose file      |
+| file     | **Yes**  | `docker-compose.yaml` | Docker Compose file      |
+| name     | No       | -                     | Docker Stack name        |
 | env_file | No       | -                     | Docker Environment file  |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
 ```yaml
       - name: "Docker Stack Deploy"
-        uses: cssnr/stack-deploy-action@master
+        uses: cssnr/stack-deploy-action@v1
         with:
           host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
-          port: ${{ secrets.DOCKER_PORT }}
-          name: "stack-name"
           file: "docker-compose-swarm.yaml"
+          name: "stack-name"
 ```
 
 ## Examples
@@ -62,17 +63,17 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Docker Stack Deploy"
-        uses: cssnr/stack-deploy-action@master
+        uses: cssnr/stack-deploy-action@v1
         with:
           host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
-          port: ${{ secrets.DOCKER_PORT }}
-          name: "stack-name"
           file: "docker-compose-swarm.yaml"
+          name: "stack-name"
 ```
 
 Full Example
@@ -90,8 +91,6 @@ on:
 
 env:
   REGISTRY: "ghcr.io"
-  USER: "user-org"
-  REPO: "repo-name"
 
 jobs:
   deploy:
@@ -100,22 +99,15 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: "Tags"
-        id: tags
-        run: |
-          echo "Input Tags: ${{ inputs.tags }}"
-          TAGS=""
-          IFS=',' read -ra INPUT <<< "${{ inputs.tags }}"
-          for tag in "${INPUT[@]}";do
-            echo "${REGISTRY}/${USER}/${REPO}:${tag}"
-            TAGS+="${REGISTRY}/${USER}/${REPO}:${tag},"
-          done
-          TAGS="$(echo ${TAGS} | sed 's/,*$//g')"
-          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
-          echo "Parsed Tags: ${TAGS}"
-
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: "Generate Tags"
+        id: tags
+        uses: smashedr/docker-tags-action@master
+        with:
+          images: "$${{ env.REGISTRY }}/${{ github.repository }}"
+          extra: ${{ inputs.tags }}
 
       - name: "Setup Buildx"
         uses: docker/setup-buildx-action@v2
@@ -138,14 +130,14 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
 
       - name: "Docker Stack Deploy"
-        uses: cssnr/stack-deploy-action@master
+        uses: cssnr/stack-deploy-action@v1
         with:
           host: ${{ secrets.DOCKER_HOST }}
-          user: ${{ secrets.DOCKER_USER }}
-          pass: ${{ secrets.DOCKER_PASS }}
           port: ${{ secrets.DOCKER_PORT }}
-          name: "stack-name"
+          user: ${{ secrets.DOCKER_USER }}
+          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           file: "docker-compose-swarm.yaml"
+          name: "stack-name"
 ```
 
 # Support

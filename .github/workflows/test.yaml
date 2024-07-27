@@ -26,12 +26,12 @@ jobs:
         uses: ./
         with:
           host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           #pass: ${{ secrets.DOCKER_PASS }}
-          port: ${{ secrets.DOCKER_PORT }}
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
-          name: "test-stack"
           file: "docker-compose.yaml"
+          name: "test-stack"
 
   lint:
     name: "Lint"

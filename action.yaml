@@ -9,26 +9,26 @@ inputs:
   host:
     description: "Docker Host"
     required: true
+  port:
+    description: "Docker Port"
+    default: "22"
+    required: false
   user:
     description: "Docker User"
     required: true
   pass:
     description: "Docker Pass"
     required: false
-  port:
-    description: "Docker Port"
-    default: "22"
-    required: false
   ssh_key:
     description: "SSH Key File"
     required: false
-  name:
-    description: "Docker Stack Name"
-    required: true
   file:
     description: "Docker Compose File"
     default: "docker-compose.yaml"
     required: false
+  name:
+    description: "Docker Stack Name"
+    required: true
   env_file:
     description: "Environment File"
     required: false
