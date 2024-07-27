@@ -12,6 +12,6 @@ jobs:
 
     steps:
       - name: "Update Tags"
-        uses: cssnr/stack-deploy-action@v1
+        uses: cssnr/update-version-tags-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
