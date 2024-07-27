@@ -27,8 +27,8 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | user     | **Yes**  | -                     | Remote Docker username   |
 | pass     | No       | -                     | Remote Docker password * |
 | ssh_key  | No       | -                     | Remote SSH Key file *    |
-| file     | **Yes**  | `docker-compose.yaml` | Docker Compose file      |
-| name     | No       | -                     | Docker Stack name        |
+| file     | No       | `docker-compose.yaml` | Docker Compose file      |
+| name     | **Yes**  | -                     | Docker Stack name        |
 | env_file | No       | -                     | Docker Environment file  |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
