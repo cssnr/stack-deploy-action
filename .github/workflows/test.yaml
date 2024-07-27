@@ -27,8 +27,9 @@ jobs:
         with:
           host: ${{ secrets.DOCKER_HOST }}
           user: ${{ secrets.DOCKER_USER }}
-          pass: ${{ secrets.DOCKER_PASS }}
+          #pass: ${{ secrets.DOCKER_PASS }}
           port: ${{ secrets.DOCKER_PORT }}
+          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           name: "test-stack"
           file: "docker-compose.yaml"
 
