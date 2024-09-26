@@ -1,0 +1,29 @@
+name: "Mirror"
+
+on:
+  workflow_dispatch:
+  release:
+    types: ["published"]
+  push:
+    branches: ["**"]
+    tags: ["**"]
+
+jobs:
+  mirror:
+    name: "Mirror"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Mirror to Codeberg"
+        uses: cssnr/mirror-repository-action@master
+        with:
+          host: https://codeberg.org
+          create: true
+          username: "shaner"
+          password: ${{ secrets.CODEBERG_TOKEN }}
