@@ -9,16 +9,28 @@ inputs:
   host:
     description: "Docker Host"
     required: true
-  port:
+  host_port:
     description: "Docker Port"
     default: "22"
     required: false
-  user:
+  host_username:
     description: "Docker User"
     required: true
-  pass:
+  host_password:
     description: "Docker Pass"
     required: false
+  registry:
+    description: "Container registry to use"
+    required: false
+    default: ""
+  username:
+    description: "Container registry username"
+    required: false
+    default: ""
+  password:
+    description: "Container registry password"
+    required: false
+    default: ""
   ssh_key:
     description: "SSH Key File"
     required: false
