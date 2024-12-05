@@ -9,9 +9,9 @@ function cleanup_trap() {
     if [[ "${_ST}" != "0" ]]; then
         echo -e "\u001b[31;1mScript Exited with Error: ${_ST}"
     fi
-    if [ -z "${INPUT_SSH_KEY}" ];then
-        echo -e "\u001b[35mCleaning Up authorized_keys on: ${INPUT_HOST}"
-        ssh -p "${INPUT_HOST_PORT}" "${INPUT_HOST_USERNAME}@${INPUT_HOST}" \
+    if [ -z "${INPUT_REMOTE_PRIVATE_KEY}" ];then
+        echo -e "\u001b[35mCleaning Up authorized_keys on: ${INPUT_REMOTE_HOST}"
+        ssh -p "${INPUT_REMOTE_PORT}" "${INPUT_REMOTE_USER}@${INPUT_REMOTE_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
     if [[ "${_ST}" == "0" ]]; then
@@ -22,20 +22,20 @@ function cleanup_trap() {
 
 mkdir -p /root/.ssh
 chmod 0700 /root/.ssh
-ssh-keyscan -p "${INPUT_HOST_PORT}" -H "${INPUT_HOST}" >> /root/.ssh/known_hosts
+ssh-keyscan -p "${INPUT_REMOTE_PORT}" -H "${INPUT_REMOTE_HOST}" >> /root/.ssh/known_hosts
 
-if [ -z "${INPUT_SSH_KEY}" ];then
-    echo -e "\u001b[36mCreating and Copying SSH Key to: ${INPUT_HOST}"
+if [ -z "${INPUT_REMOTE_PRIVATE_KEY}" ];then
+    echo -e "\u001b[36mCreating and Copying SSH Key to: ${INPUT_REMOTE_HOST}"
     ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
     eval "$(ssh-agent -s)"
     ssh-add /root/.ssh/id_rsa
 
-    sshpass -p "${INPUT_HOST_PASSWORD}" \
-        ssh-copy-id -p "${INPUT_HOST_PORT}" -i /root/.ssh/id_rsa \
-            "${INPUT_HOST_USERNAME}@${INPUT_HOST}"
+    sshpass -p "${INPUT_REMOTE_PASS}" \
+        ssh-copy-id -p "${INPUT_REMOTE_PORT}" -i /root/.ssh/id_rsa \
+            "${INPUT_REMOTE_USER}@${INPUT_REMOTE_HOST}"
 else
     echo -e "\u001b[36mAdding SSH Key to SSH Agent"
-    echo "${INPUT_SSH_KEY}" > /root/.ssh/id_rsa
+    echo "${INPUT_REMOTE_PRIVATE_KEY}" > /root/.ssh/id_rsa
     chmod 0600 /root/.ssh/id_rsa
     eval "$(ssh-agent -s)"
     ssh-add /root/.ssh/id_rsa
@@ -60,9 +60,9 @@ else
 fi
 
 echo -e "\u001b[36mVerifying Docker and Setting Context."
-ssh -p "${INPUT_HOST_PORT}" "${INPUT_HOST_USERNAME}@${INPUT_HOST}" "docker info" > /dev/null
+ssh -p "${INPUT_REMOTE_PORT}" "${INPUT_REMOTE_USER}@${INPUT_REMOTE_HOST}" "docker info" > /dev/null
 
-docker context create remote --docker "host=ssh://${INPUT_HOST_USERNAME}@${INPUT_HOST}:${INPUT_HOST_PORT}"
+docker context create remote --docker "host=ssh://${INPUT_REMOTE_USER}@${INPUT_REMOTE_HOST}:${INPUT_REMOTE_PORT}"
 docker context ls
 docker context use remote
 

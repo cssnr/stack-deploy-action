@@ -6,17 +6,17 @@ branding:
   color: "green"
 
 inputs:
-  host:
+  remote_host:
     description: "Docker Host"
     required: true
-  host_port:
+  remote_port:
     description: "Docker Port"
     default: "22"
     required: false
-  host_username:
+  remote_user:
     description: "Docker User"
     required: true
-  host_password:
+  remote_pass:
     description: "Docker Pass"
     required: false
   registry:
@@ -31,7 +31,7 @@ inputs:
     description: "Container registry password"
     required: false
     default: ""
-  ssh_key:
+  remote_private_key:
     description: "SSH Key File"
     required: false
   file:
