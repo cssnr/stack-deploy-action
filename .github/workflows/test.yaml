@@ -71,6 +71,7 @@ jobs:
         uses: ./
         with:
           host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           file: "docker-compose.yaml"
