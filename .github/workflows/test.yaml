@@ -41,10 +41,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Put private key in a file"
+      - name: "Create SSH directory"
+        run: mkdir -p ~/.ssh
+
+      - name: "Add private key to SSH agent"
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DOCKER_SSH_KEY }}
+
+      - name: "Do not check host key"
         run: |
-          echo "${{ secrets.DOCKER_SSH_KEY }}" > ansible/ssh_key
-          chmod 600 ansible/ssh_key
           export ANSIBLE_HOST_KEY_CHECKING=False
 
       - name: Run playbook
