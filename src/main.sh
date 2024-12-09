@@ -62,6 +62,7 @@ fi
 
 DEPLOY_CMD="docker stack deploy -c \"${INPUT_FILE}\" \"${INPUT_NAME}\""
 if [ "${INPUT_WITH_REGISTRY_AUTH}" == "true" ]; then
+    echo -e "\u001b[36mAdding with-registry-auth flag to command."
     DEPLOY_CMD="$DEPLOY_CMD --with-registry-auth"
 fi
 

@@ -37,11 +37,26 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: "Install required tools"
-        run: sudo apt-get install apache2-utils
-
       - name: "Checkout"
         uses: actions/checkout@v4
+
+      - name: "Put private key in a file"
+        run: |
+          echo "${{ secrets.DOCKER_SSH_KEY }}" > ansible/ssh_key
+          chmod 600 ansible/ssh_key
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: actions_test.yml
+          directory: ansible
+          options: |
+            -u ${{ secrets.DOCKER_USER }}
+            --private-key ./ssh_key
+            -i ${{ secrets.DOCKER_HOST }},
+            -c ssh
+            -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'"
 
       - name: "Write YAML"
         id: yaml-action
@@ -50,32 +65,13 @@ jobs:
           data: '{"version":"3.8","services":{"alpine":{"image":"localhost:5000/alpine","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Create Registry User"
-        run: |
-          mkdir -p ./registry
-          htpasswd -Bbn testuser testpassword > ./registry/registry.password
-
-      - name: "Spool Private Docker Registry"
-        run: |
-          docker run -d -p 5000:5000 -e REGISTRY_AUTH="htpasswd" -e REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH="/auth/registry.password" -v ./registry/registry.password:/auth/registry.password --name registry registry:2
-
-      - name: "login to Registry"
-        run: |
-          echo testpassword | docker login localhost:5000 -u testuser --password-stdin
-
-      - name: "Push Image to Registry"
-        run: |
-          docker pull alpine
-          docker tag alpine localhost:5000/alpine
-          docker push localhost:5000/alpine
-
       - name: "Test Local Action with Registry Auth"
         id: test
         uses: ./
         with:
-          host: localhost
-          user: testuser
-          pass: testpassword
+          host: ${{ secrets.DOCKER_HOST }}
+          user: ${{ secrets.DOCKER_USER }}
+          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           file: "docker-compose.yaml"
           name: "test-private-stack"
           with_registry_auth: "true"
