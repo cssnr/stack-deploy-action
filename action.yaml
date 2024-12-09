@@ -32,6 +32,10 @@ inputs:
   env_file:
     description: "Environment File"
     required: false
+  with_registry_auth:
+    description: "Use registry authentication"
+    required: false
+    default: "false"
 
 runs:
   using: "docker"

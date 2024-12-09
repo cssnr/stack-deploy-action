@@ -26,12 +26,59 @@ jobs:
         uses: ./
         with:
           host: ${{ secrets.DOCKER_HOST }}
-          port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          #pass: ${{ secrets.DOCKER_PASS }}
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           file: "docker-compose.yaml"
           name: "test-stack"
+
+  test_registry_auth:
+    name: "Test Registry Auth"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: "Install required tools"
+        run: sudo apt-get install apache2-utils
+
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Write YAML"
+        id: yaml-action
+        uses: teunmooij/yaml@v1
+        with:
+          data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
+          to-file: "docker-compose.yaml"
+
+      - name: "Spool Private Docker Registry"
+        run: |
+          docker run -d -p 5000:5000 -e REGISTRY_AUTH="htpasswd" -e REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH="/auth/registry.password" -v ./registry/registry.password:/auth/registry.password --name registry registry:2
+
+      - name: "Create Registry User"
+        run: |
+          mkdir -p auth
+          htpasswd -Bbn testuser testpassword > auth/registry.password
+
+      - name: "login to Registry"
+        run: |
+          docker login localhost:5000 -u testuser -p testpassword
+
+      - name: "Push Image to Registry"
+        run: |
+          docker pull alpine
+          docker tag alpine localhost:5000/alpine
+          docker push localhost:5000/alpine
+
+      - name: "Test Local Action with Registry Auth"
+        id: test
+        uses: ./
+        with:
+          host: localhost
+          user: testuser
+          pass: testpassword
+          file: "docker-compose.yaml"
+          name: "test-private-stack"
+          with_registry_auth: "true"
 
   lint:
     name: "Lint"
