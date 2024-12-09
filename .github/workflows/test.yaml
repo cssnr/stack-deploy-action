@@ -50,14 +50,14 @@ jobs:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
+      - name: "Create Registry User"
+        run: |
+          mkdir -p ./registry
+          htpasswd -Bbn testuser testpassword > ./registry/registry.password
+
       - name: "Spool Private Docker Registry"
         run: |
           docker run -d -p 5000:5000 -e REGISTRY_AUTH="htpasswd" -e REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH="/auth/registry.password" -v ./registry/registry.password:/auth/registry.password --name registry registry:2
-
-      - name: "Create Registry User"
-        run: |
-          mkdir -p auth
-          htpasswd -Bbn testuser testpassword > auth/registry.password
 
       - name: "login to Registry"
         run: |
