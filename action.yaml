@@ -32,6 +32,9 @@ inputs:
   env_file:
     description: "Environment File"
     required: false
+  registry_auth:
+    description: "Command to register your private repo using docker login for deploy context"
+    required: false
 
 runs:
   using: "docker"

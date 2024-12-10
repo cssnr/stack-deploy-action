@@ -60,5 +60,12 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
+DEPLOY_CMD="docker stack deploy -c \"${INPUT_FILE}\" \"${INPUT_NAME}\""
+if [ -n "${INPUT_REGISTRY_AUTH}" ];then
+    echo -e "\u001b[36mRunning register auth command."
+    eval "${INPUT_REGISTRY_AUTH}"
+    DEPLOY_CMD="$DEPLOY_CMD --with-registry-auth"
+fi
+
 echo -e "\u001b[36mDeploying Stack: \u001b[37;1m${INPUT_NAME}"
-docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}"
+eval "${DEPLOY_CMD}"

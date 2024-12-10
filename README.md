@@ -20,16 +20,17 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input    | required | default               | description               |
-| -------- | -------- | --------------------- | ------------------------- |
-| host     | **Yes**  | -                     | Remote Docker hostname    |
-| port     | No       | `22`                  | Remote Docker port        |
-| user     | **Yes**  | -                     | Remote Docker username    |
-| pass     | No       | -                     | Remote Docker password \* |
-| ssh_key  | No       | -                     | Remote SSH Key file \*    |
-| file     | No       | `docker-compose.yaml` | Docker Compose file       |
-| name     | **Yes**  | -                     | Docker Stack name         |
-| env_file | No       | -                     | Docker Environment file   |
+| input         | required | default               | description                   |
+| ------------- | -------- | --------------------- | ----------------------------- |
+| host          | **Yes**  | -                     | Remote Docker hostname        |
+| port          | No       | `22`                  | Remote Docker port            |
+| user          | **Yes**  | -                     | Remote Docker username        |
+| pass          | No       | -                     | Remote Docker password \*     |
+| ssh_key       | No       | -                     | Remote SSH Key file \*        |
+| file          | No       | `docker-compose.yaml` | Docker Compose file           |
+| name          | **Yes**  | -                     | Docker Stack name             |
+| env_file      | No       | -                     | Docker Environment file       |
+| registry_auth | No       | -                     | Docker Login for Private Repo |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
@@ -138,6 +139,35 @@ jobs:
           ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
           file: 'docker-compose-swarm.yaml'
           name: 'stack-name'
+```
+
+Private Github Docker Image with Key Example
+
+```yaml
+name: 'Test Docker Stack Deploy'
+
+on:
+  push:
+
+jobs:
+  deploy:
+    name: 'Deploy'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: 'Docker Stack Deploy'
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          name: 'stack-name'
+          file: 'docker-compose-swarm.yaml'
+          host: ${{ secrets.DOCKER_HOST }}
+          user: ${{ secrets.DOCKER_USER }}
+          ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
+          registry_auth: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 ```
 
 # Support
