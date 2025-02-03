@@ -46,7 +46,11 @@ trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 echo -e "\u001b[36mVerifying Docker and Setting Context."
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
 
-docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
+if ! docker context inspect remote >/dev/null 2>&1; then
+    docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
+else
+    docker context update remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
+fi
 docker context ls
 docker context use remote
 
