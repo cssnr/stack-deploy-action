@@ -16,24 +16,46 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Write YAML"
+      - name: "Write YAML Basic"
         id: yaml-action
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Local Action"
-        id: test
+      - name: "Test Action Basic"
+        id: test1
         uses: ./
         with:
+          name: "test-stack"
+          file: "docker-compose.yaml"
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           #pass: ${{ secrets.DOCKER_PASS }}
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
-          file: "docker-compose.yaml"
+
+      - name: "Write YAML Private"
+        id: yaml-action
+        uses: teunmooij/yaml@v1
+        with:
+          data: '{"version":"3.8","services":{"alpine":{"image":"smashedr/alpine-private","command":"tail -f /dev/null"}}}'
+          to-file: "docker-compose.yaml"
+
+      - name: "Test Action Private"
+        id: test2
+        uses: ./
+        with:
           name: "test-stack"
+          file: "docker-compose.yaml"
+          host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
+          user: ${{ secrets.DOCKER_USER }}
+          #pass: ${{ secrets.DOCKER_PASS }}
+          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
+          #registry_host: "ghcr.io"
+          registry_user: ${{ vars.DOCKER_HUB_USER }}
+          registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
 
   lint:
     name: "Lint"
