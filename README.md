@@ -40,7 +40,9 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`
 
-**registry_host/user/pass** - Set to run `docker login` before stack deploy
+**registry_host** - To run `docker login` on another registry, ex: `ghcr.io`
+
+**registry_user/registry_pass** - Required to run `docker login` before stack deploy
 
 ```yaml
 - name: 'Docker Stack Deploy'

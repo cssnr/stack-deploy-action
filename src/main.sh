@@ -60,8 +60,8 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
-if [[ -n "${INPUT_REGISTRY_HOST}" && -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
-    echo -e "\u001b[36mLogging in to Registry: \u001b[37;1m${INPUT_REGISTRY_HOST}"
+if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
+    echo -e "\u001b[36mLogging in to Registry: \u001b[37;1m${INPUT_REGISTRY_HOST:-Docker Hub}"
     echo "${INPUT_REGISTRY_PASS}" |
         docker login --username "${INPUT_REGISTRY_USER}" --password-stdin "${INPUT_REGISTRY_HOST}"
     INPUT_REGISTRY_AUTH="true"
