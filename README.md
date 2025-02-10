@@ -10,6 +10,7 @@
 # Docker Stack Deploy Action
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
+You can also optionally authenticate against a private registry using a username and password.
 
 For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
@@ -20,29 +21,34 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input    | required | default               | description               |
-| -------- | -------- | --------------------- | ------------------------- |
-| host     | **Yes**  | -                     | Remote Docker hostname    |
-| port     | No       | `22`                  | Remote Docker port        |
-| user     | **Yes**  | -                     | Remote Docker username    |
-| pass     | No       | -                     | Remote Docker password \* |
-| ssh_key  | No       | -                     | Remote SSH Key file \*    |
-| file     | No       | `docker-compose.yaml` | Docker Compose file       |
-| name     | **Yes**  | -                     | Docker Stack name         |
-| env_file | No       | -                     | Docker Environment file   |
+| input         | required | default               | description                     |
+| ------------- | -------- | --------------------- | ------------------------------- |
+| host          | **Yes**  | -                     | Remote Docker hostname          |
+| port          | No       | `22`                  | Remote Docker port              |
+| user          | **Yes**  | -                     | Remote Docker username          |
+| pass          | No       | -                     | Remote Docker password \*       |
+| ssh_key       | No       | -                     | Remote SSH Key file \*          |
+| file          | No       | `docker-compose.yaml` | Docker Compose file             |
+| name          | **Yes**  | -                     | Docker Stack name               |
+| env_file      | No       | -                     | Docker Environment file         |
+| registry_host | No       | -                     | Registry Authentication Host \* |
+| registry_user | No       | -                     | Registry Authentication User \* |
+| registry_pass | No       | -                     | Registry Authentication Pass \* |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
+
+**registry_host/user/pass** - For private registries all of these values must be provided
 
 ```yaml
 - name: 'Docker Stack Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }}
-    file: 'docker-compose-swarm.yaml'
-    name: 'stack-name'
 ```
 
 ## Examples
@@ -68,12 +74,29 @@ jobs:
       - name: 'Docker Stack Deploy'
         uses: cssnr/stack-deploy-action@v1
         with:
+          name: 'stack-name'
+          file: 'docker-compose-swarm.yaml'
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
-          file: 'docker-compose-swarm.yaml'
-          name: 'stack-name'
+```
+
+With Private Registry Credentials
+
+```yaml
+- name: 'Docker Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }}
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
 Full Example
@@ -115,14 +138,14 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
       - name: 'Docker Login'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: $${{ env.REGISTRY }}
           username: ${{ secrets.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
       - name: 'Build and Push'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -132,12 +155,12 @@ jobs:
       - name: 'Docker Stack Deploy'
         uses: cssnr/stack-deploy-action@v1
         with:
+          name: 'stack-name'
+          file: 'docker-compose-swarm.yaml'
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
-          file: 'docker-compose-swarm.yaml'
-          name: 'stack-name'
 ```
 
 # Support

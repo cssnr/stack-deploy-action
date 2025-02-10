@@ -1,5 +1,5 @@
 name: "Docker Stack Deploy"
-description: "Deploy a Docker Stack"
+description: "Deploy a Docker Stack to a Remote Host over SSH"
 author: "Shane"
 branding:
   icon: "layers"
@@ -31,6 +31,15 @@ inputs:
     required: true
   env_file:
     description: "Environment File"
+    required: false
+  registry_host:
+    description: "Registry Auth Hostname"
+    required: false
+  registry_user:
+    description: "Registry Auth Username"
+    required: false
+  registry_pass:
+    description: "Registry Auth Password"
     required: false
 
 runs:
