@@ -21,23 +21,26 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         | required | default               | description                     |
-| ------------- | -------- | --------------------- | ------------------------------- |
-| host          | **Yes**  | -                     | Remote Docker hostname          |
-| port          | No       | `22`                  | Remote Docker port              |
-| user          | **Yes**  | -                     | Remote Docker username          |
-| pass          | No       | -                     | Remote Docker password \*       |
-| ssh_key       | No       | -                     | Remote SSH Key file \*          |
-| file          | No       | `docker-compose.yaml` | Docker Compose file             |
-| name          | **Yes**  | -                     | Docker Stack name               |
-| env_file      | No       | -                     | Docker Environment file         |
-| registry_host | No       | -                     | Registry Authentication Host \* |
-| registry_user | No       | -                     | Registry Authentication User \* |
-| registry_pass | No       | -                     | Registry Authentication Pass \* |
+| input         | required | default               | description                       |
+| ------------- | -------- | --------------------- | --------------------------------- |
+| host          | **Yes**  | -                     | Remote Docker hostname            |
+| port          | No       | `22`                  | Remote Docker port                |
+| user          | **Yes**  | -                     | Remote Docker username            |
+| pass          | No       | -                     | Remote Docker password \*         |
+| ssh_key       | No       | -                     | Remote SSH Key file \*            |
+| file          | No       | `docker-compose.yaml` | Docker Compose file               |
+| name          | **Yes**  | -                     | Docker Stack name                 |
+| env_file      | No       | -                     | Docker Environment file           |
+| registry_auth | No       | -                     | Enable Registry Authentication \* |
+| registry_host | No       | -                     | Registry Authentication Host \*   |
+| registry_user | No       | -                     | Registry Authentication User \*   |
+| registry_pass | No       | -                     | Registry Authentication Pass \*   |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
-**registry_host/user/pass** - For private registries all of these values must be provided
+**registry_auth** - Set to `true` to deploy with `--with-registry-auth`
+
+**registry_host/user/pass** - Set to run `docker login` before stack deploy
 
 ```yaml
 - name: 'Docker Stack Deploy'
@@ -49,6 +52,23 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }}
+```
+
+Enable Registry Authentication and Perform Docker Login
+
+```yaml
+- name: 'Docker Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }}
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
 ## Examples
@@ -80,23 +100,6 @@ jobs:
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
-```
-
-With Private Registry Credentials
-
-```yaml
-- name: 'Docker Stack Deploy'
-  uses: cssnr/stack-deploy-action@v1
-  with:
-    name: 'stack-name'
-    file: 'docker-compose-swarm.yaml'
-    host: ${{ secrets.DOCKER_HOST }}
-    port: ${{ secrets.DOCKER_PORT }}
-    user: ${{ secrets.DOCKER_USER }}
-    pass: ${{ secrets.DOCKER_PASS }}
-    registry_host: 'ghcr.io'
-    registry_user: ${{ vars.GHCR_USER }}
-    registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
 Full Example

@@ -32,6 +32,9 @@ inputs:
   env_file:
     description: "Environment File"
     required: false
+  registry_auth:
+    description: "Enable Registry Auth"
+    required: false
   registry_host:
     description: "Registry Auth Hostname"
     required: false
