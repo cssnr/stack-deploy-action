@@ -60,13 +60,13 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
-EXTRA_ARGS=""
+EXTRA_ARGS=()
 if [[ -n "${INPUT_REGISTRY_HOST}" && -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo -e "\u001b[36mAuthenticating with Registry: \u001b[37;1m${INPUT_REGISTRY_HOST}"
-    EXTRA_ARGS+=" --with-registry-auth "
+    EXTRA_ARGS+=("--with-registry-auth")
     echo "${INPUT_REGISTRY_PASS}" |
         docker login --username "${INPUT_REGISTRY_USER}" --password-stdin "${INPUT_REGISTRY_HOST}"
 fi
 
 echo -e "\u001b[36mDeploying Stack: \u001b[37;1m${INPUT_NAME}"
-docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" ${EXTRA_ARGS}
+docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_ARGS[@]}"
