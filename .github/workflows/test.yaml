@@ -17,7 +17,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Write YAML Basic"
-        id: yaml-action
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
@@ -36,7 +35,6 @@ jobs:
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
 
       - name: "Write YAML Private"
-        id: yaml-action
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"smashedr/alpine-private","command":"tail -f /dev/null"}}}'
