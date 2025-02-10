@@ -6,6 +6,9 @@ on:
   push:
     branches: [master]
 
+env:
+  PRIVATE_IMAGE: "smashedr/alpine-private" # amd64/arm64
+
 jobs:
   test:
     name: "Test"
@@ -37,7 +40,7 @@ jobs:
       - name: "Write YAML Private"
         uses: teunmooij/yaml@v1
         with:
-          data: '{"version":"3.8","services":{"alpine":{"image":"smashedr/alpine-private","command":"tail -f /dev/null"}}}'
+          data: '{"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
       - name: "Test Action Private"
