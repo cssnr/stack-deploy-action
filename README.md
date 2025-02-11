@@ -195,6 +195,7 @@ Additionally, you can support other GitHub Actions I have published:
 - [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
 - [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
 - [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action)
+- [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action)
 - [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
 - [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
 
