@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 env:
-  PRIVATE_IMAGE: "smashedr/alpine-private" # amd64/arm64
+  PRIVATE_IMAGE: "smashedr/alpine-private:latest" # amd64/arm64
 
 jobs:
   test:
@@ -22,7 +22,7 @@ jobs:
       - name: "Write YAML Basic"
         uses: teunmooij/yaml@v1
         with:
-          data: '{"version":"3.8","services":{"alpine":{"image":"alpine","command":"tail -f /dev/null"}}}'
+          data: '{"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
       - name: "Test Action Basic"
