@@ -14,6 +14,8 @@ You can also optionally authenticate against a private registry using a username
 
 For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
+_Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
+
 - [Inputs](#Inputs)
 - [Examples](#Examples)
 - [Support](#Support)
@@ -21,26 +23,26 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         | required | default               | description                       |
-| ------------- | -------- | --------------------- | --------------------------------- |
-| host          | **Yes**  | -                     | Remote Docker hostname            |
-| port          | No       | `22`                  | Remote Docker port                |
-| user          | **Yes**  | -                     | Remote Docker username            |
-| pass          | No       | -                     | Remote Docker password \*         |
-| ssh_key       | No       | -                     | Remote SSH Key file \*            |
-| file          | No       | `docker-compose.yaml` | Docker Compose file               |
-| name          | **Yes**  | -                     | Docker Stack name                 |
-| env_file      | No       | -                     | Docker Environment file           |
-| registry_auth | No       | -                     | Enable Registry Authentication \* |
-| registry_host | No       | -                     | Registry Authentication Host \*   |
-| registry_user | No       | -                     | Registry Authentication User \*   |
-| registry_pass | No       | -                     | Registry Authentication Pass \*   |
+| input         | required         | default               | description                       |
+| ------------- | ---------------- | --------------------- | --------------------------------- |
+| host          | **Yes**          | -                     | Remote Docker hostname            |
+| port          | No               | `22`                  | Remote Docker port                |
+| user          | **Yes**          | -                     | Remote Docker username            |
+| pass          | Not w/ `ssh_key` | -                     | Remote Docker password \*         |
+| ssh_key       | Not w/ `pass`    | -                     | Remote SSH Key file \*            |
+| file          | No               | `docker-compose.yaml` | Docker Compose file               |
+| name          | **Yes**          | -                     | Docker Stack name                 |
+| env_file      | No               | -                     | Docker Environment file           |
+| registry_auth | No               | -                     | Enable Registry Authentication \* |
+| registry_host | No               | -                     | Registry Authentication Host \*   |
+| registry_user | No               | -                     | Registry Authentication User \*   |
+| registry_pass | No               | -                     | Registry Authentication Pass \*   |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`
 
-**registry_host** - To run `docker login` on another registry, ex: `ghcr.io`
+**registry_host** - To run `docker login` on another registry, example: `ghcr.io`
 
 **registry_user/registry_pass** - Required to run `docker login` before stack deploy
 
@@ -56,7 +58,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
     pass: ${{ secrets.DOCKER_PASS }}
 ```
 
-Enable Registry Authentication and Perform Docker Login
+Use `docker login` and enable `--with-registry-auth`
 
 ```yaml
 - name: 'Docker Stack Deploy'
