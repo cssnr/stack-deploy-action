@@ -10,8 +10,11 @@
 # Docker Stack Deploy Action
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
+You can also optionally authenticate against a private registry using a username and password.
 
 For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
+
+_Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
 
 - [Inputs](#Inputs)
 - [Examples](#Examples)
@@ -20,29 +23,56 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input    | required | default               | description               |
-| -------- | -------- | --------------------- | ------------------------- |
-| host     | **Yes**  | -                     | Remote Docker hostname    |
-| port     | No       | `22`                  | Remote Docker port        |
-| user     | **Yes**  | -                     | Remote Docker username    |
-| pass     | No       | -                     | Remote Docker password \* |
-| ssh_key  | No       | -                     | Remote SSH Key file \*    |
-| file     | No       | `docker-compose.yaml` | Docker Compose file       |
-| name     | **Yes**  | -                     | Docker Stack name         |
-| env_file | No       | -                     | Docker Environment file   |
+| input         | required         | default               | description                       |
+| ------------- | ---------------- | --------------------- | --------------------------------- |
+| host          | **Yes**          | -                     | Remote Docker hostname            |
+| port          | No               | `22`                  | Remote Docker port                |
+| user          | **Yes**          | -                     | Remote Docker username            |
+| pass          | Not w/ `ssh_key` | -                     | Remote Docker password \*         |
+| ssh_key       | Not w/ `pass`    | -                     | Remote SSH Key file \*            |
+| file          | No               | `docker-compose.yaml` | Docker Compose file               |
+| name          | **Yes**          | -                     | Docker Stack name                 |
+| env_file      | No               | -                     | Docker Environment file           |
+| registry_auth | No               | -                     | Enable Registry Authentication \* |
+| registry_host | No               | -                     | Registry Authentication Host \*   |
+| registry_user | No               | -                     | Registry Authentication User \*   |
+| registry_pass | No               | -                     | Registry Authentication Pass \*   |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
+
+**registry_auth** - Set to `true` to deploy with `--with-registry-auth`
+
+**registry_host** - To run `docker login` on another registry, example: `ghcr.io`
+
+**registry_user/registry_pass** - Required to run `docker login` before stack deploy
 
 ```yaml
 - name: 'Docker Stack Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }}
-    file: 'docker-compose-swarm.yaml'
+```
+
+Use `docker login` and enable `--with-registry-auth`
+
+```yaml
+- name: 'Docker Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
     name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }}
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
 ## Examples
@@ -68,12 +98,12 @@ jobs:
       - name: 'Docker Stack Deploy'
         uses: cssnr/stack-deploy-action@v1
         with:
+          name: 'stack-name'
+          file: 'docker-compose-swarm.yaml'
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
-          file: 'docker-compose-swarm.yaml'
-          name: 'stack-name'
 ```
 
 Full Example
@@ -115,14 +145,14 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
       - name: 'Docker Login'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: $${{ env.REGISTRY }}
           username: ${{ secrets.GHCR_USER }}
           password: ${{ secrets.GHCR_PASS }}
 
       - name: 'Build and Push'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -132,12 +162,12 @@ jobs:
       - name: 'Docker Stack Deploy'
         uses: cssnr/stack-deploy-action@v1
         with:
+          name: 'stack-name'
+          file: 'docker-compose-swarm.yaml'
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
-          file: 'docker-compose-swarm.yaml'
-          name: 'stack-name'
 ```
 
 # Support
@@ -165,6 +195,7 @@ Additionally, you can support other GitHub Actions I have published:
 - [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
 - [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
 - [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action)
+- [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action)
 - [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
 - [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
 

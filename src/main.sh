@@ -46,12 +46,14 @@ trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 echo -e "\u001b[36mVerifying Docker and Setting Context."
 ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
 
-docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
-docker context ls
+if ! docker context inspect remote >/dev/null 2>&1;then
+    docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"
+fi
 docker context use remote
+docker context ls
 
 if [ -n "${INPUT_ENV_FILE}" ];then
-    echo -e "\u001b[36mSourcing Environment File: ${INPUT_ENV_FILE}"
+    echo -e "\u001b[36mSourcing Environment File: \u001b[37;1m${INPUT_ENV_FILE}"
     stat "${INPUT_ENV_FILE}"
     set -a
     # shellcheck disable=SC1090
@@ -60,5 +62,18 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     # export ENV_FILE="${INPUT_ENV_FILE}"
 fi
 
+if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
+    echo -e "\u001b[36mLogging in to Registry: \u001b[37;1m${INPUT_REGISTRY_HOST:-Docker Hub}"
+    echo "${INPUT_REGISTRY_PASS}" |
+        docker login --username "${INPUT_REGISTRY_USER}" --password-stdin "${INPUT_REGISTRY_HOST}"
+    INPUT_REGISTRY_AUTH="true"
+fi
+
+EXTRA_ARGS=()
+if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
+    echo -e "Adding extra arg: --with-registry-auth"
+    EXTRA_ARGS+=("--with-registry-auth")
+fi
+
 echo -e "\u001b[36mDeploying Stack: \u001b[37;1m${INPUT_NAME}"
-docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}"
+docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_ARGS[@]}"
