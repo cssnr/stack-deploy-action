@@ -2,9 +2,14 @@ name: "Test"
 
 on:
   workflow_dispatch:
-  pull_request:
+  schedule:
+    - cron: "23 23 * * 4"
   push:
-    branches: [master]
+    paths:
+      - "src/**"
+      - ".github/workflows/test.yaml"
+      - "Dockerfile"
+      - "action.yaml"
 
 env:
   PRIVATE_IMAGE: "smashedr/alpine-private:latest" # amd64/arm64
@@ -12,20 +17,30 @@ env:
 jobs:
   test:
     name: "Test"
+    if: ${{ !contains(github.event.head_commit.message, '#notest') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    concurrency:
+      group: test
+      cancel-in-progress: true
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Write YAML Basic"
+      #- name: "Debug event.json"
+      #  run: |
+      #    cat "${GITHUB_EVENT_PATH}"
+
+      - name: "1: Write YAML"
+        if: ${{ always() }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Action Basic"
+      - name: "1: Test Password"
+        if: ${{ always() }}
         id: test1
         uses: ./
         with:
@@ -34,16 +49,18 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          #pass: ${{ secrets.DOCKER_PASS }}
-          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
+          pass: ${{ secrets.DOCKER_PASS }}
+          #ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
 
-      - name: "Write YAML Private"
+      - name: "2: Write YAML"
+        if: ${{ always() && !github.event.act }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Action Private"
+      - name: "2: Test SSH and Auth"
+        if: ${{ always() && !github.event.act }}
         id: test2
         uses: ./
         with:
@@ -54,20 +71,6 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           #pass: ${{ secrets.DOCKER_PASS }}
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
-          #registry_host: "ghcr.io"
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
-
-  lint:
-    name: "Lint"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "ShellCheck"
-        uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: src
+          summary: false

@@ -22,13 +22,13 @@ inputs:
   ssh_key:
     description: "SSH Key File"
     required: false
-  file:
-    description: "Docker Compose File"
-    default: "docker-compose.yaml"
-    required: false
   name:
     description: "Docker Stack Name"
     required: true
+  file:
+    description: "Docker Compose File"
+    required: false
+    default: "docker-compose.yaml"
   env_file:
     description: "Environment File"
     required: false
@@ -44,6 +44,10 @@ inputs:
   registry_pass:
     description: "Registry Auth Password"
     required: false
+  summary:
+    description: "Add Summary to Job"
+    required: false
+    default: "true"
 
 runs:
   using: "docker"
