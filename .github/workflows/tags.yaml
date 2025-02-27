@@ -9,9 +9,9 @@ jobs:
     name: "Tags"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write
 
     steps:
       - name: "Update Tags"
         uses: cssnr/update-version-tags-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}

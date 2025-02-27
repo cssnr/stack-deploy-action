@@ -1,13 +1,20 @@
 [![Tags](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/tags.yaml?logo=github&logoColor=white&label=tags)](https://github.com/cssnr/stack-deploy-action/actions/workflows/tags.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/releases/latest)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/parse-issue-form-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/parse-issue-form-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/parse-issue-form-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/parse-issue-form-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/stack-deploy-action/stargazers)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 
 # Docker Stack Deploy Action
+
+- [Inputs](#Inputs)
+- [Examples](#Examples)
+- [Support](#Support)
+- [Contributing](#Contributing)
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
@@ -16,27 +23,22 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
 
-- [Inputs](#Inputs)
-- [Examples](#Examples)
-- [Support](#Support)
-- [Contributing](#Contributing)
-
 ## Inputs
 
-| input         | required         | default               | description                       |
-| ------------- | ---------------- | --------------------- | --------------------------------- |
-| host          | **Yes**          | -                     | Remote Docker hostname            |
-| port          | No               | `22`                  | Remote Docker port                |
-| user          | **Yes**          | -                     | Remote Docker username            |
+| input         |     required     | default               | description                       |
+| ------------- | :--------------: | --------------------- | --------------------------------- |
+| host          |     **Yes**      | -                     | Remote Docker hostname            |
+| port          |        -         | `22`                  | Remote Docker port                |
+| user          |     **Yes**      | -                     | Remote Docker username            |
 | pass          | Not w/ `ssh_key` | -                     | Remote Docker password \*         |
-| ssh_key       | Not w/ `pass`    | -                     | Remote SSH Key file \*            |
-| file          | No               | `docker-compose.yaml` | Docker Compose file               |
-| name          | **Yes**          | -                     | Docker Stack name                 |
-| env_file      | No               | -                     | Docker Environment file           |
-| registry_auth | No               | -                     | Enable Registry Authentication \* |
-| registry_host | No               | -                     | Registry Authentication Host \*   |
-| registry_user | No               | -                     | Registry Authentication User \*   |
-| registry_pass | No               | -                     | Registry Authentication Pass \*   |
+| ssh_key       |  Not w/ `pass`   | -                     | Remote SSH Key file \*            |
+| file          |        -         | `docker-compose.yaml` | Docker Compose file               |
+| name          |     **Yes**      | -                     | Docker Stack name                 |
+| env_file      |        -         | -                     | Docker Environment file           |
+| registry_auth |        -         | -                     | Enable Registry Authentication \* |
+| registry_host |        -         | -                     | Registry Authentication Host \*   |
+| registry_user |        -         | -                     | Registry Authentication User \*   |
+| registry_pass |        -         | -                     | Registry Authentication Pass \*   |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
@@ -181,8 +183,7 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 
 - Report an Issue: https://github.com/cssnr/stack-deploy-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General
-  Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy)
+- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy)
 
 # Contributing
 
@@ -190,13 +191,15 @@ Currently, the best way to contribute to this project is to star this project on
 
 Additionally, you can support other GitHub Actions I have published:
 
-- [VirusTotal Action](https://github.com/cssnr/virustotal-action)
-- [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action)
-- [Update JSON Value Action](https://github.com/cssnr/update-json-value-action)
-- [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action)
-- [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action)
-- [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action)
-- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action)
-- [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action)
+- [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
+- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action?tab=readme-ov-file#readme)
+- [VirusTotal Action](https://github.com/cssnr/virustotal-action?tab=readme-ov-file#readme)
+- [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action?tab=readme-ov-file#readme)
+- [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action?tab=readme-ov-file#readme)
+- [Update JSON Value Action](https://github.com/cssnr/update-json-value-action?tab=readme-ov-file#readme)
+- [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action?tab=readme-ov-file#readme)
+- [Cloudflare Purge Cache Action](https://github.com/cssnr/cloudflare-purge-cache-action?tab=readme-ov-file#readme)
+- [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action?tab=readme-ov-file#readme)
+- [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
 
 For a full list of current projects to support visit: [https://cssnr.github.io/](https://cssnr.github.io/)
