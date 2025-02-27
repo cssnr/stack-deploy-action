@@ -1,7 +1,7 @@
-FROM docker:24-dind
+FROM docker:28-dind
 
 RUN apk add --update --no-cache bash sshpass
 
-COPY src/main.sh /main.sh
+COPY src/ /src
 
-ENTRYPOINT ["bash", "/main.sh"]
+ENTRYPOINT ["bash", "/src/main.sh"]

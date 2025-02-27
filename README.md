@@ -39,6 +39,7 @@ _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-s
 | registry_host |        -         | -                     | Registry Authentication Host \*   |
 | registry_user |        -         | -                     | Registry Authentication User \*   |
 | registry_pass |        -         | -                     | Registry Authentication Pass \*   |
+| summary       |        -         | `true`                | Add Job Summary                   |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 

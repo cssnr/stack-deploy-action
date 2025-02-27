@@ -24,8 +24,8 @@ inputs:
     required: false
   file:
     description: "Docker Compose File"
-    default: "docker-compose.yaml"
     required: false
+    default: "docker-compose.yaml"
   name:
     description: "Docker Stack Name"
     required: true
@@ -44,6 +44,10 @@ inputs:
   registry_pass:
     description: "Registry Auth Password"
     required: false
+  summary:
+    description: "Add Summary to Job"
+    required: false
+    default: "true"
 
 runs:
   using: "docker"

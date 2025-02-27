@@ -15,9 +15,9 @@ env:
 jobs:
   test:
     name: "Test"
+    if: ${{ !contains(github.event.head_commit.message, '#notest') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: ${{ !contains(github.event.head_commit.message, '#notest') }}
 
     steps:
       - name: "Checkout"
@@ -28,12 +28,14 @@ jobs:
       #    cat "${GITHUB_EVENT_PATH}"
 
       - name: "Write YAML Basic"
+        if: ${{ !github.event.act }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Action Basic"
+      - name: "Test SSH Key"
+        if: ${{ !github.event.act }}
         id: test1
         uses: ./
         with:
@@ -51,7 +53,7 @@ jobs:
           data: '{"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Action Private"
+      - name: "Test Password w/ Registry"
         id: test2
         uses: ./
         with:
@@ -60,8 +62,8 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          #pass: ${{ secrets.DOCKER_PASS }}
-          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
+          pass: ${{ secrets.DOCKER_PASS }}
+          #ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           #registry_host: "ghcr.io"
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
