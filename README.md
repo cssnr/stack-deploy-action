@@ -206,6 +206,8 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 
 Currently, the best way to contribute to this project is to star this project on GitHub.
 
+If you would like to submit a PR, please review the [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Additionally, you can support other GitHub Actions I have published:
 
 - [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
