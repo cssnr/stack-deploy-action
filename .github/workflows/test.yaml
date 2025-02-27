@@ -28,14 +28,14 @@ jobs:
       #    cat "${GITHUB_EVENT_PATH}"
 
       - name: "Write YAML Basic"
-        if: ${{ !github.event.act }}
+        if: ${{ always() && !github.event.act }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
       - name: "Test SSH Key"
-        if: ${{ !github.event.act }}
+        if: ${{ always() && !github.event.act }}
         id: test1
         uses: ./
         with:
@@ -48,12 +48,14 @@ jobs:
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
 
       - name: "Write YAML Private"
+        if: ${{ always() }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
       - name: "Test Password w/ Registry"
+        if: ${{ always() }}
         id: test2
         uses: ./
         with:

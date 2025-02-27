@@ -19,30 +19,33 @@ function cleanup_trap() {
     exit "${_ST}"
 }
 
+SSH_DIR="/root/.ssh"
+
 echo "::group::Starting Stack Deploy Action"
 echo "User: $(whoami)"
 echo "Script: ${0}"
-echo -e "Directory: $(pwd)"
-mkdir -p /root/.ssh
-chmod 0700 /root/.ssh
-ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> /root/.ssh/known_hosts
+echo "Current Directory: $(pwd)"
+echo "Home Directory: ${HOME}"
+echo "SSH Directory: ${SSH_DIR}"
+mkdir -p "${SSH_DIR}" ~/.ssh
+chmod 0700 "${SSH_DIR}" ~/.ssh
+ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
 echo "::endgroup::"
 
 if [ -z "${INPUT_SSH_KEY}" ];then
     echo -e "::group::Copying SSH Key to Remote Host"
-    ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
+    ssh-keygen -q -f "${SSH_DIR}/id_rsa" -N "" -C "docker-stack-deploy-action"
     eval "$(ssh-agent -s)"
-    ssh-add /root/.ssh/id_rsa
-    mkdir ~/.ssh
+    ssh-add "${SSH_DIR}/id_rsa"
     sshpass -eINPUT_PASS \
-        ssh-copy-id -i /root/.ssh/id_rsa -o ConnectTimeout=15 \
+        ssh-copy-id -i "${SSH_DIR}/id_rsa" -o ConnectTimeout=15 \
             -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}"
 else
     echo "::group::Adding SSH Key to SSH Agent"
-    echo "${INPUT_SSH_KEY}" > /root/.ssh/id_rsa
-    chmod 0600 /root/.ssh/id_rsa
+    echo "${INPUT_SSH_KEY}" > "${SSH_DIR}/id_rsa"
+    chmod 0600 "${SSH_DIR}/id_rsa"
     eval "$(ssh-agent -s)"
-    ssh-add /root/.ssh/id_rsa
+    ssh-add "${SSH_DIR}/id_rsa"
 fi
 echo "::endgroup::"
 
@@ -83,11 +86,13 @@ if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
 fi
 # shellcheck disable=SC2034
 STACK_RESULTS=$(docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_ARGS[@]}")
-echo "${STACK_RESULTS}"
 echo "::endgroup::"
+
+echo "${STACK_RESULTS}"
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
     # shellcheck source=/src/summary.sh
-    source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}"
+    source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}" ||\
+        echo "::error::Failed to Write Job Summary!"
 fi
