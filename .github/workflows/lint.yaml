@@ -24,7 +24,7 @@ jobs:
         if: ${{ always() }}
         uses: ludeeus/action-shellcheck@master
         env:
-          SHELLCHECK_OPTS:
+          SHELLCHECK_OPTS: -x
         with:
           scandir: src
 
