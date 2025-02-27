@@ -51,7 +51,7 @@ _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-s
 
 **summary** - Write a Summary for the job. To disable this set to `false`.
 
-<details><summary>📜 View Example Job Summary</summary>
+<details><summary>👀 View Example Job Summary</summary>
 
 ---
 
