@@ -6,15 +6,16 @@ set -e
 function cleanup_trap() {
     _ST="$?"
     if [[ "${_ST}" != "0" ]]; then
-        echo -e "⛔ \u001b[31;1mFailed to Deploy Stack! See logs for details..."
+        echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
+        echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
     fi
     if [ -z "${INPUT_SSH_KEY}" ];then
-        echo -e "Cleaning Up authorized_keys on: \u001b[36;1m${INPUT_HOST}"
-        ssh -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
+        echo -e "🧹 Cleaning Up authorized_keys"
+        ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
     if [[ "${_ST}" == "0" ]]; then
-        echo -e "✅ \u001b[32;1mFinished Success."
+        echo -e "✅ \u001b[32;1mFinished Success"
     fi
     exit "${_ST}"
 }
@@ -38,7 +39,7 @@ if [ -z "${INPUT_SSH_KEY}" ];then
     eval "$(ssh-agent -s)"
     ssh-add "${SSH_DIR}/id_rsa"
     sshpass -eINPUT_PASS \
-        ssh-copy-id -i "${SSH_DIR}/id_rsa" -o ConnectTimeout=15 \
+        ssh-copy-id -i "${SSH_DIR}/id_rsa" -o ConnectTimeout=30 \
             -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}"
 else
     echo "::group::Adding SSH Key to SSH Agent"
@@ -52,7 +53,7 @@ echo "::endgroup::"
 trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 
 echo "::group::Verifying Remote Docker Context"
-ssh -o BatchMode=yes -o ConnectTimeout=15 -p "${INPUT_PORT}" \
+ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" \
     "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
 if ! docker context inspect remote >/dev/null 2>&1;then
     docker context create remote --docker "host=ssh://${INPUT_USER}@${INPUT_HOST}:${INPUT_PORT}"

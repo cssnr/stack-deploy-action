@@ -34,9 +34,18 @@ To run actions locally you need to install act: https://nektosact.com/installati
 1. Create a `.secrets` file with all your secrets in .env file format.
 2. Run: `act -j test`
 
-To skip half the tests (`-e event.json`) and print your secrets (insecure) run:  
-`act -j test --insecure-secrets -e event.json`
+To test the private image you must create a `.env` file with, or use --env `PRIVATE_IMAGE=yourimage`
 
-To see all available jobs run: `act -l`
+To skip the private image test run with `-e event.json`.
+
+To print your secrets in plan text (insecure) use `--insecure-secrets`
+
+To see all available jobs run `act -l` and see `act --help`
+
+```shell
+act -j test --insecure-secrets -e event.json
+act -j test --insecure-secrets --env PRIVATE_IMAGE=your/private-image:latest
+act -j lint
+```
 
 For more information see the documentation: https://nektosact.com/usage/index.html
