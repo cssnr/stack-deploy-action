@@ -1,4 +1,4 @@
-[![Tags](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/tags.yaml?logo=github&logoColor=white&label=tags)](https://github.com/cssnr/stack-deploy-action/actions/workflows/tags.yaml)
+[![Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&logoColor=white&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
 [![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/releases/latest)
@@ -39,7 +39,7 @@ _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-s
 | registry_host |        -         | -                     | Registry Authentication Host \*   |
 | registry_user |        -         | -                     | Registry Authentication User \*   |
 | registry_pass |        -         | -                     | Registry Authentication Pass \*   |
-| summary       |        -         | `true`                | Add Job Summary                   |
+| summary       |        -         | `true`                | Add Job Summary \*                |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`
 
@@ -49,8 +49,24 @@ _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-s
 
 **registry_user/registry_pass** - Required to run `docker login` before stack deploy
 
+**summary** - Write a Summary for the job. To disable this set to `false`.
+
+<details><summary>📜 View Example Job Summary</summary>
+
+---
+
+🎉 Stack `test-stack` Successfully Deployed.
+
+```text
+Updating service test-stack_alpine (id: tu58yhd2vpbr0uymimvy2fq4i)
+```
+
+---
+
+</details>
+
 ```yaml
-- name: 'Docker Stack Deploy'
+- name: 'Stack Deploy Action'
   uses: cssnr/stack-deploy-action@v1
   with:
     name: 'stack-name'
@@ -64,7 +80,7 @@ _Portainer Users_: You can deploy directly to Portainer with: [cssnr/portainer-s
 Use `docker login` and enable `--with-registry-auth`
 
 ```yaml
-- name: 'Docker Stack Deploy'
+- name: 'Stack Deploy Action'
   uses: cssnr/stack-deploy-action@v1
   with:
     name: 'stack-name'
@@ -83,7 +99,7 @@ Use `docker login` and enable `--with-registry-auth`
 Simple Example
 
 ```yaml
-name: 'Test Docker Stack Deploy'
+name: 'Docker Stack Deploy'
 
 on:
   push:
@@ -98,7 +114,7 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: 'Docker Stack Deploy'
+      - name: 'Stack Deploy Action'
         uses: cssnr/stack-deploy-action@v1
         with:
           name: 'stack-name'
@@ -112,7 +128,7 @@ jobs:
 Full Example
 
 ```yaml
-name: 'Test Docker Stack Deploy'
+name: 'Docker Stack Deploy'
 
 on:
   workflow_dispatch:
@@ -162,7 +178,7 @@ jobs:
           push: true
           tags: ${{ steps.tags.outputs.tags }}
 
-      - name: 'Docker Stack Deploy'
+      - name: 'Stack Deploy Action'
         uses: cssnr/stack-deploy-action@v1
         with:
           name: 'stack-name'

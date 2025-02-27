@@ -29,7 +29,7 @@ ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> /root/.ssh/known_hosts
 echo "::endgroup::"
 
 if [ -z "${INPUT_SSH_KEY}" ];then
-    echo -e "::group::Copying SSH Key to: \u001b[36;1m${INPUT_HOST}"
+    echo -e "::group::Copying SSH Key to Remote Host"
     ssh-keygen -q -f /root/.ssh/id_rsa -N "" -C "docker-stack-deploy-action"
     eval "$(ssh-agent -s)"
     ssh-add /root/.ssh/id_rsa
@@ -48,7 +48,7 @@ echo "::endgroup::"
 
 trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 
-echo "::group::Verifying Docker and Setting Context."
+echo "::group::Verifying Remote Docker Context"
 ssh -o BatchMode=yes -o ConnectTimeout=15 -p "${INPUT_PORT}" \
     "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
 if ! docker context inspect remote >/dev/null 2>&1;then
@@ -75,14 +75,16 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo "::endgroup::"
 fi
 
-echo -e "Deploying Stack: \u001b[36;1m${INPUT_NAME}"
+echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
 EXTRA_ARGS=()
 if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
-    echo -e "Enabling Registry Authentication"
+    echo -e "Adding: --with-registry-auth"
     EXTRA_ARGS+=("--with-registry-auth")
 fi
 # shellcheck disable=SC2034
 STACK_RESULTS=$(docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_ARGS[@]}")
+echo "${STACK_RESULTS}"
+echo "::endgroup::"
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
