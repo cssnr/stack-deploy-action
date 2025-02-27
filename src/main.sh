@@ -86,5 +86,6 @@ STACK_RESULTS=$(docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
+    # shellcheck source=/src/summary.sh
     source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}"
 fi

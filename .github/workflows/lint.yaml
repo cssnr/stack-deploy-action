@@ -23,6 +23,8 @@ jobs:
       - name: "ShellCheck"
         if: ${{ always() }}
         uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS:
         with:
           scandir: src
 

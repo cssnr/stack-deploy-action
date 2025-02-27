@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 cat << EOM
 ## Stack Deploy Action
 
