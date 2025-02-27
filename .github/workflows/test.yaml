@@ -51,7 +51,6 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
           #ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
-          summary: false
 
       - name: "2: Write YAML"
         if: ${{ always() && !github.event.act }}
@@ -74,3 +73,4 @@ jobs:
           ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
+          summary: false
