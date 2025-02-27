@@ -2,6 +2,8 @@ name: "Test"
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "18 0 * * 4"
   push:
     paths:
       - "src/**"
@@ -18,6 +20,9 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    concurrency:
+      group: test
+      cancel-in-progress: true
 
     steps:
       - name: "Checkout"
@@ -27,14 +32,14 @@ jobs:
       #  run: |
       #    cat "${GITHUB_EVENT_PATH}"
 
-      - name: "Write YAML Basic"
+      - name: "1: Write YAML"
         if: ${{ always() && !github.event.act }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test SSH Key"
+      - name: "1: Test Password"
         if: ${{ always() && !github.event.act }}
         id: test1
         uses: ./
@@ -44,17 +49,17 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          #pass: ${{ secrets.DOCKER_PASS }}
-          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
+          pass: ${{ secrets.DOCKER_PASS }}
+          #ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
 
-      - name: "Write YAML Private"
+      - name: "2: Write YAML"
         if: ${{ always() }}
         uses: teunmooij/yaml@v1
         with:
           data: '{"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}'
           to-file: "docker-compose.yaml"
 
-      - name: "Test Password w/ Registry"
+      - name: "2: Test SSH w/ Auth"
         if: ${{ always() }}
         id: test2
         uses: ./
@@ -64,8 +69,8 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          pass: ${{ secrets.DOCKER_PASS }}
-          #ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
+          #pass: ${{ secrets.DOCKER_PASS }}
+          ssh_key: "${{ secrets.DOCKER_SSH_KEY }}"
           #registry_host: "ghcr.io"
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
