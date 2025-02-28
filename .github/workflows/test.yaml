@@ -3,7 +3,7 @@ name: "Test"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "18 18 * * 1,3,5"
+    - cron: "18 18 * * *"
   push:
     paths:
       - "src/**"
@@ -44,8 +44,8 @@ jobs:
         id: test1
         uses: ./
         with:
-          name: "test-stack"
-          file: "docker-compose.yaml"
+          name: test_stack-deploy
+          file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
@@ -64,8 +64,8 @@ jobs:
         id: test2
         uses: ./
         with:
-          name: "test-stack"
-          file: "docker-compose.yaml"
+          name: test_stack-deploy
+          file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
