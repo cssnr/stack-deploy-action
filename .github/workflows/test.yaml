@@ -3,7 +3,7 @@ name: "Test"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "18 18 * * *"
+    - cron: "18 18 * * 1,3,5"
   push:
     paths:
       - "src/**"
@@ -77,6 +77,6 @@ jobs:
 
       - name: "Schedule Failure Notification"
         uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && github.event_name == 'schedule' && (steps.test1.outcome == 'failure' || steps.test2.outcome == 'failure') }}
+        if: ${{ always() && github.event_name == 'schedule' && (steps.test1.outcome != 'success' || steps.test2.outcome != 'success') }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
