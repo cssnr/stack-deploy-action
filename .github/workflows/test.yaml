@@ -3,7 +3,7 @@ name: "Test"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 23 * * 4"
+    - cron: "18 18 * * 1,3,5"
   push:
     paths:
       - "src/**"
@@ -44,8 +44,8 @@ jobs:
         id: test1
         uses: ./
         with:
-          name: "test-stack"
-          file: "docker-compose.yaml"
+          name: test_stack-deploy
+          file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
@@ -64,8 +64,8 @@ jobs:
         id: test2
         uses: ./
         with:
-          name: "test-stack"
-          file: "docker-compose.yaml"
+          name: test_stack-deploy
+          file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
@@ -74,3 +74,9 @@ jobs:
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
           summary: false
+
+      - name: "Schedule Failure Notification"
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ always() && github.event_name == 'schedule' && (steps.test1.outcome != 'success' || steps.test2.outcome != 'success') }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
