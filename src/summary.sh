@@ -14,4 +14,6 @@ ${STACK_RESULTS}
 </details>
 
 [Report an issue or request a feature](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
+
+---
 EOM
