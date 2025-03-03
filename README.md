@@ -75,8 +75,7 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
 </details>
 
 To see a workflow run you can view a recent
-[test.yaml run](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
-_(requires login)_.
+[test.yaml run](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) _(requires login)_.
 
 ```yaml
 - name: 'Stack Deploy'
