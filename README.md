@@ -26,8 +26,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 > [!NOTE]  
 > Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
-> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues)
-> if you find any bugs...
+> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
 
 ## Inputs
 
@@ -76,7 +75,7 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
 </details>
 
 To see a workflow run you can view a recent
-[test.yaml workflow run](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[test.yaml run](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
 _(requires login)_.
 
 ```yaml
