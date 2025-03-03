@@ -5,16 +5,15 @@ set -e
 
 function cleanup_trap() {
     _ST="$?"
-    if [[ "${_ST}" != "0" ]]; then
-        echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
-        echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
-    fi
     if [ -z "${INPUT_SSH_KEY}" ];then
         echo -e "🧹 Cleaning Up authorized_keys"
         ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
-    if [[ "${_ST}" == "0" ]]; then
+    if [[ "${_ST}" != "0" ]]; then
+        echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
+        echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
+    else
         echo -e "✅ \u001b[32;1mFinished Success"
     fi
     exit "${_ST}"

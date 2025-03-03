@@ -2,8 +2,8 @@
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
 [![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/releases/latest)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/parse-issue-form-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/parse-issue-form-action/graphs/commit-activity)
-[![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/parse-issue-form-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/parse-issue-form-action)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
+[![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/stack-deploy-action?style=flat&logo=github)](https://github.com/cssnr/stack-deploy-action/forks)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/stack-deploy-action/stargazers)
@@ -26,8 +26,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 > [!NOTE]  
 > Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
-> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues)
-> if you find any bugs...
+> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
 
 ## Inputs
 
@@ -74,6 +73,9 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
 ---
 
 </details>
+
+To see a workflow run you can view a recent
+[test.yaml run](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) _(requires login)_.
 
 ```yaml
 - name: 'Stack Deploy'
