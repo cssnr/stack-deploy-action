@@ -5,6 +5,7 @@ on:
   schedule:
     - cron: "18 18 * * 1,3,5"
   push:
+    branches: ["**"]
     paths:
       - "dist/**"
       - "src/**"
