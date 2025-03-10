@@ -61,6 +61,7 @@ To use a docker `env_file` specify it in your compose file and make it available
 If you need compose file templating this can also be done in a previous step.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
+This will generate extra output in the logs and is useful for debugging deployments.
 
 **resolve_image** - When the default `always` is used, this argument is omitted.
 
@@ -81,7 +82,9 @@ To view a workflow run, click on a recent
 
 🎉 Stack `test_stack-deploy` Successfully Deployed.
 
-`docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy`
+```text
+docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy
+```
 
 <details><summary>Results</summary>
 
