@@ -25,17 +25,17 @@ Running locally is harder to set up, but it is much easier to test; and by far r
 
 Test #1 test password authentication and uses the following secrets:
 
-`secrets.DOCKER_HOST` - SSH Hostname.
-`secrets.DOCKER_PORT` - SSH Port.
-`secrets.DOCKER_USER` - SSH Username.
+`secrets.DOCKER_HOST` - SSH Hostname.  
+`secrets.DOCKER_PORT` - SSH Port.  
+`secrets.DOCKER_USER` - SSH Username.  
 `secrets.DOCKER_PASS` - SSH Password.
 
 Test #2 tests both SSH auth and registry auth and runs on GitHub by default.
 To test this on GitHub you need to additionally add the following secrets and variables:
 
-`vars.PRIVATE_IMAGE` - Image to your private image.
-`vars.DOCKER_HUB_USER` - Private registry username.
-`secrets.DOCKER_HUB_PASS` - Private registry password.
+`vars.PRIVATE_IMAGE` - Image to your private image.  
+`vars.DOCKER_HUB_USER` - Private registry username.  
+`secrets.DOCKER_HUB_PASS` - Private registry password.  
 `secrets.DOCKER_SSH_KEY` - SSH Private Key.
 
 When you push your branch to your repository, the [test.yaml](.github/workflows/test.yaml) should run...
