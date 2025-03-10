@@ -95,10 +95,13 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
-    pass: ${{ secrets.DOCKER_PASS }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
 ```
 
-Use `docker login` and enable `--with-registry-auth`
+## Examples
+
+Use password, `docker login` and enable `--with-registry-auth`
 
 ```yaml
 - name: 'Stack Deploy'
@@ -115,9 +118,24 @@ Use `docker login` and enable `--with-registry-auth`
     registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
-## Examples
+Use SSH key, prune services, set `--detach=false` and `--resolve-image=changed`
 
-Simple Example
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    detach: false
+    prune: true
+    resolve_image: changed
+```
+
+Simple Workflow Example
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -146,7 +164,7 @@ jobs:
           pass: ${{ secrets.DOCKER_PASS }}
 ```
 
-Full Example
+Full Workflow Example
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -222,6 +240,9 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
 ```
+
+For more examples, you can check out other projects using this action:  
+https://github.com/cssnr/stack-deploy-action/network/dependents
 
 # Support
 
