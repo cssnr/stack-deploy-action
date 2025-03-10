@@ -33,34 +33,36 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         |   required   | default               | description                              |
-| ------------- | :----------: | --------------------- | ---------------------------------------- |
-| name          |   **Yes**    | -                     | Docker Stack name                        |
-| file          |      -       | `docker-compose.yaml` | Docker Compose file                      |
-| host          |   **Yes**    | -                     | Remote Docker hostname                   |
-| port          |      -       | `22`                  | Remote Docker port                       |
-| user          |   **Yes**    | -                     | Remote Docker username                   |
-| pass          | or `ssh_key` | -                     | Remote Docker password \*                |
-| ssh_key       |  or `pass`   | -                     | Remote SSH Key file \*                   |
-| env_file      |      -       | -                     | Docker Environment file \*               |
-| detach        |      -       | `true`                | Detach flag, `false` to disable \*       |
-| prune         |      -       | `false`               | Prune flag, `true` to enable             |
-| resolve_image |      -       | `always`              | One of [`always`, `changed`, `never`] \* |
-| registry_auth |      -       | -                     | Enable Registry Authentication \*        |
-| registry_host |      -       | -                     | Registry Authentication Host \*          |
-| registry_user |      -       | -                     | Registry Authentication User \*          |
-| registry_pass |      -       | -                     | Registry Authentication Pass \*          |
-| summary       |      -       | `true`                | Add Job Summary \*                       |
+| input         |   required   | default               | description                               |
+| ------------- | :----------: | --------------------- | ----------------------------------------- |
+| name          |   **Yes**    | -                     | Docker Stack Name                         |
+| file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
+| host          |   **Yes**    | -                     | Remote Docker Hostname                    |
+| port          |      -       | `22`                  | Remote Docker Port                        |
+| user          |   **Yes**    | -                     | Remote Docker Username                    |
+| pass          | or `ssh_key` | -                     | Remote Docker Password \*                 |
+| ssh_key       |  or `pass`   | -                     | Remote SSH Key File \*                    |
+| env_file      |      -       | -                     | Docker Environment File \*                |
+| detach        |      -       | `true`                | Detach Flag, `false` to disable \*        |
+| prune         |      -       | `false`               | Prune Flag, `true` to enable              |
+| resolve_image |      -       | `always`              | Options [`always`, `changed`, `never`] \* |
+| registry_auth |      -       | -                     | Enable Registry Authentication \*         |
+| registry_host |      -       | -                     | Registry Authentication Host \*           |
+| registry_user |      -       | -                     | Registry Authentication Username \*       |
+| registry_pass |      -       | -                     | Registry Authentication Password \*       |
+| summary       |      -       | `true`                | Add Job Summary \*                        |
+
+For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
 
-**env_file** - Variables in this file are exported before stack deploy.  
-To use a docker `env_file` specify it in your compose file and download it in a step before this step.
+**env_file** - Variables in this file are exported before running stack deploy.
+To use a docker `env_file` specify it in your compose file and make it available in a previous step.
+If you need compose file templating this can also be done in a previous step.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 
 **resolve_image** - When the default `always` is used, this argument is omitted.
-For more information see the [docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`.
 
