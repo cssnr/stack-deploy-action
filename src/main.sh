@@ -80,31 +80,33 @@ fi
 
 EXTRA_ARGS=()
 if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
-    echo -e "Adding: --with-registry-auth"
+    #echo -e "Adding: --with-registry-auth"
     EXTRA_ARGS+=("--with-registry-auth")
 fi
 if [[ "${INPUT_DETACH}" != "true" ]];then
-    echo -e "Adding: --detach=false"
+    #echo -e "Adding: --detach=false"
     EXTRA_ARGS+=("--detach=false")
 fi
 if [[ "${INPUT_PRUNE}" != "false" ]];then
-    echo -e "Adding: --prune"
+    #echo -e "Adding: --prune"
     EXTRA_ARGS+=("--prune")
 fi
 if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
     if [[ "${INPUT_RESOLVE_IMAGE}" != "changed" ]] && [[ "${INPUT_RESOLVE_IMAGE}" != "never" ]];then
         echo "::error::Input resolve_image must be one of: always, changed, never"
+        exit 1
     fi
-    echo -e "Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
+    #echo -e "Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
     EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
 fi
 
 echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
+echo docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}"
+exec 5>&1
 # shellcheck disable=SC2034
-STACK_RESULTS=$(docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}")
+STACK_RESULTS=$(docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}" | tee >(cat ->&5))
+#echo "${STACK_RESULTS}"
 echo "::endgroup::"
-
-echo "${STACK_RESULTS}"
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
