@@ -5,7 +5,9 @@ cat << EOM
 
 🎉 Stack \`${INPUT_NAME}\` Successfully Deployed.
 
-\`${COMMAND[*]}\`
+\`\`\`text
+${COMMAND[*]}
+\`\`\`
 
 <details><summary>Results</summary>
 
