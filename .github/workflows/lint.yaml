@@ -21,7 +21,7 @@ jobs:
       #    cat "${GITHUB_EVENT_PATH}"
 
       - name: "ShellCheck"
-        if: ${{ always() }}
+        if: ${{ !cancelled() }}
         uses: ludeeus/action-shellcheck@master
         env:
           SHELLCHECK_OPTS: -x

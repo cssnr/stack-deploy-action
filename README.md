@@ -5,6 +5,7 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
+[![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/stack-deploy-action)](https://github.com/cssnr/stack-deploy-action/discussions)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/stack-deploy-action?style=flat&logo=github)](https://github.com/cssnr/stack-deploy-action/forks)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/stack-deploy-action/stargazers)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
@@ -64,6 +65,9 @@ For more information see the [docs](https://docs.docker.com/reference/cli/docker
 
 **summary** - Write a Summary for the job. To disable this set to `false`.
 
+To view a workflow run, click on a recent
+[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
+
 <details><summary>👀 View Example Job Summary</summary>
 
 ---
@@ -81,9 +85,6 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
 ---
 
 </details>
-
-To view a workflow run, click on a recent
-[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
 ```yaml
 - name: 'Stack Deploy'
@@ -219,7 +220,7 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
+          ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
 ```
 
 # Support
