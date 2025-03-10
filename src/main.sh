@@ -92,6 +92,9 @@ if [[ "${INPUT_PRUNE}" != "false" ]];then
     EXTRA_ARGS+=("--prune")
 fi
 if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+    if [[ "${INPUT_RESOLVE_IMAGE}" != "changed" ]] && [[ "${INPUT_RESOLVE_IMAGE}" != "never" ]];then
+        echo "::error::Input resolve_image must be one of: always, changed, never"
+    fi
     echo -e "Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
     EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
 fi
