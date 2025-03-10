@@ -97,13 +97,11 @@ if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
         EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
     else
         echo "::error::Input resolve_image must be one of: always, changed, never"
-        exit 1
     fi
 fi
 
 echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
-echo -e "\u001b[33;1m"docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}"
-echo -e "\u001b[33;1m--"
+echo -e "\u001b[33;1m"docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}" "\n"
 exec 5>&1
 # shellcheck disable=SC2034
 STACK_RESULTS=$(docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}" | tee >(cat ->&5))
