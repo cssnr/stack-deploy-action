@@ -101,11 +101,10 @@ if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
 fi
 
 echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
-echo docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}"
+echo -e "\u001b[33;1m"docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}" "\n--"
 exec 5>&1
 # shellcheck disable=SC2034
 STACK_RESULTS=$(docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}" | tee >(cat ->&5))
-#echo "${STACK_RESULTS}"
 echo "::endgroup::"
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
