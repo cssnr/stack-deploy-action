@@ -21,6 +21,8 @@
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
 
+This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
+
 For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 **Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
@@ -33,14 +35,14 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 | input         |   required   | default               | description                              |
 | ------------- | :----------: | --------------------- | ---------------------------------------- |
+| name          |   **Yes**    | -                     | Docker Stack name                        |
+| file          |      -       | `docker-compose.yaml` | Docker Compose file                      |
 | host          |   **Yes**    | -                     | Remote Docker hostname                   |
 | port          |      -       | `22`                  | Remote Docker port                       |
 | user          |   **Yes**    | -                     | Remote Docker username                   |
 | pass          | or `ssh_key` | -                     | Remote Docker password \*                |
 | ssh_key       |  or `pass`   | -                     | Remote SSH Key file \*                   |
-| name          |   **Yes**    | -                     | Docker Stack name                        |
-| file          |      -       | `docker-compose.yaml` | Docker Compose file                      |
-| env_file      |      -       | -                     | Docker Environment file                  |
+| env_file      |      -       | -                     | Docker Environment file \*               |
 | detach        |      -       | `true`                | Detach flag, `false` to disable \*       |
 | prune         |      -       | `false`               | Prune flag, `true` to enable             |
 | resolve_image |      -       | `always`              | One of [`always`, `changed`, `never`] \* |
@@ -51,6 +53,9 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | summary       |      -       | `true`                | Add Job Summary \*                       |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
+
+**env_file** - Variables in this file are exported before stack deploy.  
+To use a docker `env_file` specify it in your compose file and download it in a step before this step.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 
@@ -72,12 +77,23 @@ To view a workflow run, click on a recent
 
 ---
 
-🎉 Stack `test-stack` Successfully Deployed.
+🎉 Stack `test_stack-deploy` Successfully Deployed.
+
+`docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy`
 
 <details><summary>Results</summary>
 
 ```text
-Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
+Updating service test_stack-deploy_alpine (id: tdk8v42m0rvp9hz4rbfrtszb6)
+1/1:
+overall progress: 0 out of 1 tasks
+overall progress: 1 out of 1 tasks
+verify: Waiting 5 seconds to verify that tasks are stable...
+verify: Waiting 4 seconds to verify that tasks are stable...
+verify: Waiting 3 seconds to verify that tasks are stable...
+verify: Waiting 2 seconds to verify that tasks are stable...
+verify: Waiting 1 seconds to verify that tasks are stable...
+verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
