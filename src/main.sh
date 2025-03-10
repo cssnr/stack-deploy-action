@@ -78,14 +78,27 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo "::endgroup::"
 fi
 
-echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
 EXTRA_ARGS=()
 if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
     echo -e "Adding: --with-registry-auth"
     EXTRA_ARGS+=("--with-registry-auth")
 fi
+if [[ "${INPUT_DETACH}" != "true" ]];then
+    echo -e "Adding: --detach=false"
+    EXTRA_ARGS+=("--detach=false")
+fi
+if [[ "${INPUT_PRUNE}" != "false" ]];then
+    echo -e "Adding: --prune"
+    EXTRA_ARGS+=("--prune")
+fi
+if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+    echo -e "Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
+    EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
+fi
+
+echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
 # shellcheck disable=SC2034
-STACK_RESULTS=$(docker stack deploy -c "${INPUT_FILE}" "${INPUT_NAME}" "${EXTRA_ARGS[@]}")
+STACK_RESULTS=$(docker stack deploy "${EXTRA_ARGS[@]}" -c "${INPUT_FILE}" "${INPUT_NAME}")
 echo "::endgroup::"
 
 echo "${STACK_RESULTS}"

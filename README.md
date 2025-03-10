@@ -30,23 +30,28 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         |   required   | default               | description                       |
-| ------------- | :----------: | --------------------- | --------------------------------- |
-| host          |   **Yes**    | -                     | Remote Docker hostname            |
-| port          |      -       | `22`                  | Remote Docker port                |
-| user          |   **Yes**    | -                     | Remote Docker username            |
-| pass          | or `ssh_key` | -                     | Remote Docker password \*         |
-| ssh_key       |  or `pass`   | -                     | Remote SSH Key file \*            |
-| name          |   **Yes**    | -                     | Docker Stack name                 |
-| file          |      -       | `docker-compose.yaml` | Docker Compose file               |
-| env_file      |      -       | -                     | Docker Environment file           |
-| registry_auth |      -       | -                     | Enable Registry Authentication \* |
-| registry_host |      -       | -                     | Registry Authentication Host \*   |
-| registry_user |      -       | -                     | Registry Authentication User \*   |
-| registry_pass |      -       | -                     | Registry Authentication Pass \*   |
-| summary       |      -       | `true`                | Add Job Summary \*                |
+| input         |   required   | default               | description                        |
+| ------------- | :----------: | --------------------- | ---------------------------------- |
+| host          |   **Yes**    | -                     | Remote Docker hostname             |
+| port          |      -       | `22`                  | Remote Docker port                 |
+| user          |   **Yes**    | -                     | Remote Docker username             |
+| pass          | or `ssh_key` | -                     | Remote Docker password \*          |
+| ssh_key       |  or `pass`   | -                     | Remote SSH Key file \*             |
+| name          |   **Yes**    | -                     | Docker Stack name                  |
+| file          |      -       | `docker-compose.yaml` | Docker Compose file                |
+| env_file      |      -       | -                     | Docker Environment file            |
+| detach        |      -       | `true`                | Detach flag, `false` to disable \* |
+| prune         |      -       | `false`               | Prune flag, `true` to enable       |
+| resolve_image |      -       | `always`              | [`always`, `changed`, `never`]     |
+| registry_auth |      -       | -                     | Enable Registry Authentication \*  |
+| registry_host |      -       | -                     | Registry Authentication Host \*    |
+| registry_user |      -       | -                     | Registry Authentication User \*    |
+| registry_pass |      -       | -                     | Registry Authentication Pass \*    |
+| summary       |      -       | `true`                | Add Job Summary \*                 |
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
+
+**detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`.
 

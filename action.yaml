@@ -32,6 +32,18 @@ inputs:
   env_file:
     description: "Environment File"
     required: false
+  detach:
+    description: "Detach Flag"
+    required: false
+    default: "true"
+  prune:
+    description: "Prune Flag"
+    required: false
+    default: "false"
+  resolve_image:
+    description: "Resolve Image Flag"
+    required: false
+    default: "always"
   registry_auth:
     description: "Enable Registry Auth"
     required: false
