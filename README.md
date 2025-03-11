@@ -5,6 +5,7 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
+[![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/stack-deploy-action)](https://github.com/cssnr/stack-deploy-action/discussions)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/stack-deploy-action?style=flat&logo=github)](https://github.com/cssnr/stack-deploy-action/forks)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/stack-deploy-action/stargazers)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
@@ -20,6 +21,8 @@
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
 
+This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
+
 For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 **Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
@@ -30,23 +33,37 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         |   required   | default               | description                       |
-| ------------- | :----------: | --------------------- | --------------------------------- |
-| host          |   **Yes**    | -                     | Remote Docker hostname            |
-| port          |      -       | `22`                  | Remote Docker port                |
-| user          |   **Yes**    | -                     | Remote Docker username            |
-| pass          | or `ssh_key` | -                     | Remote Docker password \*         |
-| ssh_key       |  or `pass`   | -                     | Remote SSH Key file \*            |
-| name          |   **Yes**    | -                     | Docker Stack name                 |
-| file          |      -       | `docker-compose.yaml` | Docker Compose file               |
-| env_file      |      -       | -                     | Docker Environment file           |
-| registry_auth |      -       | -                     | Enable Registry Authentication \* |
-| registry_host |      -       | -                     | Registry Authentication Host \*   |
-| registry_user |      -       | -                     | Registry Authentication User \*   |
-| registry_pass |      -       | -                     | Registry Authentication Pass \*   |
-| summary       |      -       | `true`                | Add Job Summary \*                |
+| input         |   required   | default               | description                               |
+| ------------- | :----------: | --------------------- | ----------------------------------------- |
+| name          |   **Yes**    | -                     | Docker Stack Name                         |
+| file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
+| host          |   **Yes**    | -                     | Remote Docker Hostname                    |
+| port          |      -       | `22`                  | Remote Docker Port                        |
+| user          |   **Yes**    | -                     | Remote Docker Username                    |
+| pass          | or `ssh_key` | -                     | Remote Docker Password \*                 |
+| ssh_key       |  or `pass`   | -                     | Remote SSH Key File \*                    |
+| env_file      |      -       | -                     | Docker Environment File \*                |
+| detach        |      -       | `true`                | Detach Flag, `false` to disable \*        |
+| prune         |      -       | `false`               | Prune Flag, `true` to enable              |
+| resolve_image |      -       | `always`              | Options [`always`, `changed`, `never`] \* |
+| registry_auth |      -       | -                     | Enable Registry Authentication \*         |
+| registry_host |      -       | -                     | Registry Authentication Host \*           |
+| registry_user |      -       | -                     | Registry Authentication Username \*       |
+| registry_pass |      -       | -                     | Registry Authentication Password \*       |
+| summary       |      -       | `true`                | Add Job Summary \*                        |
+
+For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
+
+**env_file** - Variables in this file are exported before running stack deploy.
+To use a docker `env_file` specify it in your compose file and make it available in a previous step.
+If you need compose file templating this can also be done in a previous step.
+
+**detach** - Set this to `false` to not exit immediately and wait for the services to converge.
+This will generate extra output in the logs and is useful for debugging deployments.
+
+**resolve_image** - When the default `always` is used, this argument is omitted.
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`.
 
@@ -56,16 +73,32 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 **summary** - Write a Summary for the job. To disable this set to `false`.
 
+To view a workflow run, click on a recent
+[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
+
 <details><summary>👀 View Example Job Summary</summary>
 
 ---
 
-🎉 Stack `test-stack` Successfully Deployed.
+🎉 Stack `test_stack-deploy` Successfully Deployed.
+
+```text
+docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy
+```
 
 <details><summary>Results</summary>
 
 ```text
-Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
+Updating service test_stack-deploy_alpine (id: tdk8v42m0rvp9hz4rbfrtszb6)
+1/1:
+overall progress: 0 out of 1 tasks
+overall progress: 1 out of 1 tasks
+verify: Waiting 5 seconds to verify that tasks are stable...
+verify: Waiting 4 seconds to verify that tasks are stable...
+verify: Waiting 3 seconds to verify that tasks are stable...
+verify: Waiting 2 seconds to verify that tasks are stable...
+verify: Waiting 1 seconds to verify that tasks are stable...
+verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
@@ -73,9 +106,6 @@ Updating service test-stack_alpine (id: ewi9ck5hcdmmvaj8ms0te4t8r)
 ---
 
 </details>
-
-To view a workflow run, click on a recent
-[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
 ```yaml
 - name: 'Stack Deploy'
@@ -86,10 +116,15 @@ To view a workflow run, click on a recent
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
-    pass: ${{ secrets.DOCKER_PASS }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
 ```
 
-Use `docker login` and enable `--with-registry-auth`
+## Examples
+
+💡 _Click on a heading to expand or collapse an example._
+
+<details open><summary>With password, docker login and --with-registry-auth</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -106,9 +141,54 @@ Use `docker login` and enable `--with-registry-auth`
     registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
-## Examples
+</details>
 
-Simple Example
+<details><summary>With SSH key, --prune, --detach=false and --resolve-image=changed</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    detach: false
+    prune: true
+    resolve_image: 'changed'
+```
+
+</details>
+
+<details><summary>With All Inputs</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    env_file: 'stack.env'
+    detach: true
+    prune: false
+    resolve_image: 'always'
+    registry_auth: true # not needed with registry_pass/registry_user
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    summary: true
+```
+
+</details>
+
+<details><summary>Simple Workflow Example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -137,7 +217,9 @@ jobs:
           pass: ${{ secrets.DOCKER_PASS }}
 ```
 
-Full Example
+</details>
+
+<details><summary>Full Workflow Example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -153,11 +235,15 @@ on:
 env:
   REGISTRY: 'ghcr.io'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   build:
   name: 'Build'
   runs-on: ubuntu-latest
-  timeout-minutes: 5
+  timeout-minutes: 15
   permissions:
     packages: write
 
@@ -168,7 +254,7 @@ jobs:
     - name: 'Setup Buildx'
       uses: docker/setup-buildx-action@v2
       with:
-        platforms: linux/amd64,linux/arm64
+        platforms: 'linux/amd64,linux/arm64'
 
     - name: 'Docker Login'
       uses: docker/login-action@v3
@@ -181,14 +267,14 @@ jobs:
       id: tags
       uses: smashedr/docker-tags-action@v1
       with:
-        images: '$${{ env.REGISTRY }}/${{ github.repository }}'
+        images: $${{ env.REGISTRY }}/${{ github.repository }}
         tags: ${{ inputs.tags }}
 
     - name: 'Build and Push'
       uses: docker/build-push-action@v6
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: 'linux/amd64,linux/arm64'
         push: true
         tags: ${{ steps.tags.outputs.tags }}
         labels: ${{ steps.tags.outputs.labels }}
@@ -211,8 +297,29 @@ jobs:
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
-          ssh_key: '${{ secrets.DOCKER_SSH_KEY }}'
+          ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+
+  cleanup:
+    name: 'Cleanup'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: deploy
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 'Purge Cache'
+        uses: cssnr/cloudflare-purge-cache-action@v2
+        with:
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          zones: cssnr.com
 ```
+
+</details>
+
+For more examples, you can check out other projects using this action:  
+https://github.com/cssnr/stack-deploy-action/network/dependents
 
 # Support
 
