@@ -122,9 +122,9 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 ## Examples
 
-💡 _Click on a heading to expand or collapse the examples._
+💡 _Click on a heading to expand or collapse an example._
 
-<details open><summary>Use password, `docker login` and enable `--with-registry-auth`</summary>
+<details open><summary>With password, docker login and --with-registry-auth</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -136,14 +136,14 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }}
-    registry_host: 'ghcr.io'
+    registry_host: ghcr.io
     registry_user: ${{ vars.GHCR_USER }}
     registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
 </details>
 
-<details><summary>Use SSH key, prune services, set `--detach=false` and `--resolve-image=changed`</summary>
+<details><summary>With SSH key, --prune, --detach=false and --resolve-image=changed</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -162,7 +162,33 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 </details>
 
-<details><summary>Simple workflow example</summary>
+<details open><summary>With all inputs</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    env_file: stack.env
+    detach: true
+    prune: false
+    resolve_image: always
+    registry_auth: true # not needed with registry_pass/registry_user
+    registry_host: ghcr.io
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    summary: true
+```
+
+</details>
+
+<details><summary>Simple Workflow Example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -193,7 +219,7 @@ jobs:
 
 </details>
 
-<details><summary>Full workflow example</summary>
+<details><summary>Full Workflow Example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
