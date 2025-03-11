@@ -136,7 +136,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }}
-    registry_host: ghcr.io
+    registry_host: 'ghcr.io'
     registry_user: ${{ vars.GHCR_USER }}
     registry_pass: ${{ secrets.GHCR_PASS }}
 ```
@@ -157,12 +157,12 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
     detach: false
     prune: true
-    resolve_image: changed
+    resolve_image: 'changed'
 ```
 
 </details>
 
-<details open><summary>With all inputs</summary>
+<details><summary>With All Inputs</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -175,12 +175,12 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
     user: ${{ secrets.DOCKER_USER }}
     pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
-    env_file: stack.env
+    env_file: 'stack.env'
     detach: true
     prune: false
-    resolve_image: always
+    resolve_image: 'always'
     registry_auth: true # not needed with registry_pass/registry_user
-    registry_host: ghcr.io
+    registry_host: 'ghcr.io'
     registry_user: ${{ vars.GHCR_USER }}
     registry_pass: ${{ secrets.GHCR_PASS }}
     summary: true
@@ -235,11 +235,15 @@ on:
 env:
   REGISTRY: 'ghcr.io'
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   build:
   name: 'Build'
   runs-on: ubuntu-latest
-  timeout-minutes: 5
+  timeout-minutes: 15
   permissions:
     packages: write
 
@@ -250,7 +254,7 @@ jobs:
     - name: 'Setup Buildx'
       uses: docker/setup-buildx-action@v2
       with:
-        platforms: linux/amd64,linux/arm64
+        platforms: 'linux/amd64,linux/arm64'
 
     - name: 'Docker Login'
       uses: docker/login-action@v3
@@ -263,14 +267,14 @@ jobs:
       id: tags
       uses: smashedr/docker-tags-action@v1
       with:
-        images: '$${{ env.REGISTRY }}/${{ github.repository }}'
+        images: $${{ env.REGISTRY }}/${{ github.repository }}
         tags: ${{ inputs.tags }}
 
     - name: 'Build and Push'
       uses: docker/build-push-action@v6
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: 'linux/amd64,linux/arm64'
         push: true
         tags: ${{ steps.tags.outputs.tags }}
         labels: ${{ steps.tags.outputs.labels }}
@@ -294,6 +298,22 @@ jobs:
           port: ${{ secrets.DOCKER_PORT }}
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+
+  cleanup:
+    name: 'Cleanup'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: deploy
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 'Purge Cache'
+        uses: cssnr/cloudflare-purge-cache-action@v2
+        with:
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          zones: cssnr.com
 ```
 
 </details>
