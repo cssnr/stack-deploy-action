@@ -325,16 +325,17 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 
 ## Tags
 
-The following rolling tags are maintained.
+The following [rolling tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
-| Tag       | Example  | Description                                                     |
-| --------- | -------- | --------------------------------------------------------------- |
-| `vN` \*   | `v1`     | Points to latest vN release. New features and improvements.     |
-| `vN.N` \* | `v1.0`   | Points to latest vN.N release. No new features, bug fixes only. |
-| `vN.N.N`  | `v1.0.0` | **Not a rolling tag!** Points directly to a specific release.   |
+| Tag       | Example  | Description                                                                    |
+| --------- | -------- | ------------------------------------------------------------------------------ |
+| `vN` \*   | `v1`     | Recommended. Points to latest `vN` release. New features and improvements.     |
+| `vN.N` \* | `v1.0`   | Minimal. Points to latest `vN.N` release. No new features, bug fixes only.     |
+| `vN.N.N`  | `v1.0.0` | **Not a rolling tag! Not Recommended.** Points directly to a specific release. |
 
-`vN` - This is the recommended tag. It will never include breaking changes.  
-`vN.N` - At a minimum you should use this rolling tag which will include bug fixes.
+**Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags)...
+
+You can view the release notes for each version on the [Releases Page](https://github.com/cssnr/stack-deploy-action/releases).
 
 # Support
 
