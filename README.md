@@ -122,7 +122,9 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 ## Examples
 
-Use password, `docker login` and enable `--with-registry-auth`
+💡 _Click on a heading to expand or collapse the examples._
+
+<details open><summary>Use password, `docker login` and enable `--with-registry-auth`</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -139,7 +141,9 @@ Use password, `docker login` and enable `--with-registry-auth`
     registry_pass: ${{ secrets.GHCR_PASS }}
 ```
 
-Use SSH key, prune services, set `--detach=false` and `--resolve-image=changed`
+</details>
+
+<details><summary>Use SSH key, prune services, set `--detach=false` and `--resolve-image=changed`</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -156,7 +160,9 @@ Use SSH key, prune services, set `--detach=false` and `--resolve-image=changed`
     resolve_image: changed
 ```
 
-Simple Workflow Example
+</details>
+
+<details><summary>Simple workflow example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -185,7 +191,9 @@ jobs:
           pass: ${{ secrets.DOCKER_PASS }}
 ```
 
-Full Workflow Example
+</details>
+
+<details><summary>Full workflow example</summary>
 
 ```yaml
 name: 'Stack Deploy Action'
@@ -261,6 +269,8 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
 ```
+
+</details>
 
 For more examples, you can check out other projects using this action:  
 https://github.com/cssnr/stack-deploy-action/network/dependents

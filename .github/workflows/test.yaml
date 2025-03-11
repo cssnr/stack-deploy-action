@@ -6,14 +6,14 @@ on:
     - cron: "18 18 * * 1,3,5"
   push:
     branches: ["**"]
-    paths:
-      - "dist/**"
-      - "src/**"
-      - ".github/workflows/test.yaml"
-      - "Dockerfile"
-      - "package*.json"
-      - "requirements.txt"
-      - "action.yaml"
+    #paths:
+    #  - "dist/**"
+    #  - "src/**"
+    #  - ".github/workflows/test.yaml"
+    #  - "Dockerfile"
+    #  - "package*.json"
+    #  - "requirements.txt"
+    #  - "action.yaml"
 
 env:
   PRIVATE_IMAGE: ${{ vars.PRIVATE_IMAGE || 'smashedr/alpine-private:latest' }}
