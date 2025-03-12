@@ -1,17 +1,17 @@
 blank_issues_enabled: true
 contact_links:
   - name: "💡 Request a Feature"
-    about: Request a New Feature or Enhancement in the Discussions.
-    url: https://github.com/cssnr/stack-deploy-action/discussions/new?category=feature-requests
+    about: Request a new feature or enhancement in a discussions.
+    url: https://github.com/cssnr/virustotal-action/discussions/new?category=feature-requests
 
   - name: "❔ Ask a Question"
-    about: Ask a General Question or start a Discussions.
-    url: https://github.com/cssnr/stack-deploy-action/discussions/new?category=q-a
+    about: Ask a general question or start a discussions.
+    url: https://github.com/cssnr/virustotal-action/discussions/new?category=q-a
 
   - name: "💬 Join Discord"
-    about: Chat with us about Issues, Features, Questions and More.
+    about: Chat with us about general questions, issues or suggestions.
     url: https://discord.gg/wXy6m2X8wY
 
   - name: "📝 Submit Feedback"
-    about: Send General Feedback.
+    about: Send general feedback through the website.
     url: https://cssnr.github.io/feedback

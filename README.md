@@ -25,13 +25,13 @@ You can also optionally authenticate against a private registry using a username
 
 This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
 
-For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
-
 **Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
 
 > [!NOTE]  
 > Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
 > for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
+
+For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
@@ -54,7 +54,8 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | registry_pass |      -       | -                     | Registry Authentication Password \*       |
 | summary       |      -       | `true`                | Add Job Summary \*                        |
 
-For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
+_For additional details on inputs, see the stack deploy
+[documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/)._
 
 **host** - The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
@@ -127,7 +128,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 ## Examples
 
-💡 _Click on a heading to expand or collapse an example._
+💡 _Click on an example heading to expand or collapse the example._
 
 <details open><summary>With password, docker login and --with-registry-auth</summary>
 
@@ -328,17 +329,17 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 
 ## Tags
 
-The following [rolling tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
+The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
-| Tag      | Example  | Bugs | Feat. | Description                            |
-| -------- | -------- | :--: | :---: | -------------------------------------- |
-| `vN`     | `v1`     |  ✅  |  ✅   | Points to latest `vN` release.         |
-| `vN.N`   | `v1.0`   |  ✅  |  ❌   | Points to latest `vN.N` release.       |
-| `vN.N.N` | `v1.0.0` |  ❌  |  ❌   | Points directly to a specific release. |
+[![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=latest%20version)](https://github.com/cssnr/stack-deploy-action/releases/latest)
 
-**Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags).
+| Tag      | Example  | Target   | Bugs | Feat. | Description                                               |
+| -------- | -------- | -------- | :--: | :---: | --------------------------------------------------------- |
+| `vN`     | `v1`     | `vN.x.x` |  ✅  |  ✅   | Includes new features but is always backwards compatible. |
+| `vN.N`   | `v1.0`   | `vN.N.x` |  ✅  |  ❌   | Only receives bug fixes. This is the most stable tag.     |
+| `vN.N.N` | `v1.0.0` | `vN.N.N` |  ❌  |  ❌   | Not a rolling tag. **Not** recommended.                   |
 
-You can view the release notes for each version on the [Releases Page](https://github.com/cssnr/stack-deploy-action/releases).
+You can view the release notes for each version on the [releases](https://github.com/cssnr/stack-deploy-action/releases) page.
 
 # Support
 
@@ -352,6 +353,8 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 - Report an Issue: https://github.com/cssnr/stack-deploy-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
 - Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy)
+
+For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.github/blob/master/.github/SUPPORT.md#support).
 
 # Contributing
 
