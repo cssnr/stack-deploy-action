@@ -39,7 +39,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | ------------- | :----------: | --------------------- | ----------------------------------------- |
 | name          |   **Yes**    | -                     | Docker Stack Name                         |
 | file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
-| host          |   **Yes**    | -                     | Remote Docker Hostname or IP Address      |
+| host          |   **Yes**    | -                     | Remote Docker Hostname or IP \*           |
 | port          |      -       | `22`                  | Remote Docker Port                        |
 | user          |   **Yes**    | -                     | Remote Docker Username                    |
 | pass          | or `ssh_key` | -                     | Remote Docker Password \*                 |
@@ -55,6 +55,9 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | summary       |      -       | `true`                | Add Job Summary \*                        |
 
 For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
+
+**host** - The hostname or IP address of the remote docker server to deploy too.
+If your hostname is behind a proxy like cloudflare you will need to use the IP address.
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
 
@@ -329,11 +332,11 @@ The following [rolling tags](https://github.com/cssnr/stack-deploy-action/tags) 
 
 | Tag       | Example  | Description                                                                    |
 | --------- | -------- | ------------------------------------------------------------------------------ |
-| `vN` \*   | `v1`     | Recommended. Points to latest `vN` release. New features and improvements.     |
-| `vN.N` \* | `v1.0`   | Minimal. Points to latest `vN.N` release. No new features, bug fixes only.     |
-| `vN.N.N`  | `v1.0.0` | **Not a rolling tag! Not Recommended.** Points directly to a specific release. |
+| `vN` \*   | `v1`     | Points to latest `vN` release. Always Backwards Compatible. Recommended.       |
+| `vN.N` \* | `v1.0`   | Points to latest `vN.N` release. Only includes bug fixes and improvements.     |
+| `vN.N.N`  | `v1.0.0` | **Not Recommended. Not a rolling tag!** Points directly to a specific release. |
 
-**Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags)...
+**Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags).
 
 You can view the release notes for each version on the [Releases Page](https://github.com/cssnr/stack-deploy-action/releases).
 
