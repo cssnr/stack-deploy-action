@@ -57,7 +57,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
 
 **host** - The hostname or IP address of the remote docker server to deploy too.
-If your hostname is behind a proxy like cloudflare you will need to use the IP address.
+If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
 
