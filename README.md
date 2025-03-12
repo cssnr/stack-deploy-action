@@ -1,20 +1,22 @@
-[![Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&logoColor=white&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
-[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
-[![Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&logoColor=white&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
-[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/releases/latest)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
+[![Tags](https://img.shields.io/badge/tags-v1_%7C_v1.2-blue?logo=git&logoColor=white)](https://github.com/cssnr/stack-deploy-action/tags)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=git&logoColor=white&label=latest)](https://github.com/cssnr/stack-deploy-action/releases/latest)
+[![Release WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
+[![Test WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[![Lint WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
-[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/stack-deploy-action)](https://github.com/cssnr/stack-deploy-action/discussions)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/stack-deploy-action?style=flat&logo=github)](https://github.com/cssnr/stack-deploy-action/forks)
-[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/stack-deploy-action/stargazers)
-[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/stack-deploy-action?style=flat&logo=github)](https://github.com/cssnr/stack-deploy-action/stargazers)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 
 # Docker Stack Deploy Action
 
 - [Inputs](#Inputs)
 - [Examples](#Examples)
+- [Tags](#Tags)
 - [Support](#Support)
 - [Contributing](#Contributing)
 
@@ -37,7 +39,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | ------------- | :----------: | --------------------- | ----------------------------------------- |
 | name          |   **Yes**    | -                     | Docker Stack Name                         |
 | file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
-| host          |   **Yes**    | -                     | Remote Docker Hostname                    |
+| host          |   **Yes**    | -                     | Remote Docker Hostname or IP \*           |
 | port          |      -       | `22`                  | Remote Docker Port                        |
 | user          |   **Yes**    | -                     | Remote Docker Username                    |
 | pass          | or `ssh_key` | -                     | Remote Docker Password \*                 |
@@ -53,6 +55,9 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | summary       |      -       | `true`                | Add Job Summary \*                        |
 
 For additional details on inputs, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
+
+**host** - The hostname or IP address of the remote docker server to deploy too.
+If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
 **pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
 
@@ -265,7 +270,7 @@ jobs:
 
     - name: 'Generate Tags'
       id: tags
-      uses: smashedr/docker-tags-action@v1
+      uses: cssnr/docker-tags-action@v1
       with:
         images: $${{ env.REGISTRY }}/${{ github.repository }}
         tags: ${{ inputs.tags }}
@@ -320,6 +325,20 @@ jobs:
 
 For more examples, you can check out other projects using this action:  
 https://github.com/cssnr/stack-deploy-action/network/dependents
+
+## Tags
+
+The following [rolling tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
+
+| Tag      | Example  | Bugs | Feat. | Description                            |
+| -------- | -------- | :--: | :---: | -------------------------------------- |
+| `vN`     | `v1`     |  ✅  |  ✅   | Points to latest `vN` release.         |
+| `vN.N`   | `v1.0`   |  ✅  |  ❌   | Points to latest `vN.N` release.       |
+| `vN.N.N` | `v1.0.0` |  ❌  |  ❌   | Points directly to a specific release. |
+
+**Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags).
+
+You can view the release notes for each version on the [Releases Page](https://github.com/cssnr/stack-deploy-action/releases).
 
 # Support
 
