@@ -330,11 +330,11 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 
 The following [rolling tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
-| Tag       | Example  | Description                                                                    |
-| --------- | -------- | ------------------------------------------------------------------------------ |
-| `vN` \*   | `v1`     | Points to latest `vN` release. Always Backwards Compatible. Recommended.       |
-| `vN.N` \* | `v1.0`   | Points to latest `vN.N` release. Only includes bug fixes and improvements.     |
-| `vN.N.N`  | `v1.0.0` | **Not Recommended. Not a rolling tag!** Points directly to a specific release. |
+| Tag      | Example  | Bugs | Feat. | Description                            |
+| -------- | -------- | :--: | :---: | -------------------------------------- |
+| `vN`     | `v1`     |  ✅  |  ✅   | Points to latest `vN` release.         |
+| `vN.N`   | `v1.0`   |  ✅  |  ❌   | Points to latest `vN.N` release.       |
+| `vN.N.N` | `v1.0.0` |  ❌  |  ❌   | Points directly to a specific release. |
 
 **Important:** Make sure to use one of the [latest tags](https://github.com/cssnr/stack-deploy-action/tags).
 
