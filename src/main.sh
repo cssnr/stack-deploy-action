@@ -11,8 +11,8 @@ function cleanup_trap() {
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
     if [[ "${_ST}" != "0" ]]; then
-        echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
-        echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
+        echo -e "⛔ \u001b[31;1mFailed to deploy stack!"
+        echo "::error::Failed to deploy stack. See logs for details..."
     else
         echo -e "✅ \u001b[32;1mFinished Success"
     fi
@@ -83,30 +83,43 @@ if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
     echo "::debug::Adding: --with-registry-auth"
     EXTRA_ARGS+=("--with-registry-auth")
 fi
-if [[ "${INPUT_DETACH}" != "true" ]];then
-    echo "::debug::Adding: --detach=false"
-    EXTRA_ARGS+=("--detach=false")
-fi
 if [[ "${INPUT_PRUNE}" != "false" ]];then
     echo "::debug::Adding: --prune"
     EXTRA_ARGS+=("--prune")
 fi
-if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
-    if [[ "${INPUT_RESOLVE_IMAGE}" == "changed" || "${INPUT_RESOLVE_IMAGE}" == "never" ]];then
-        echo "::debug::Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
-        EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
-    else
-        echo "::error::Input resolve_image must be one of: always, changed, never"
+
+if [[ "${INPUT_COMPOSE}" != "false" ]];then
+    echo "::debug::Adding: ${INPUT_COMPOSE_ARGS}"
+    read -r -a args <<< "${INPUT_COMPOSE_ARGS}"
+    EXTRA_ARGS+=("${args[@]}")
+else
+    if [[ "${INPUT_DETACH}" != "true" ]];then
+        echo "::debug::Adding: --detach=false"
+        EXTRA_ARGS+=("--detach=false")
+    fi
+    if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+        if [[ "${INPUT_RESOLVE_IMAGE}" == "changed" || "${INPUT_RESOLVE_IMAGE}" == "never" ]];then
+            echo "::debug::Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
+            EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
+        else
+            echo "::error::Input resolve_image must be one of: always, changed, never"
+        fi
     fi
 fi
 
-echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
-COMMAND=("docker" "stack" "deploy" "${EXTRA_ARGS[@]}" "-c" "${INPUT_FILE}" "${INPUT_NAME}")
+if [[ "${INPUT_COMPOSE}" != "false" ]];then
+    _type="Docker Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+else
+    _type="Docker Stack \u001b[36;1m${INPUT_NAME}"
+    COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+fi
+
+echo -e "::group::Deploying ${_type}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
 # shellcheck disable=SC2034
 STACK_RESULTS=$("${COMMAND[@]}" | tee >(cat >&5))
-
 echo "::endgroup::"
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then

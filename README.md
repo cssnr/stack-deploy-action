@@ -1,9 +1,9 @@
 [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
 [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/releases/latest)
-[![Release WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
-[![Test WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
-[![Lint WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
+[![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
+[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx)](https://github.com/cssnr/stack-deploy-action)
@@ -21,6 +21,8 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
+> **Now works with vanilla Docker hosts using Compose. No Swarm Required!**
+
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
 
@@ -36,10 +38,12 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         |   required   | default               | description                               |
-| ------------- | :----------: | --------------------- | ----------------------------------------- |
-| name          |   **Yes**    | -                     | Docker Stack Name                         |
-| file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
+| Input         |   Required   | Default               | Description                               |
+| :------------ | :----------: | :-------------------- | :---------------------------------------- |
+| name          | _for swarm_  | -                     | Docker Stack Name for Swarm               |
+| file          |      -       | `docker-compose.yaml` | Docker Stack/Compose File                 |
+| compose       |      -       | `false`               | Uses Compose instead of Swarm \*          |
+| compose_args  |      -       | -                     | Additional Arguments for Compose \*       |
 | host          |   **Yes**    | -                     | Remote Docker Hostname or IP \*           |
 | port          |      -       | `22`                  | Remote Docker Port                        |
 | user          |   **Yes**    | -                     | Remote Docker Username                    |
@@ -48,7 +52,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | env_file      |      -       | -                     | Docker Environment File \*                |
 | detach        |      -       | `true`                | Detach Flag, `false` to disable \*        |
 | prune         |      -       | `false`               | Prune Flag, `true` to enable              |
-| resolve_image |      -       | `always`              | Options [`always`, `changed`, `never`] \* |
+| resolve_image |      -       | `always`              | Resolve [`always`, `changed`, `never`] \* |
 | registry_auth |      -       | -                     | Enable Registry Authentication \*         |
 | registry_host |      -       | -                     | Registry Authentication Host \*           |
 | registry_user |      -       | -                     | Registry Authentication Username \*       |
@@ -57,6 +61,13 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 _For additional details on inputs, see the stack deploy
 [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/)._
+
+**compose** - Set this to `true` to use `compose up` instead of `stack deploy` for standalone Docker hosts.
+
+**compose_args** - Arguments to pass to the `compose up` command. Only used for `compose: true` deployments.
+Detach `-d` is always passed. With no args the default is `--remove-orphans --force-recreate`.
+Use an empty string to override. For more details, see the compose up
+[docs](https://docs.docker.com/reference/cli/docker/compose/up/).
 
 **host** - The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
@@ -149,7 +160,6 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-
 <details><summary>With SSH key, --prune, --detach=false and --resolve-image=changed</summary>
 
 ```yaml
@@ -168,7 +178,6 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-
 <details><summary>With All Inputs</summary>
 
 ```yaml
@@ -194,7 +203,39 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
+<details><summary>Standalone Compose with Defaults</summary>
 
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    compose: true
+```
+
+</details>
+<details><summary>Standalone Compose with Custom Arguments</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    compose: true
+    compose_args: --remove-orphans --force-recreate
+```
+
+Note: these are the default arguments. To remove them pass an empty string.
+
+</details>
 <details><summary>Simple Workflow Example</summary>
 
 ```yaml
@@ -225,7 +266,6 @@ jobs:
 ```
 
 </details>
-
 <details><summary>Full Workflow Example</summary>
 
 ```yaml
@@ -333,7 +373,7 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
 | Tag                                                                                                                                                                                                                           | Example  | Target   | Bugs | Feat. | Description                                               |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | :--: | :---: | --------------------------------------------------------- |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :------- | :--: | :---: | :-------------------------------------------------------- |
 | [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=limegreen)](https://github.com/cssnr/stack-deploy-action/releases/latest)     | `vN`     | `vN.x.x` |  ✅  |  ✅   | Includes new features but is always backwards compatible. |
 | [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=yellowgreen)](https://github.com/cssnr/stack-deploy-action/releases/latest) | `vN.N`   | `vN.N.x` |  ✅  |  ❌   | Only receives bug fixes. This is the most stable tag.     |
 | [![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=%20&color=orange)](https://github.com/cssnr/stack-deploy-action/releases/latest)                               | `vN.N.N` | `vN.N.N` |  ❌  |  ❌   | Not a rolling tag. **Not** recommended.                   |
