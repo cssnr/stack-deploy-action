@@ -136,9 +136,11 @@ fi
 echo -e "::group::Deploying Docker ${_type} Stack: \u001b[36;1m${INPUT_NAME}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
+set +e
 # shellcheck disable=SC2034
 STACK_RESULTS=$( "${COMMAND[@]}" 2>&1 | tee >(cat >&5) ;exit "${PIPESTATUS[0]}" )
 EXIT_STATUS="$?"
+set -e
 echo "::endgroup::"
 
 ## Write Summary
