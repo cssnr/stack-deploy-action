@@ -63,6 +63,20 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 _Swarm hosts, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/) for more details._  
 _Compose hosts, see the compose up [documentation](https://docs.docker.com/reference/cli/docker/compose/up/) for more details._
 
+<details><summary>🖱️ Click Here to see how the script generates the command</summary>
+
+```shell
+if [[ "${INPUT_COMPOSE}" != "false" ]];then
+    _type="Docker Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+else
+    _type="Docker Stack"
+    COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+fi
+```
+
+</details>
+
 **name** - For Swarm this is the stack name and for Compose the project name.
 
 **compose** - Set this to `true` to use `compose up` instead of `stack deploy` for non-swarm Docker hosts.
