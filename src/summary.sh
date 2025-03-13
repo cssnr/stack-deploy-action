@@ -4,7 +4,7 @@
 cat << EOM
 ## Stack Deploy Action
 
-🎉 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed.
+🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed.
 
 \`\`\`text
 ${COMMAND[*]}
@@ -18,7 +18,7 @@ ${STACK_RESULTS}
 
 </details>
 
-[Report an issue or request a feature](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
+[View Documentation, Report Issues or Request Features](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
 
 ---
 EOM

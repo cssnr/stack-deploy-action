@@ -67,10 +67,10 @@ _Compose hosts, see the compose up [documentation](https://docs.docker.com/refer
 
 ```shell
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
-    _type="Docker Compose"
+    _type="Compose"
     COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 else
-    _type="Docker Swarm"
+    _type="Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 fi
 ```

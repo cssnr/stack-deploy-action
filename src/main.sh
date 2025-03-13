@@ -79,10 +79,6 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
 fi
 
 EXTRA_ARGS=()
-if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
-    echo "::debug::Adding: --with-registry-auth"
-    EXTRA_ARGS+=("--with-registry-auth")
-fi
 if [[ "${INPUT_PRUNE}" != "false" ]];then
     echo "::debug::Adding: --prune"
     EXTRA_ARGS+=("--prune")
@@ -93,6 +89,10 @@ if [[ "${INPUT_COMPOSE}" != "false" ]];then
     read -r -a args <<< "${INPUT_COMPOSE_ARGS}"
     EXTRA_ARGS+=("${args[@]}")
 else
+    if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
+        echo "::debug::Adding: --with-registry-auth"
+        EXTRA_ARGS+=("--with-registry-auth")
+    fi
     if [[ "${INPUT_DETACH}" != "true" ]];then
         echo "::debug::Adding: --detach=false"
         EXTRA_ARGS+=("--detach=false")
@@ -108,14 +108,14 @@ else
 fi
 
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
-    _type="Docker Compose"
+    _type="Compose"
     COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 else
-    _type="Docker Swarm"
+    _type="Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 fi
 
-echo -e "::group::Deploying ${_type} Stack: \u001b[36;1m${INPUT_NAME}"
+echo -e "::group::Deploying Docker ${_type} Stack: \u001b[36;1m${INPUT_NAME}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
 # shellcheck disable=SC2034
