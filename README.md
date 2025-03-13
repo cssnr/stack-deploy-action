@@ -390,7 +390,7 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 
 The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
-| Version Tag                                                                                                                                                                                                            | Example  | Target   | Rolling | Bugs | Feat. |
+| Version&nbsp;Tag                                                                                                                                                                                                       | Example  | Target   | Rolling | Bugs | Feat. |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :------- | :-----: | :--: | :---: |
 | [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/cssnr/stack-deploy-action/releases/latest)   | `vN`     | `vN.x.x` |   ✅    |  ✅  |  ✅   |
 | [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/cssnr/stack-deploy-action/releases/latest) | `vN.N`   | `vN.N.x` |   ✅    |  ✅  |  ❌   |
