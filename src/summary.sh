@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2154
 cat << EOM
 ## Stack Deploy Action
 
-🎉 Stack \`${INPUT_NAME}\` Successfully Deployed.
+🎉 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed.
 
 \`\`\`text
 ${COMMAND[*]}
