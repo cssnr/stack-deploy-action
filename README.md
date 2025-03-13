@@ -22,7 +22,7 @@
 - [Contributing](#Contributing)
 
 > [!TIP]  
-> 🐳 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**
+> 💡 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
@@ -88,19 +88,20 @@ Use an empty string to override. For more details, see the compose up [docs](htt
 **host** - The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
-**pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
+**pass/ssh_key** - You must provide either a `pass` or `ssh_key`, but not both.
 
 **env_file** - Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
 If you need compose file templating this can also be done in a previous step.
+If using `compose: true` you can add the `compose_arg: --env-file stringArray`.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
 This is automatically set to `false` if you set `compose: true`.
 
-**resolve_image** - When the default `always` is used, this argument is omitted.
+**resolve_image** - When the default `always` is used, this argument is omitted. Swarm only.
 
-**registry_auth** - Set to `true` to deploy with `--with-registry-auth`.
+**registry_auth** - Set to `true` to deploy with `--with-registry-auth`. Swarm only.
 
 **registry_host** - To run `docker login` on another registry. Example: `ghcr.io`
 
@@ -251,7 +252,8 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
     compose_args: --remove-orphans --force-recreate
 ```
 
-Note: these are the default arguments. To remove them pass an empty string.
+Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
+You can disable them by passing an empty string.
 
 </details>
 <details><summary>Simple Workflow Example</summary>

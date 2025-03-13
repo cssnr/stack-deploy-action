@@ -22,20 +22,20 @@ inputs:
     required: false
     default: "--remove-orphans --force-recreate"
   host:
-    description: "Docker Host"
+    description: "Remote Docker Host"
     required: true
   port:
-    description: "Docker Port"
+    description: "Remote Docker Port"
     required: false
     default: "22"
   user:
-    description: "Docker User"
+    description: "Remote Docker User"
     required: true
   pass:
-    description: "Docker Pass"
+    description: "Remote Docker Pass"
     required: false
   ssh_key:
-    description: "SSH Key File"
+    description: "Remote SSH Key File"
     required: false
   env_file:
     description: "Environment File"
