@@ -63,7 +63,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 _Swarm hosts, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/) for more details._  
 _Compose hosts, see the compose up [documentation](https://docs.docker.com/reference/cli/docker/compose/up/) for more details._
 
-<details><summary>🖱️ Click Here to see how the script generates the command</summary>
+<details><summary>📟 Click Here to see how command is generated</summary>
 
 ```shell
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
@@ -219,12 +219,13 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-<details><summary>Standalone Compose with Defaults</summary>
+<details><summary>Compose with Defaults</summary>
 
 ```yaml
-- name: 'Stack Deploy'
+- name: 'Compose Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
+    name: 'stack-name'
     file: 'docker-compose.yaml'
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
@@ -234,12 +235,13 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-<details><summary>Standalone Compose with Custom Arguments</summary>
+<details open><summary>Compose with Custom Arguments</summary>
 
 ```yaml
-- name: 'Stack Deploy'
+- name: 'Compose Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
+    name: 'stack-name'
     file: 'docker-compose.yaml'
     host: ${{ secrets.DOCKER_HOST }}
     port: ${{ secrets.DOCKER_PORT }}
