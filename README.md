@@ -115,7 +115,7 @@ To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-
 
 ---
 
-🎉 Stack `test_stack-deploy` Successfully Deployed.
+🚀 Swarm Stack `test_stack-deploy` Successfully Deployed.
 
 ```text
 docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy
@@ -253,7 +253,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
-You can disable them by passing an empty string.
+You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
 
 </details>
 <details><summary>Simple Workflow Example</summary>

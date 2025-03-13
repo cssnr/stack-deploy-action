@@ -5,7 +5,7 @@ set -e
 
 function cleanup_trap() {
     _ST="$?"
-    if [ -z "${INPUT_SSH_KEY}" ];then
+    if [[ -z "${INPUT_SSH_KEY}" ]];then
         echo "🧹 Cleaning Up authorized_keys"
         ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
@@ -18,6 +18,12 @@ function cleanup_trap() {
     fi
     exit "${_ST}"
 }
+
+## Set Variables
+
+if [[ "${INPUT_COMPOSE}" != "false" && "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
+    echo "::warning::You set compose_args but compose is false!"
+fi
 
 SSH_DIR="/root/.ssh"
 
@@ -32,7 +38,9 @@ chmod 0700 "${SSH_DIR}" ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
 echo "::endgroup::"
 
-if [ -z "${INPUT_SSH_KEY}" ];then
+## Setup Authentication
+
+if [[ -z "${INPUT_SSH_KEY}" ]];then
     echo "::group::Copying SSH Key to Remote Host"
     ssh-keygen -q -f "${SSH_DIR}/id_rsa" -N "" -C "docker-stack-deploy-action"
     eval "$(ssh-agent -s)"
@@ -51,6 +59,8 @@ echo "::endgroup::"
 
 trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 
+## Setup Docker Context
+
 echo "::group::Verifying Remote Docker Context"
 ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" \
     "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
@@ -61,7 +71,9 @@ docker context use remote
 docker context ls
 echo "::endgroup::"
 
-if [ -n "${INPUT_ENV_FILE}" ];then
+## Export Environment File
+
+if [[ -f "${INPUT_ENV_FILE}" ]];then
     echo -e "::group::Sourcing Environment File: \u001b[36;1m${INPUT_ENV_FILE}"
     stat "${INPUT_ENV_FILE}"
     set -a
@@ -70,6 +82,8 @@ if [ -n "${INPUT_ENV_FILE}" ];then
 echo "::endgroup::"
 fi
 
+## Docker Login
+
 if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo -e "::group::Logging in to Registry: \u001b[36;1m${INPUT_REGISTRY_HOST:-Docker Hub}"
     echo "${INPUT_REGISTRY_PASS}" |
@@ -77,6 +91,8 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     INPUT_REGISTRY_AUTH="true"
     echo "::endgroup::"
 fi
+
+## Collect Arguments
 
 EXTRA_ARGS=()
 if [[ "${INPUT_PRUNE}" != "false" ]];then
@@ -107,6 +123,8 @@ else
     fi
 fi
 
+## Deploy Stack
+
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
     _type="Compose"
     COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
@@ -121,6 +139,8 @@ exec 5>&1
 # shellcheck disable=SC2034
 STACK_RESULTS=$("${COMMAND[@]}" 2>&1 | tee >(cat >&5))
 echo "::endgroup::"
+
+## Write Summary
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
