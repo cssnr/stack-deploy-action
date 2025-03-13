@@ -11,8 +11,8 @@ function cleanup_trap() {
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
     if [[ "${_ST}" != "0" ]]; then
-        echo -e "⛔ \u001b[31;1mFailed to deploy stack!"
-        echo "::error::Failed to deploy stack. See logs for details..."
+        echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
+        echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
     else
         echo -e "✅ \u001b[32;1mFinished Success"
     fi
@@ -109,13 +109,13 @@ fi
 
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
     _type="Docker Compose"
-    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 else
-    _type="Docker Stack \u001b[36;1m${INPUT_NAME}"
+    _type="Docker Stack"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 fi
 
-echo -e "::group::Deploying ${_type}"
+echo -e "::group::Deploying ${_type} \u001b[36;1m${INPUT_NAME}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
 # shellcheck disable=SC2034

@@ -40,7 +40,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 | Input         |   Required   | Default               | Description                               |
 | :------------ | :----------: | :-------------------- | :---------------------------------------- |
-| name          | _for swarm_  | -                     | Docker Stack Name for Swarm               |
+| name          |   **Yes**    | -                     | Docker Stack/Project Name \*              |
 | file          |      -       | `docker-compose.yaml` | Docker Stack/Compose File                 |
 | compose       |      -       | `false`               | Uses Compose instead of Swarm \*          |
 | compose_args  |      -       | -                     | Additional Arguments for Compose \*       |
@@ -59,10 +59,12 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | registry_pass |      -       | -                     | Registry Authentication Password \*       |
 | summary       |      -       | `true`                | Add Job Summary \*                        |
 
-_For additional details on inputs, see the stack deploy
-[documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/)._
+_Swarm hosts, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/) for more details._  
+_Compose hosts, see the compose up [documentation](https://docs.docker.com/reference/cli/docker/compose/up/) for more details._
 
-**compose** - Set this to `true` to use `compose up` instead of `stack deploy` for standalone Docker hosts.
+**name** - For Swarm this is the stack name and for Compose the project name.
+
+**compose** - Set this to `true` to use `compose up` instead of `stack deploy` for non-swarm Docker hosts.
 
 **compose_args** - Arguments to pass to the `compose up` command. Only used for `compose: true` deployments.
 Detach `-d` is always passed. With no args the default is `--remove-orphans --force-recreate`.
@@ -91,8 +93,7 @@ This will generate extra output in the logs and is useful for debugging deployme
 
 **summary** - Write a Summary for the job. To disable this set to `false`.
 
-To view a workflow run, click on a recent
-[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
+To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
 <details><summary>👀 View Example Job Summary</summary>
 
