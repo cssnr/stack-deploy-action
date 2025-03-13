@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-
 # shellcheck disable=SC2154
-cat << EOM
-## Stack Deploy Action
 
-🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed.
+echo -e "## Stack Deploy Action\n"
+
+if [[ "${EXIT_STATUS}" == 0 ]];then
+    echo "🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed."
+else
+    echo "⛔ ${_type} Stack \`${INPUT_NAME}\` Failed to Deploy!"
+fi
+
+cat << EOM
 
 \`\`\`text
 ${COMMAND[*]}
