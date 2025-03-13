@@ -138,6 +138,7 @@ echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
 # shellcheck disable=SC2034
 STACK_RESULTS=$("${COMMAND[@]}" 2>&1 | tee >(cat >&5))
+_EXIT="$?"
 echo "::endgroup::"
 
 ## Write Summary
@@ -148,3 +149,5 @@ if [[ "${INPUT_SUMMARY}" == "true" ]];then
     source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}" ||\
         echo "::error::Failed to Write Job Summary!"
 fi
+
+exit "${_EXIT}"
