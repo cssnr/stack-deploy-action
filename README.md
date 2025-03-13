@@ -22,7 +22,7 @@
 - [Contributing](#Contributing)
 
 > [!TIP]  
-> **Now works with vanilla Docker hosts using Compose. No Swarm Required!**
+> 🐳 Now works with vanilla Docker hosts using Compose. **No Swarm Required!**
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
