@@ -111,11 +111,11 @@ if [[ "${INPUT_COMPOSE}" != "false" ]];then
     _type="Docker Compose"
     COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 else
-    _type="Docker Stack"
+    _type="Docker Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 fi
 
-echo -e "::group::Deploying ${_type} \u001b[36;1m${INPUT_NAME}"
+echo -e "::group::Deploying ${_type} Stack: \u001b[36;1m${INPUT_NAME}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
 # shellcheck disable=SC2034
