@@ -62,8 +62,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 > **¹** Swarm Hosts Only
 
-_Swarm hosts, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/) for more details._  
-_Compose hosts, see the compose up [documentation](https://docs.docker.com/reference/cli/docker/compose/up/) for more details._
+_For more information, see the [Swarm docs](https://docs.docker.com/reference/cli/docker/stack/deploy/) or [Compose docs](https://docs.docker.com/reference/cli/docker/compose/up/)._
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -101,9 +100,9 @@ If using `compose: true` you can add the `compose_arg: --env-file stringArray`.
 This will generate extra output in the logs and is useful for debugging deployments.
 This is automatically set to `false` if you set `compose: true`.
 
-**resolve_image** - When the default `always` is used, this argument is omitted. Swarm only.
+**resolve_image** - When the default `always` is used, this argument is omitted. _Swarm only._
 
-**registry_auth** - Set to `true` to deploy with `--with-registry-auth`. Swarm only.
+**registry_auth** - Set to `true` to deploy with `--with-registry-auth`. _Swarm only._
 
 **registry_host** - To run `docker login` on another registry. Example: `ghcr.io`
 
@@ -184,7 +183,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 
 💡 _Click on an example heading to expand or collapse the example._
 
-<details open><summary>With password, docker login and --with-registry-auth</summary>
+<details open><summary>With Password, docker login and --with-registry-auth</summary>
 
 ```yaml
 - name: 'Stack Deploy'
