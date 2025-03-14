@@ -22,8 +22,21 @@ function cleanup_trap() {
 
 ## Set Variables
 
-if [[ "${INPUT_COMPOSE}" != "false" && "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
-    echo "::warning::You set compose_args but compose is false!"
+#if [[ "${INPUT_COMPOSE}" != "false" && "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
+if [[ "${INPUT_COMPOSE}" == "false" ]];then
+    if [[ "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
+        echo "::warning::You set compose_args but compose is false!"
+    fi
+else
+    if [[ "${INPUT_DETACH}" != "true" ]];then
+        echo "::warning::You set detach but compose is true!"
+    fi
+    if [[ "${INPUT_PRUNE}" != "false" ]];then
+        echo "::warning::You set prune but compose is true!"
+    fi
+    if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+        echo "::warning::You set resolve_image but compose is true!"
+    fi
 fi
 
 SSH_DIR="/root/.ssh"
@@ -34,11 +47,7 @@ echo "Script: ${0}"
 echo "Current Directory: $(pwd)"
 echo "Home Directory: ${HOME}"
 echo "SSH Directory: ${SSH_DIR}"
-mkdir -p "${SSH_DIR}" ~/.ssh
-chmod 0700 "${SSH_DIR}" ~/.ssh
-ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
 echo "::endgroup::"
-
 
 ## Setup SSH
 
