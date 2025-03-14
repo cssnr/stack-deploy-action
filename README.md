@@ -54,7 +54,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | detach **¹**        |      -       | `true`                              | Detach Flag, `false` to disable \*        |
 | prune **¹**         |      -       | `false`                             | Prune Flag, `true` to enable              |
 | resolve_image **¹** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| registry_auth       |      -       | -                                   | Enable Registry Authentication \*         |
+| registry_auth **¹** |      -       | -                                   | Enable Registry Authentication \*         |
 | registry_host       |      -       | -                                   | Registry Authentication Host \*           |
 | registry_user       |      -       | -                                   | Registry Authentication Username \*       |
 | registry_pass       |      -       | -                                   | Registry Authentication Password \*       |
@@ -98,7 +98,7 @@ If using `compose: true` you can add the `compose_arg: --env-file stringArray`.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
-This is automatically set to `false` if you set `compose: true`.
+This is automatically set to `false` if you set `compose: true`. _Swarm only._
 
 **resolve_image** - When the default `always` is used, this argument is omitted. _Swarm only._
 
