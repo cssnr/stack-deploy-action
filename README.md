@@ -18,6 +18,7 @@
 - [Inputs](#Inputs)
 - [Examples](#Examples)
 - [Tags](#Tags)
+- [Features](#Features)
 - [Support](#Support)
 - [Contributing](#Contributing)
 
@@ -467,6 +468,17 @@ The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) 
 | [![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=%20&color=red)](https://github.com/cssnr/stack-deploy-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | `vN.N.N` | `vN.N.N` |
 
 You can view the release notes for each version on the [releases](https://github.com/cssnr/stack-deploy-action/releases) page.
+
+## Features
+
+- Deploy to a remote host using SSH or Password authentication.
+- Deploy using a remote context from the current working directory.
+- Deploy from a compose file to either a Docker Swarm or Compose host.
+- Displays output in logs, captures it in the Summary, and checks the status.
+- Allows logging into a private registry and deploying with registry auth.
+- Allows specifying all arguments for both Swarm and Compose deployments.
+
+Don't see your feature here? Request it below in the [Support](#Support) section.
 
 # Support
 
