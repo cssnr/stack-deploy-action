@@ -63,7 +63,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 > **¹** Compose Only. View the [Documentation](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only. View the [Documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
-> \* More Details Below...
+> \* See Below for More Details...
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
