@@ -60,10 +60,8 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | registry_pass       |      -       | -                                   | Registry Authentication Password \*       |
 | summary             |      -       | `true`                              | Add Job Summary \*                        |
 
-> **¹** Compose Only  
-> **²** Swarm Only
-
-_For more information, see the [Swarm docs](https://docs.docker.com/reference/cli/docker/stack/deploy/) or [Compose docs](https://docs.docker.com/reference/cli/docker/compose/up/)._
+> **¹** Compose Only. View the [documentation](https://docs.docker.com/reference/cli/docker/compose/up/).  
+> **²** Swarm Only. View the [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -114,7 +112,7 @@ This is automatically set to `false` if you set `mode: compose`. _Swarm only._
 
 To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
-<details><summary>👀 View Example ✔️ Successful Job Summary</summary>
+<details><summary>👀 View Example Successful ✔️ Job Summary</summary>
 
 ---
 
@@ -145,7 +143,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 </details>
 
-<details><summary>👀 View Example ❌ Failure Job Summary</summary>
+<details><summary>👀 View Example Failure ❌ Job Summary</summary>
 
 ---
 
