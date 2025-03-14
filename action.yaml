@@ -1,5 +1,5 @@
 name: "Docker Stack Deploy"
-description: "Deploy a Docker Compose or Stack to a Remote Host over SSH w/ Optional Registry Authentication"
+description: "Deploy a Docker Compose or Swarm Stack to a Remote Host over SSH with Password or Key File Authentication"
 author: "Shane"
 branding:
   icon: "layers"

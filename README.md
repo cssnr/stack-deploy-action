@@ -39,26 +39,28 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| Input          |   Required   | Default                             | Description                               |
-| :------------- | :----------: | :---------------------------------- | :---------------------------------------- |
-| name           |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
-| file           |      -       | `docker-compose.yaml`               | Docker Stack/Compose File                 |
-| _compose_      |      -       | `false`                             | Use **Compose** instead of Swarm \*       |
-| _compose_args_ |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
-| host           |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
-| port           |      -       | `22`                                | Remote Docker Port                        |
-| user           |   **Yes**    | -                                   | Remote Docker Username                    |
-| pass           | or `ssh_key` | -                                   | Remote Docker Password \*                 |
-| ssh_key        |  or `pass`   | -                                   | Remote SSH Key File \*                    |
-| env_file       |      -       | -                                   | Docker Environment File \*                |
-| detach         |      -       | `true`                              | Detach Flag, `false` to disable \*        |
-| prune          |      -       | `false`                             | Prune Flag, `true` to enable              |
-| resolve_image  |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| registry_auth  |      -       | -                                   | Enable Registry Authentication \*         |
-| registry_host  |      -       | -                                   | Registry Authentication Host \*           |
-| registry_user  |      -       | -                                   | Registry Authentication Username \*       |
-| registry_pass  |      -       | -                                   | Registry Authentication Password \*       |
-| summary        |      -       | `true`                              | Add Job Summary \*                        |
+| Input               |   Required   | Default                             | Description                               |
+| :------------------ | :----------: | :---------------------------------- | :---------------------------------------- |
+| name                |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
+| file                |      -       | `docker-compose.yaml`               | Docker Stack/Compose File                 |
+| _compose_           |      -       | `false`                             | Use **Compose** instead of Swarm \*       |
+| _compose_args_      |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
+| host                |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
+| port                |      -       | `22`                                | Remote Docker Port                        |
+| user                |   **Yes**    | -                                   | Remote Docker Username                    |
+| pass                | or `ssh_key` | -                                   | Remote Docker Password \*                 |
+| ssh_key             |  or `pass`   | -                                   | Remote SSH Key File \*                    |
+| env_file            |      -       | -                                   | Docker Environment File \*                |
+| detach **¹**        |      -       | `true`                              | Detach Flag, `false` to disable \*        |
+| prune **¹**         |      -       | `false`                             | Prune Flag, `true` to enable              |
+| resolve_image **¹** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
+| registry_auth       |      -       | -                                   | Enable Registry Authentication \*         |
+| registry_host       |      -       | -                                   | Registry Authentication Host \*           |
+| registry_user       |      -       | -                                   | Registry Authentication Username \*       |
+| registry_pass       |      -       | -                                   | Registry Authentication Password \*       |
+| summary             |      -       | `true`                              | Add Job Summary \*                        |
+
+> **¹** Swarm Hosts Only
 
 _Swarm hosts, see the stack deploy [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/) for more details._  
 _Compose hosts, see the compose up [documentation](https://docs.docker.com/reference/cli/docker/compose/up/) for more details._

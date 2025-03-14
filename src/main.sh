@@ -39,6 +39,15 @@ chmod 0700 "${SSH_DIR}" ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
 echo "::endgroup::"
 
+
+## Setup SSH
+
+echo "::group::Setup SSH Directory and Known Hosts"
+mkdir -p "${SSH_DIR}" ~/.ssh
+chmod 0700 "${SSH_DIR}" ~/.ssh
+ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
+echo "::endgroup::"
+
 ## Setup Authentication
 
 if [[ -z "${INPUT_SSH_KEY}" ]];then
@@ -96,11 +105,6 @@ fi
 ## Collect Arguments
 
 EXTRA_ARGS=()
-if [[ "${INPUT_PRUNE}" != "false" ]];then
-    echo "::debug::Adding: --prune"
-    EXTRA_ARGS+=("--prune")
-fi
-
 if [[ "${INPUT_COMPOSE}" != "false" ]];then
     echo "::debug::Adding: ${INPUT_COMPOSE_ARGS}"
     read -r -a args <<< "${INPUT_COMPOSE_ARGS}"
@@ -113,6 +117,10 @@ else
     if [[ "${INPUT_DETACH}" != "true" ]];then
         echo "::debug::Adding: --detach=false"
         EXTRA_ARGS+=("--detach=false")
+    fi
+    if [[ "${INPUT_PRUNE}" != "false" ]];then
+        echo "::debug::Adding: --prune"
+        EXTRA_ARGS+=("--prune")
     fi
     if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
         if [[ "${INPUT_RESOLVE_IMAGE}" == "changed" || "${INPUT_RESOLVE_IMAGE}" == "never" ]];then
@@ -153,4 +161,5 @@ if [[ "${INPUT_SUMMARY}" == "true" ]];then
         echo "::error::Failed to Write Job Summary!"
 fi
 
+echo "::debug::EXIT_STATUS: ${EXIT_STATUS}"
 exit "${EXIT_STATUS}"
