@@ -82,9 +82,9 @@ fi
 
 **name**: Stack name for Swarm and project name for Compose.
 
-**mode**¹: Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts. _Compose only._
+**mode**: **¹** Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts. _Compose only._
 
-**args**¹: Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
+**args**: **¹** Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
 The `detach` flag defaults to false for compose. With no args the default is `--remove-orphans --force-recreate`.
 Use an empty string to override. For more details, see the compose up
 [docs](https://docs.docker.com/reference/cli/docker/compose/up/). _Compose only._
@@ -99,13 +99,13 @@ To use a docker `env_file` specify it in your compose file and make it available
 If you need compose file templating this can also be done in a previous step.
 If using `mode: compose` you can also add the `compose_arg: --env-file stringArray`.
 
-**detach**²: Set this to `false` to not exit immediately and wait for the services to converge.
+**detach**: **²** Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
 Defaults to `false` in `mode: compose`. _Swarm only._
 
-**resolve_image**²: When the default `always` is used, this argument is omitted. _Swarm only._
+**resolve_image**: **²** When the default `always` is used, this argument is omitted. _Swarm only._
 
-**registry_auth**²: Set to `true` to deploy with `--with-registry-auth`. _Swarm only._
+**registry_auth**: **²** Set to `true` to deploy with `--with-registry-auth`. _Swarm only._
 
 **registry_host**: To run `docker login` on another registry. Example: `ghcr.io`.
 
