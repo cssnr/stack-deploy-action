@@ -22,21 +22,24 @@ function cleanup_trap() {
 
 ## Check Variables
 
-#if [[ "${INPUT_COMPOSE}" != "false" && "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
-if [[ "${INPUT_COMPOSE}" == "false" ]];then
-    if [[ "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
-        echo "::warning::You set compose_args but compose is false!"
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    if [[ "${INPUT_ARGS}" != "--remove-orphans --force-recreate" ]];then
+        echo "::warning::You set compose args but mode is swarm!"
     fi
 else
+#elif [[ "${INPUT_MODE}" == "compose" ]];then
     if [[ "${INPUT_DETACH}" != "true" ]];then
-        echo "::warning::You set detach but compose is true!"
+        echo "::warning::You set detach but mode is compose!"
     fi
     if [[ "${INPUT_PRUNE}" != "false" ]];then
-        echo "::warning::You set prune but compose is true!"
+        echo "::warning::You set prune but mode is compose!"
     fi
     if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
-        echo "::warning::You set resolve_image but compose is true!"
+        echo "::warning::You set resolve_image but mode is compose!"
     fi
+#else
+#    echo "::error::Input mode must be set to swarm or compose!"
+#    exit 1
 fi
 
 ## Setup Script
@@ -112,11 +115,8 @@ fi
 ## Collect Arguments
 
 EXTRA_ARGS=()
-if [[ "${INPUT_COMPOSE}" != "false" ]];then
-    echo "::debug::Adding: ${INPUT_COMPOSE_ARGS}"
-    read -r -a args <<< "${INPUT_COMPOSE_ARGS}"
-    EXTRA_ARGS+=("${args[@]}")
-else
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    echo "::debug::Processing Swarm Arguments"
     if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
         echo "::debug::Adding: --with-registry-auth"
         EXTRA_ARGS+=("--with-registry-auth")
@@ -134,19 +134,24 @@ else
             echo "::debug::Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
             EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
         else
-            echo "::error::Input resolve_image must be one of: always, changed, never"
+            echo "::warning::Input resolve_image must be one of: always, changed, never"
         fi
     fi
+else
+    echo "::debug::Processing Compose Arguments"
+    echo "::debug::Adding: ${INPUT_ARGS}"
+    read -r -a args <<< "${INPUT_ARGS}"
+    EXTRA_ARGS+=("${args[@]}")
 fi
 
 ## Deploy Stack
 
-if [[ "${INPUT_COMPOSE}" != "false" ]];then
-    _type="Compose"
-    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
-else
+if [[ "${INPUT_MODE}" == "swarm" ]];then
     _type="Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+else
+    _type="Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 fi
 
 echo -e "::group::Deploying Docker ${_type} Stack: \u001b[36;1m${INPUT_NAME}"

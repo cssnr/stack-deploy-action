@@ -102,7 +102,7 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
           #ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-          compose: true
+          mode: compose
           summary: false
 
       - name: "4: Write YAML"
@@ -124,7 +124,7 @@ jobs:
           user: ${{ secrets.DOCKER_USER }}
           pass: ${{ secrets.DOCKER_PASS }}
           #ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-          compose: true
+          mode: compose
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
 

@@ -13,11 +13,11 @@ inputs:
     description: "Docker Compose File"
     required: false
     default: "docker-compose.yaml"
-  compose:
-    description: "Use Compose"
+  mode:
+    description: "Deploy Mode"
     required: false
-    default: "false"
-  compose_args:
+    default: "swarm"
+  args:
     description: "Compose Arguments"
     required: false
     default: "--remove-orphans --force-recreate"

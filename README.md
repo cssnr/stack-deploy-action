@@ -43,36 +43,37 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | :------------------ | :----------: | :---------------------------------- | :---------------------------------------- |
 | name                |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
 | file                |      -       | `docker-compose.yaml`               | Docker Stack/Compose File                 |
-| _compose_           |      -       | `false`                             | Use **Compose** instead of Swarm \*       |
-| _compose_args_      |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
+| _mode_ **¹**        |      -       | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
+| _args_ **¹**        |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
 | host                |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
 | port                |      -       | `22`                                | Remote Docker Port                        |
 | user                |   **Yes**    | -                                   | Remote Docker Username                    |
 | pass                | or `ssh_key` | -                                   | Remote Docker Password \*                 |
 | ssh_key             |  or `pass`   | -                                   | Remote SSH Key File \*                    |
 | env_file            |      -       | -                                   | Docker Environment File \*                |
-| detach **¹**        |      -       | `true`                              | Detach Flag, `false` to disable \*        |
-| prune **¹**         |      -       | `false`                             | Prune Flag, `true` to enable              |
-| resolve_image **¹** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| registry_auth **¹** |      -       | -                                   | Enable Registry Authentication \*         |
+| detach **²**        |      -       | `true`                              | Detach Flag, `false` to disable \*        |
+| prune **²**         |      -       | `false`                             | Prune Flag, `true` to enable              |
+| resolve_image **²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
+| registry_auth **²** |      -       | -                                   | Enable Registry Authentication \*         |
 | registry_host       |      -       | -                                   | Registry Authentication Host \*           |
 | registry_user       |      -       | -                                   | Registry Authentication Username \*       |
 | registry_pass       |      -       | -                                   | Registry Authentication Password \*       |
 | summary             |      -       | `true`                              | Add Job Summary \*                        |
 
-> **¹** Swarm Hosts Only
+> **¹** Compose Only  
+> **²** Swarm Only
 
 _For more information, see the [Swarm docs](https://docs.docker.com/reference/cli/docker/stack/deploy/) or [Compose docs](https://docs.docker.com/reference/cli/docker/compose/up/)._
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
 ```shell
-if [[ "${INPUT_COMPOSE}" != "false" ]];then
-    _type="Compose"
-    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
-else
+if [[ "${INPUT_MODE}" == "swarm" ]];then
     _type="Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+else
+    _type="Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 fi
 ```
 
@@ -80,11 +81,12 @@ fi
 
 **name** - Stack name for Swarm and project name for Compose.
 
-**compose** - Set this to `true` to use `compose up` instead of `stack deploy` for non-swarm Docker hosts.
+**mode** - Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts. _Compose only._
 
-**compose_args** - Arguments to pass to the `compose up` command. Only used for `compose: true` deployments.
+**args** - Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
 The `detach` flag defaults to false for compose. With no args the default is `--remove-orphans --force-recreate`.
-Use an empty string to override. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
+Use an empty string to override. For more details, see the compose up
+[docs](https://docs.docker.com/reference/cli/docker/compose/up/). _Compose only._
 
 **host** - The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
@@ -94,11 +96,11 @@ If your hostname is behind a proxy like Cloudflare you will need to use the IP a
 **env_file** - Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
 If you need compose file templating this can also be done in a previous step.
-If using `compose: true` you can add the `compose_arg: --env-file stringArray`.
+If using `mode: compose` you can add the `compose_arg: --env-file stringArray`.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
-This is automatically set to `false` if you set `compose: true`. _Swarm only._
+This is automatically set to `false` if you set `mode: compose`. _Swarm only._
 
 **resolve_image** - When the default `always` is used, this argument is omitted. _Swarm only._
 
@@ -256,7 +258,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-    compose: true
+    mode: compose
 ```
 
 </details>
@@ -272,11 +274,11 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
     port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-    compose: true
-    compose_args: --remove-orphans --force-recreate
+    mode: compose
+    args: --remove-orphans --force-recreate
 ```
 
-Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
+Note: these are the default arguments. If you use `args` this will override the default arguments unless they are included.
 You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
 
 </details>
@@ -295,12 +297,8 @@ You can disable them by passing an empty string. For more details, see the compo
     registry_host: 'ghcr.io'
     registry_user: ${{ vars.GHCR_USER }}
     registry_pass: ${{ secrets.GHCR_PASS }}
-    compose: true
-    compose_args: --remove-orphans --force-recreate
+    mode: compose
 ```
-
-Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
-You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
 
 </details>
 <details><summary>With All Compose Inputs</summary>
@@ -320,8 +318,8 @@ You can disable them by passing an empty string. For more details, see the compo
     registry_host: 'ghcr.io'
     registry_user: ${{ vars.GHCR_USER }}
     registry_pass: ${{ secrets.GHCR_PASS }}
-    compose: true
-    compose_args: --remove-orphans --force-recreate
+    mode: compose
+    args: --remove-orphans --force-recreate
     summary: true
 ```
 
