@@ -20,7 +20,7 @@ function cleanup_trap() {
     exit "${_ST}"
 }
 
-## Set Variables
+## Check Variables
 
 #if [[ "${INPUT_COMPOSE}" != "false" && "${INPUT_COMPOSE_ARGS}" != "--remove-orphans --force-recreate" ]];then
 if [[ "${INPUT_COMPOSE}" == "false" ]];then
@@ -39,6 +39,8 @@ else
     fi
 fi
 
+## Setup Script
+
 SSH_DIR="/root/.ssh"
 
 echo "::group::Starting Stack Deploy Action ${GITHUB_ACTION_REF}"
@@ -47,11 +49,7 @@ echo "Script: ${0}"
 echo "Current Directory: $(pwd)"
 echo "Home Directory: ${HOME}"
 echo "SSH Directory: ${SSH_DIR}"
-echo "::endgroup::"
 
-## Setup SSH
-
-echo "::group::Setup SSH Directory and Known Hosts"
 mkdir -p "${SSH_DIR}" ~/.ssh
 chmod 0700 "${SSH_DIR}" ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"

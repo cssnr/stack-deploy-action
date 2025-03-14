@@ -202,7 +202,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 ```
 
 </details>
-<details><summary>With SSH key, --prune, --detach=false and --resolve-image=changed</summary>
+<details><summary>With SSH Key, --prune, --detach=false and --resolve-image=changed</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -220,7 +220,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 ```
 
 </details>
-<details><summary>With All Inputs</summary>
+<details><summary>With All Swarm Inputs</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -279,6 +279,52 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 
 Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
 You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
+
+</details>
+<details><summary>Compose with Private Image</summary>
+
+```yaml
+- name: 'Compose Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    compose: true
+    compose_args: --remove-orphans --force-recreate
+```
+
+Note: these are the default arguments. If you use `compose_args` this will override the default arguments unless they are included.
+You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
+
+</details>
+<details><summary>With All Compose Inputs</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    env_file: 'stack.env'
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    compose: true
+    compose_args: --remove-orphans --force-recreate
+    summary: true
+```
 
 </details>
 <details><summary>Simple Workflow Example</summary>
