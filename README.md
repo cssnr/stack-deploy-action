@@ -53,8 +53,8 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
 | `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
 | `env_file`           |      -       | -                                   | Docker Environment File \*                |
-| `detach`**²**        |      -       | `true`                              | Detach Flag, `false` to disable \*        |
-| `prune`**²**         |      -       | `false`                             | Prune Flag, `true` to enable              |
+| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
+| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
 | `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
 | `registry_auth`**²** |      -       | -                                   | Enable Registry Authentication \*         |
 | `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
