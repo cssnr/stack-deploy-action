@@ -111,7 +111,7 @@ This is automatically set to `false` if you set `compose: true`.
 
 To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
-<details><summary>👀 View Example Successful Job Summary</summary>
+<details><summary>👀 View Example ✔️ Successful Job Summary</summary>
 
 ---
 
@@ -142,7 +142,9 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 </details>
 
-<details><summary>👀 View Example Failure Job Summary</summary>
+<details><summary>👀 View Example ❌ Failure Job Summary</summary>
+
+---
 
 ⛔ Swarm Stack `test_stack-deploy` Failed to Deploy!
 
@@ -150,7 +152,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 docker stack deploy -c docker-compose.yaml --detach=false --resolve-image=changed test_stack-deploy
 ```
 
-<details><summary>Results</summary>
+<details open><summary>Errors</summary>
 
 ```text
 Creating network test_stack-deploy_default
@@ -158,6 +160,8 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 ```
 
 </details>
+
+---
 
 </details>
 

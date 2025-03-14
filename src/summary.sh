@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154
 
-echo -e "## Stack Deploy Action\n"
-
 if [[ "${EXIT_STATUS}" == 0 ]];then
-    echo "🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed."
+    _result="🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed."
+    _details="<details><summary>Results</summary>"
 else
-    echo "⛔ ${_type} Stack \`${INPUT_NAME}\` Failed to Deploy!"
+    _result="⛔ ${_type} Stack \`${INPUT_NAME}\` Failed to Deploy!"
+    _details="<details open><summary>Errors</summary>"
 fi
 
 cat << EOM
+## Stack Deploy Action
+
+${_result}
 
 \`\`\`text
 ${COMMAND[*]}
 \`\`\`
 
-<details><summary>Results</summary>
+${_details}
 
 \`\`\`text
 ${STACK_RESULTS}
