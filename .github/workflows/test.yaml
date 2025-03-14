@@ -95,7 +95,7 @@ jobs:
         if: ${{ !cancelled() && !github.event.act }}
         uses: ./
         with:
-          name: test_stack-deploy
+          name: test_stack-deploy-compose
           file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}
@@ -117,7 +117,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: ./
         with:
-          name: test_stack-deploy
+          name: test_stack-deploy-compose
           file: docker-compose.yaml
           host: ${{ secrets.DOCKER_HOST }}
           port: ${{ secrets.DOCKER_PORT }}

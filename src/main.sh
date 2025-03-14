@@ -3,6 +3,7 @@
 
 set -e
 
+# shellcheck disable=SC2317
 function cleanup_trap() {
     _ST="$?"
     if [[ -z "${INPUT_SSH_KEY}" ]];then
