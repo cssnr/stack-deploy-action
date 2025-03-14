@@ -2,10 +2,10 @@
 # shellcheck disable=SC2154
 
 if [[ "${EXIT_STATUS}" == 0 ]];then
-    _result="🚀 ${_type} Stack \`${INPUT_NAME}\` Successfully Deployed."
+    _result="🚀 ${DEPLOY_TYPE} Stack \`${INPUT_NAME}\` Successfully Deployed."
     _details="<details><summary>Results</summary>"
 else
-    _result="⛔ ${_type} Stack \`${INPUT_NAME}\` Failed to Deploy!"
+    _result="⛔ ${DEPLOY_TYPE} Stack \`${INPUT_NAME}\` Failed to Deploy!"
     _details="<details open><summary>Errors</summary>"
 fi
 

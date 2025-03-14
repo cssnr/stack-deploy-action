@@ -69,10 +69,10 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ```shell
 if [[ "${INPUT_MODE}" == "swarm" ]];then
-    _type="Swarm"
+    DEPLOY_TYPE="Swarm"
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 else
-    _type="Compose"
+    DEPLOY_TYPE="Compose"
     COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 fi
 ```
