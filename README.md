@@ -22,7 +22,8 @@
 - [Contributing](#Contributing)
 
 > [!TIP]  
-> 💡 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**
+> 💡 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**  
+> Just set `mode: compose`. See the [Inputs](#Inputs) for more details...
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
@@ -60,9 +61,9 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
 | `summary`            |      -       | `true`                              | Add Job Summary \*                        |
 
-> **¹** Compose Only. View the [documentation](https://docs.docker.com/reference/cli/docker/compose/up/).  
-> **²** Swarm Only. View the [documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
-> **\*** More Details Below...
+> **¹** Compose Only. View the [Documentation](https://docs.docker.com/reference/cli/docker/compose/up/).  
+> **²** Swarm Only. View the [Documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
+> \* More Details Below...
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -95,17 +96,17 @@ If your hostname is behind a proxy like Cloudflare you will need to use the IP a
 **env_file** - Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
 If you need compose file templating this can also be done in a previous step.
-If using `mode: compose` you can add the `compose_arg: --env-file stringArray`.
+If using `mode: compose` you can also add the `compose_arg: --env-file stringArray`.
 
 **detach** - Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
-This is automatically set to `false` if you set `mode: compose`. _Swarm only._
+Defaults to `false` in `mode: compose`. _Swarm only._
 
 **resolve_image** - When the default `always` is used, this argument is omitted. _Swarm only._
 
 **registry_auth** - Set to `true` to deploy with `--with-registry-auth`. _Swarm only._
 
-**registry_host** - To run `docker login` on another registry. Example: `ghcr.io`
+**registry_host** - To run `docker login` on another registry. Example: `ghcr.io`.
 
 **registry_user/registry_pass** - Required to run `docker login` before stack deploy.
 
