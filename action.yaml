@@ -1,27 +1,11 @@
 name: "Docker Stack Deploy"
-description: "Deploy a Docker Stack to a Remote Host over SSH w/ Optional Registry Authentication"
+description: "Deploy a Docker Compose or Swarm Stack to a Remote Host over SSH with Password or Key File Authentication"
 author: "Shane"
 branding:
   icon: "layers"
   color: "green"
 
 inputs:
-  host:
-    description: "Docker Host"
-    required: true
-  port:
-    description: "Docker Port"
-    default: "22"
-    required: false
-  user:
-    description: "Docker User"
-    required: true
-  pass:
-    description: "Docker Pass"
-    required: false
-  ssh_key:
-    description: "SSH Key File"
-    required: false
   name:
     description: "Docker Stack Name"
     required: true
@@ -29,6 +13,30 @@ inputs:
     description: "Docker Compose File"
     required: false
     default: "docker-compose.yaml"
+  mode:
+    description: "Deploy Mode"
+    required: false
+    default: "swarm"
+  args:
+    description: "Compose Arguments"
+    required: false
+    default: "--remove-orphans --force-recreate"
+  host:
+    description: "Remote Docker Host"
+    required: true
+  port:
+    description: "Remote Docker Port"
+    required: false
+    default: "22"
+  user:
+    description: "Remote Docker User"
+    required: true
+  pass:
+    description: "Remote Docker Pass"
+    required: false
+  ssh_key:
+    description: "Remote SSH Key File"
+    required: false
   env_file:
     description: "Environment File"
     required: false

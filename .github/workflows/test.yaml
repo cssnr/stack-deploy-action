@@ -18,15 +18,16 @@ on:
 env:
   PRIVATE_IMAGE: ${{ vars.PRIVATE_IMAGE || 'smashedr/alpine-private:latest' }}
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: "Test"
     if: ${{ !contains(github.event.head_commit.message, '#notest') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    concurrency:
-      group: ${{ github.workflow }}
-      cancel-in-progress: true
 
     steps:
       - name: "Checkout"
@@ -81,6 +82,51 @@ jobs:
           registry_user: ${{ vars.DOCKER_HUB_USER }}
           registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
           summary: false
+
+      - name: "3: Write YAML"
+        if: ${{ !cancelled() && !github.event.act }}
+        uses: teunmooij/yaml@v1
+        with:
+          to-file: "docker-compose.yaml"
+          data: |
+            {"version":"3.8","services":{"alpine":{"image":"alpine:latest","command":"tail -f /dev/null"}}}
+
+      - name: "3: Test Compose"
+        if: ${{ !cancelled() && !github.event.act }}
+        uses: ./
+        with:
+          name: test_stack-deploy-compose
+          file: docker-compose.yaml
+          host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
+          user: ${{ secrets.DOCKER_USER }}
+          pass: ${{ secrets.DOCKER_PASS }}
+          #ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+          mode: compose
+          summary: false
+
+      - name: "4: Write YAML"
+        if: ${{ !cancelled() }}
+        uses: teunmooij/yaml@v1
+        with:
+          to-file: "docker-compose.yaml"
+          data: |
+            {"version":"3.8","services":{"alpine":{"image":"${{ env.PRIVATE_IMAGE }}","command":"tail -f /dev/null"}}}
+
+      - name: "4: Test Compose SSH and Auth"
+        if: ${{ !cancelled() }}
+        uses: ./
+        with:
+          name: test_stack-deploy-compose
+          file: docker-compose.yaml
+          host: ${{ secrets.DOCKER_HOST }}
+          port: ${{ secrets.DOCKER_PORT }}
+          user: ${{ secrets.DOCKER_USER }}
+          #pass: ${{ secrets.DOCKER_PASS }}
+          ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+          mode: compose
+          registry_user: ${{ vars.DOCKER_HUB_USER }}
+          registry_pass: ${{ secrets.DOCKER_HUB_PASS }}
 
       - name: "Schedule Failure Notification"
         if: ${{ failure() && github.event_name == 'schedule' }}

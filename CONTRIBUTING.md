@@ -3,7 +3,7 @@
 > [!WARNING]  
 > This guide is a work in progress and may not be complete.
 
-This is a basic contributing guide and is a work in progress.
+Note: This guide is not updated for Compose but those tests work the same way.
 
 ## Workflow
 

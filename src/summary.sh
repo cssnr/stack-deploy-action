@@ -1,15 +1,24 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
+
+if [[ "${EXIT_STATUS}" == 0 ]];then
+    _result="🚀 ${DEPLOY_TYPE} Stack \`${INPUT_NAME}\` Successfully Deployed."
+    _details="<details><summary>Results</summary>"
+else
+    _result="⛔ ${DEPLOY_TYPE} Stack \`${INPUT_NAME}\` Failed to Deploy!"
+    _details="<details open><summary>Errors</summary>"
+fi
 
 cat << EOM
 ## Stack Deploy Action
 
-🎉 Stack \`${INPUT_NAME}\` Successfully Deployed.
+${_result}
 
 \`\`\`text
 ${COMMAND[*]}
 \`\`\`
 
-<details><summary>Results</summary>
+${_details}
 
 \`\`\`text
 ${STACK_RESULTS}
@@ -17,7 +26,7 @@ ${STACK_RESULTS}
 
 </details>
 
-[Report an issue or request a feature](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
+[View Documentation, Report Issues or Request Features](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
 
 ---
 EOM

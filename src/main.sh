@@ -3,9 +3,10 @@
 
 set -e
 
+# shellcheck disable=SC2317
 function cleanup_trap() {
     _ST="$?"
-    if [ -z "${INPUT_SSH_KEY}" ];then
+    if [[ -z "${INPUT_SSH_KEY}" ]];then
         echo "🧹 Cleaning Up authorized_keys"
         ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
@@ -19,6 +20,30 @@ function cleanup_trap() {
     exit "${_ST}"
 }
 
+## Check Variables
+
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    if [[ "${INPUT_ARGS}" != "--remove-orphans --force-recreate" ]];then
+        echo "::warning::You set compose args but mode is swarm!"
+    fi
+else
+#elif [[ "${INPUT_MODE}" == "compose" ]];then
+    if [[ "${INPUT_DETACH}" != "true" ]];then
+        echo "::warning::You set detach but mode is compose!"
+    fi
+    if [[ "${INPUT_PRUNE}" != "false" ]];then
+        echo "::warning::You set prune but mode is compose!"
+    fi
+    if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+        echo "::warning::You set resolve_image but mode is compose!"
+    fi
+#else
+#    echo "::error::Input mode must be set to swarm or compose!"
+#    exit 1
+fi
+
+## Setup Script
+
 SSH_DIR="/root/.ssh"
 
 echo "::group::Starting Stack Deploy Action ${GITHUB_ACTION_REF}"
@@ -27,12 +52,15 @@ echo "Script: ${0}"
 echo "Current Directory: $(pwd)"
 echo "Home Directory: ${HOME}"
 echo "SSH Directory: ${SSH_DIR}"
+
 mkdir -p "${SSH_DIR}" ~/.ssh
 chmod 0700 "${SSH_DIR}" ~/.ssh
 ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
 echo "::endgroup::"
 
-if [ -z "${INPUT_SSH_KEY}" ];then
+## Setup Authentication
+
+if [[ -z "${INPUT_SSH_KEY}" ]];then
     echo "::group::Copying SSH Key to Remote Host"
     ssh-keygen -q -f "${SSH_DIR}/id_rsa" -N "" -C "docker-stack-deploy-action"
     eval "$(ssh-agent -s)"
@@ -51,6 +79,8 @@ echo "::endgroup::"
 
 trap cleanup_trap EXIT HUP INT QUIT PIPE TERM
 
+## Setup Docker Context
+
 echo "::group::Verifying Remote Docker Context"
 ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" \
     "${INPUT_USER}@${INPUT_HOST}" "docker info" > /dev/null
@@ -61,7 +91,9 @@ docker context use remote
 docker context ls
 echo "::endgroup::"
 
-if [ -n "${INPUT_ENV_FILE}" ];then
+## Export Environment File
+
+if [[ -f "${INPUT_ENV_FILE}" ]];then
     echo -e "::group::Sourcing Environment File: \u001b[36;1m${INPUT_ENV_FILE}"
     stat "${INPUT_ENV_FILE}"
     set -a
@@ -69,6 +101,8 @@ if [ -n "${INPUT_ENV_FILE}" ];then
     source "${INPUT_ENV_FILE}"
 echo "::endgroup::"
 fi
+
+## Docker Login
 
 if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo -e "::group::Logging in to Registry: \u001b[36;1m${INPUT_REGISTRY_HOST:-Docker Hub}"
@@ -78,36 +112,59 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
     echo "::endgroup::"
 fi
 
+## Collect Arguments
+
 EXTRA_ARGS=()
-if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
-    echo "::debug::Adding: --with-registry-auth"
-    EXTRA_ARGS+=("--with-registry-auth")
-fi
-if [[ "${INPUT_DETACH}" != "true" ]];then
-    echo "::debug::Adding: --detach=false"
-    EXTRA_ARGS+=("--detach=false")
-fi
-if [[ "${INPUT_PRUNE}" != "false" ]];then
-    echo "::debug::Adding: --prune"
-    EXTRA_ARGS+=("--prune")
-fi
-if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
-    if [[ "${INPUT_RESOLVE_IMAGE}" == "changed" || "${INPUT_RESOLVE_IMAGE}" == "never" ]];then
-        echo "::debug::Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
-        EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
-    else
-        echo "::error::Input resolve_image must be one of: always, changed, never"
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    echo "::debug::Processing Swarm Arguments"
+    if [[ -n "${INPUT_REGISTRY_AUTH}" ]];then
+        echo "::debug::Adding: --with-registry-auth"
+        EXTRA_ARGS+=("--with-registry-auth")
     fi
+    if [[ "${INPUT_DETACH}" != "true" ]];then
+        echo "::debug::Adding: --detach=false"
+        EXTRA_ARGS+=("--detach=false")
+    fi
+    if [[ "${INPUT_PRUNE}" != "false" ]];then
+        echo "::debug::Adding: --prune"
+        EXTRA_ARGS+=("--prune")
+    fi
+    if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
+        if [[ "${INPUT_RESOLVE_IMAGE}" == "changed" || "${INPUT_RESOLVE_IMAGE}" == "never" ]];then
+            echo "::debug::Adding: --resolve-image=${INPUT_RESOLVE_IMAGE}"
+            EXTRA_ARGS+=("--resolve-image=${INPUT_RESOLVE_IMAGE}")
+        else
+            echo "::warning::Input resolve_image must be one of: always, changed, never"
+        fi
+    fi
+else
+    echo "::debug::Processing Compose Arguments"
+    echo "::debug::Adding: ${INPUT_ARGS}"
+    read -r -a args <<< "${INPUT_ARGS}"
+    EXTRA_ARGS+=("${args[@]}")
 fi
 
-echo -e "::group::Deploying Stack: \u001b[36;1m${INPUT_NAME}"
-COMMAND=("docker" "stack" "deploy" "${EXTRA_ARGS[@]}" "-c" "${INPUT_FILE}" "${INPUT_NAME}")
+## Deploy Stack
+
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    DEPLOY_TYPE="Swarm"
+    COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+else
+    DEPLOY_TYPE="Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+fi
+
+echo -e "::group::Deploying Docker ${DEPLOY_TYPE} Stack: \u001b[36;1m${INPUT_NAME}"
 echo -e "\u001b[33;1m${COMMAND[*]}\n"
 exec 5>&1
+set +e
 # shellcheck disable=SC2034
-STACK_RESULTS=$("${COMMAND[@]}" | tee >(cat >&5))
-
+STACK_RESULTS=$( "${COMMAND[@]}" 2>&1 | tee >(cat >&5) ; exit "${PIPESTATUS[0]}" )
+EXIT_STATUS="$?"
+set -e
 echo "::endgroup::"
+
+## Write Summary
 
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
@@ -115,3 +172,6 @@ if [[ "${INPUT_SUMMARY}" == "true" ]];then
     source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}" ||\
         echo "::error::Failed to Write Job Summary!"
 fi
+
+echo "::debug::EXIT_STATUS: ${EXIT_STATUS}"
+exit "${EXIT_STATUS}"

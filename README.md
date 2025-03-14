@@ -1,9 +1,9 @@
 [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
 [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/releases/latest)
-[![Release WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
-[![Test WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
-[![Lint WF](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
+[![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
+[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=htmx)](https://github.com/cssnr/stack-deploy-action)
@@ -18,8 +18,13 @@
 - [Inputs](#Inputs)
 - [Examples](#Examples)
 - [Tags](#Tags)
+- [Features](#Features)
 - [Support](#Support)
 - [Contributing](#Contributing)
+
+> [!TIP]  
+> 💡 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**  
+> Just set `mode: compose`. See the [Inputs](#Inputs) for more details...
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
@@ -36,58 +41,85 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| input         |   required   | default               | description                               |
-| ------------- | :----------: | --------------------- | ----------------------------------------- |
-| name          |   **Yes**    | -                     | Docker Stack Name                         |
-| file          |      -       | `docker-compose.yaml` | Docker Compose File                       |
-| host          |   **Yes**    | -                     | Remote Docker Hostname or IP \*           |
-| port          |      -       | `22`                  | Remote Docker Port                        |
-| user          |   **Yes**    | -                     | Remote Docker Username                    |
-| pass          | or `ssh_key` | -                     | Remote Docker Password \*                 |
-| ssh_key       |  or `pass`   | -                     | Remote SSH Key File \*                    |
-| env_file      |      -       | -                     | Docker Environment File \*                |
-| detach        |      -       | `true`                | Detach Flag, `false` to disable \*        |
-| prune         |      -       | `false`               | Prune Flag, `true` to enable              |
-| resolve_image |      -       | `always`              | Options [`always`, `changed`, `never`] \* |
-| registry_auth |      -       | -                     | Enable Registry Authentication \*         |
-| registry_host |      -       | -                     | Registry Authentication Host \*           |
-| registry_user |      -       | -                     | Registry Authentication Username \*       |
-| registry_pass |      -       | -                     | Registry Authentication Password \*       |
-| summary       |      -       | `true`                | Add Job Summary \*                        |
+| Input                |   Required   | Default                             | Description                               |
+| :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
+| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
+| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File                 |
+| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
+| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
+| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
+| `port`               |      -       | `22`                                | Remote Docker Port                        |
+| `user`               |   **Yes**    | -                                   | Remote Docker Username                    |
+| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
+| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
+| `env_file`           |      -       | -                                   | Docker Environment File \*                |
+| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
+| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
+| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
+| `registry_auth`**²** |      -       | -                                   | Enable Registry Authentication \*         |
+| `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
+| `registry_user`      |      -       | -                                   | Registry Authentication Username \*       |
+| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
+| `summary`            |      -       | `true`                              | Add Job Summary \*                        |
 
-_For additional details on inputs, see the stack deploy
-[documentation](https://docs.docker.com/reference/cli/docker/stack/deploy/)._
+> **¹** Compose Only. View the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
+> **²** Swarm Only. View the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
+> \* See Below for more details...
 
-**host** - The hostname or IP address of the remote docker server to deploy too.
+<details><summary>📟 Click Here to see how the deployment command is generated</summary>
+
+```shell
+if [[ "${INPUT_MODE}" == "swarm" ]];then
+    DEPLOY_TYPE="Swarm"
+    COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
+else
+    DEPLOY_TYPE="Compose"
+    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+fi
+```
+
+</details>
+
+**name:** Stack name for Swarm and project name for Compose.
+
+**mode:** _Compose only._ Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts.
+
+**args:** _Compose only._ Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
+The `detach` flag defaults to false for compose. With no args the default is `--remove-orphans --force-recreate`.
+Use an empty string to override. For more details, see the compose
+[docs](https://docs.docker.com/reference/cli/docker/compose/up/).
+
+**host:** The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
-**pass/ssh_key** - You must provide either a `pass` or `ssh_key`.
+**pass/ssh_key:** You must provide either a `pass` or `ssh_key`, but not both.
 
-**env_file** - Variables in this file are exported before running stack deploy.
+**env_file:** Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
 If you need compose file templating this can also be done in a previous step.
+If using `mode: compose` you can also add the `compose_arg: --env-file stringArray`.
 
-**detach** - Set this to `false` to not exit immediately and wait for the services to converge.
+**detach:** _Swarm only._ Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
+Defaults to `false` in `mode: compose`.
 
-**resolve_image** - When the default `always` is used, this argument is omitted.
+**resolve_image:** _Swarm only._ When the default `always` is used, this argument is omitted.
 
-**registry_auth** - Set to `true` to deploy with `--with-registry-auth`.
+**registry_auth:** _Swarm only._ Set to `true` to deploy with `--with-registry-auth`.
 
-**registry_host** - To run `docker login` on another registry. Example: `ghcr.io`
+**registry_host:** To run `docker login` on another registry. Example: `ghcr.io`.
 
-**registry_user/registry_pass** - Required to run `docker login` before stack deploy.
+**registry_user/registry_pass:** Required to run `docker login` before stack deploy.
 
-**summary** - Write a Summary for the job. To disable this set to `false`.
+**summary:** Write a Summary for the job. To disable this set to `false`.
 
-To view a workflow run, click on a recent
-[Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
+To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
-<details><summary>👀 View Example Job Summary</summary>
+<details><summary>👀 View Example Successful ✔️ Job Summary</summary>
 
 ---
 
-🎉 Stack `test_stack-deploy` Successfully Deployed.
+🚀 Swarm Stack `test_stack-deploy` Successfully Deployed.
 
 ```text
 docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy
@@ -114,6 +146,29 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 </details>
 
+<details><summary>👀 View Example Failure ❌ Job Summary</summary>
+
+---
+
+⛔ Swarm Stack `test_stack-deploy` Failed to Deploy!
+
+```text
+docker stack deploy -c docker-compose.yaml --detach=false --resolve-image=changed test_stack-deploy
+```
+
+<details open><summary>Errors</summary>
+
+```text
+Creating network test_stack-deploy_default
+failed to create network test_stack-deploy_default: Error response from daemon: network with name test_stack-deploy_default already exists
+```
+
+</details>
+
+---
+
+</details>
+
 ```yaml
 - name: 'Stack Deploy'
   uses: cssnr/stack-deploy-action@v1
@@ -131,7 +186,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 
 💡 _Click on an example heading to expand or collapse the example._
 
-<details open><summary>With password, docker login and --with-registry-auth</summary>
+<details open><summary>With Password, docker login and --with-registry-auth</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -149,8 +204,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-
-<details><summary>With SSH key, --prune, --detach=false and --resolve-image=changed</summary>
+<details><summary>With SSH Key, --prune, --detach=false and --resolve-image=changed</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -168,8 +222,7 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
-
-<details><summary>With All Inputs</summary>
+<details><summary>With All Swarm Inputs</summary>
 
 ```yaml
 - name: 'Stack Deploy'
@@ -194,7 +247,84 @@ verify: Service tdk8v42m0rvp9hz4rbfrtszb6 converged
 ```
 
 </details>
+<details><summary>Compose with Defaults</summary>
 
+```yaml
+- name: 'Compose Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    mode: compose
+```
+
+</details>
+<details open><summary>Compose with Custom Arguments</summary>
+
+```yaml
+- name: 'Compose Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    mode: compose
+    args: --remove-orphans --force-recreate
+```
+
+Note: these are the default arguments. If you use `args` this will override the default arguments unless they are included.
+You can disable them by passing an empty string. For more details, see the compose up [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
+
+</details>
+<details><summary>Compose with Private Image</summary>
+
+```yaml
+- name: 'Compose Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    mode: compose
+```
+
+</details>
+<details><summary>With All Compose Inputs</summary>
+
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name'
+    file: 'docker-compose-swarm.yaml'
+    host: ${{ secrets.DOCKER_HOST }}
+    port: ${{ secrets.DOCKER_PORT }}
+    user: ${{ secrets.DOCKER_USER }}
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    env_file: 'stack.env'
+    registry_host: 'ghcr.io'
+    registry_user: ${{ vars.GHCR_USER }}
+    registry_pass: ${{ secrets.GHCR_PASS }}
+    mode: compose
+    args: --remove-orphans --force-recreate
+    summary: true
+```
+
+</details>
 <details><summary>Simple Workflow Example</summary>
 
 ```yaml
@@ -225,7 +355,6 @@ jobs:
 ```
 
 </details>
-
 <details><summary>Full Workflow Example</summary>
 
 ```yaml
@@ -332,13 +461,24 @@ https://github.com/cssnr/stack-deploy-action/network/dependents
 
 The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) are maintained.
 
-| Tag                                                                                                                                                                                                                           | Example  | Target   | Bugs | Feat. | Description                                               |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | :--: | :---: | --------------------------------------------------------- |
-| [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=limegreen)](https://github.com/cssnr/stack-deploy-action/releases/latest)     | `vN`     | `vN.x.x` |  ✅  |  ✅   | Includes new features but is always backwards compatible. |
-| [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=yellowgreen)](https://github.com/cssnr/stack-deploy-action/releases/latest) | `vN.N`   | `vN.N.x` |  ✅  |  ❌   | Only receives bug fixes. This is the most stable tag.     |
-| [![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=%20&color=orange)](https://github.com/cssnr/stack-deploy-action/releases/latest)                               | `vN.N.N` | `vN.N.N` |  ❌  |  ❌   | Not a rolling tag. **Not** recommended.                   |
+| Version&nbsp;Tag                                                                                                                                                                                                       | Rolling | Bugs | Feat. | Target   | Example  |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: | :--: | :---: | :------- | :------- |
+| [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=44cc10)](https://github.com/cssnr/stack-deploy-action/releases/latest) |   ✅    |  ✅  |  ✅   | `vN.x.x` | `vN`     |
+| [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/cssnr/stack-deploy-action/releases/latest) |   ✅    |  ✅  |  ❌   | `vN.N.x` | `vN.N`   |
+| [![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=%20&color=red)](https://github.com/cssnr/stack-deploy-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | `vN.N.N` | `vN.N.N` |
 
 You can view the release notes for each version on the [releases](https://github.com/cssnr/stack-deploy-action/releases) page.
+
+## Features
+
+- Deploy to a remote host using SSH or Password authentication.
+- Deploy using a remote context from the current working directory.
+- Deploy from a compose file to either a Docker Swarm or Compose host.
+- Displays output in logs, captures it in the Summary, and checks the status.
+- Allows logging into a private registry and deploying with registry auth.
+- Allows specifying all arguments for both Swarm and Compose deployments.
+
+Don't see your feature here? Request it below in the [Support](#Support) section.
 
 # Support
 
