@@ -41,7 +41,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| Input&nbsp;Name      | Is&nbsp;Required | Default&nbsp;Value                  | Short&nbsp;Description                    |
+| Input&nbsp;Name      | Is&nbsp;Required | Default&nbsp;Value                  | Input&nbsp;Description                    |
 | :------------------- | :--------------: | :---------------------------------- | :---------------------------------------- |
 | `name`               |     **Yes**      | -                                   | Docker Stack/Project Name \*              |
 | `file`               |        -         | `docker-compose.yaml`               | Docker Stack/Compose File                 |
