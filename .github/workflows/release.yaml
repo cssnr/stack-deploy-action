@@ -18,6 +18,7 @@ jobs:
         uses: cssnr/update-version-tags-action@v1
 
       - name: "Debug Tags"
+        continue-on-error: true
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "steps.tags.outputs.tags: ${{ steps.tags.outputs.tags }}"
