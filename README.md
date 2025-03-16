@@ -23,8 +23,8 @@
 - [Contributing](#Contributing)
 
 > [!TIP]  
-> 💡 Now works with vanilla Docker hosts using **Compose. No Swarm Required!**  
-> Just set `mode: compose`. See the [Inputs](#Inputs) for more details...
+> Now works with Docker **Compose. No Swarm Required!**  
+> ▶️ Simply set `mode: compose`. See [Inputs](#Inputs) for more details.
 
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
@@ -41,30 +41,30 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| Input                |   Required   | Default                             | Description                               |
-| :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
-| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
-| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File                 |
-| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
-| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
-| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
-| `port`               |      -       | `22`                                | Remote Docker Port                        |
-| `user`               |   **Yes**    | -                                   | Remote Docker Username                    |
-| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
-| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
-| `env_file`           |      -       | -                                   | Docker Environment File \*                |
-| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
-| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
-| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| `registry_auth`**²** |      -       | -                                   | Enable Registry Authentication \*         |
-| `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
-| `registry_user`      |      -       | -                                   | Registry Authentication Username \*       |
-| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
-| `summary`            |      -       | `true`                              | Add Job Summary \*                        |
+| Input&nbsp;Name      | Is&nbsp;Required | Default&nbsp;Value                  | Short&nbsp;Description                    |
+| :------------------- | :--------------: | :---------------------------------- | :---------------------------------------- |
+| `name`               |     **Yes**      | -                                   | Docker Stack/Project Name \*              |
+| `file`               |        -         | `docker-compose.yaml`               | Docker Stack/Compose File                 |
+| `mode`**¹**          |        -         | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
+| `args`**¹**          |        -         | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
+| `host`               |     **Yes**      | -                                   | Remote Docker Hostname or IP \*           |
+| `port`               |        -         | `22`                                | Remote Docker Port                        |
+| `user`               |     **Yes**      | -                                   | Remote Docker Username                    |
+| `pass`               |   or `ssh_key`   | -                                   | Remote Docker Password \*                 |
+| `ssh_key`            |    or `pass`     | -                                   | Remote SSH Key File \*                    |
+| `env_file`           |        -         | -                                   | Docker Environment File \*                |
+| `detach`**²**        |        -         | `true`                              | Detach Flag, `false`, to disable \*       |
+| `prune`**²**         |        -         | `false`                             | Prune Flag, `true`, to enable             |
+| `resolve_image`**²** |        -         | `always`                            | Resolve [`always`, `changed`, `never`] \* |
+| `registry_auth`**²** |        -         | -                                   | Enable Registry Authentication \*         |
+| `registry_host`      |        -         | -                                   | Registry Authentication Host \*           |
+| `registry_user`      |        -         | -                                   | Registry Authentication Username \*       |
+| `registry_pass`      |        -         | -                                   | Registry Authentication Password \*       |
+| `summary`            |        -         | `true`                              | Add Job Summary \*                        |
 
-> **¹** Compose Only. View the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
-> **²** Swarm Only. View the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
-> \* See Below for more details...
+> **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
+> **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
+> \* More details below...
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -92,7 +92,7 @@ Use an empty string to override. For more details, see the compose
 **host:** The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
-**pass/ssh_key:** You must provide either a `pass` or `ssh_key`, but not both.
+**pass/ssh_key:** You must provide either a `pass` or `ssh_key`, not both.
 
 **env_file:** Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
@@ -122,7 +122,7 @@ To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-
 🚀 Swarm Stack `test_stack-deploy` Successfully Deployed.
 
 ```text
-docker stack deploy --detach=false --resolve-image=changed -c docker-compose.yaml test_stack-deploy
+docker stack deploy -c docker-compose.yaml --detach=false --resolve-image=changed test_stack-deploy
 ```
 
 <details><summary>Results</summary>
@@ -468,6 +468,9 @@ The following rolling [tags](https://github.com/cssnr/stack-deploy-action/tags) 
 | [![GitHub Release](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?style=for-the-badge&label=%20&color=red)](https://github.com/cssnr/stack-deploy-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | `vN.N.N` | `vN.N.N` |
 
 You can view the release notes for each version on the [releases](https://github.com/cssnr/stack-deploy-action/releases) page.
+
+The Major tag is recommended. It is the most up-to-date and always backwards compatible.
+Breaking changes will always result in a major version bump. At a minimum you should use a Minor tag.
 
 ## Features
 

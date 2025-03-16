@@ -22,12 +22,14 @@ function cleanup_trap() {
 
 ## Check Variables
 
+INPUT_MODE=$(echo "${INPUT_MODE}" | xargs | tr '[:upper:]' '[:lower:]')
+echo "::debug::INPUT_MODE: ${INPUT_MODE}"
+
 if [[ "${INPUT_MODE}" == "swarm" ]];then
     if [[ "${INPUT_ARGS}" != "--remove-orphans --force-recreate" ]];then
         echo "::warning::You set compose args but mode is swarm!"
     fi
-else
-#elif [[ "${INPUT_MODE}" == "compose" ]];then
+elif [[ "${INPUT_MODE}" == "compose" ]];then
     if [[ "${INPUT_DETACH}" != "true" ]];then
         echo "::warning::You set detach but mode is compose!"
     fi
@@ -37,9 +39,10 @@ else
     if [[ "${INPUT_RESOLVE_IMAGE}" != "always" ]];then
         echo "::warning::You set resolve_image but mode is compose!"
     fi
-#else
-#    echo "::error::Input mode must be set to swarm or compose!"
-#    exit 1
+else
+    echo "::error::Input mode must be set to swarm or compose!"
+    echo "⛔ Input Parsing Failed. The mode must be set to swarm or compose."
+    exit 1
 fi
 
 ## Setup Script
@@ -52,6 +55,7 @@ echo "Script: ${0}"
 echo "Current Directory: $(pwd)"
 echo "Home Directory: ${HOME}"
 echo "SSH Directory: ${SSH_DIR}"
+echo "Deploy Mode: ${INPUT_MODE}"
 
 mkdir -p "${SSH_DIR}" ~/.ssh
 chmod 0700 "${SSH_DIR}" ~/.ssh
@@ -93,13 +97,18 @@ echo "::endgroup::"
 
 ## Export Environment File
 
-if [[ -f "${INPUT_ENV_FILE}" ]];then
-    echo -e "::group::Sourcing Environment File: \u001b[36;1m${INPUT_ENV_FILE}"
-    stat "${INPUT_ENV_FILE}"
-    set -a
-    # shellcheck disable=SC1090
-    source "${INPUT_ENV_FILE}"
-echo "::endgroup::"
+if [[ -n "${INPUT_ENV_FILE}" ]];then
+    if [[ -f "${INPUT_ENV_FILE}" ]];then
+        echo -e "::group::Sourcing Environment File: \u001b[36;1m${INPUT_ENV_FILE}"
+        set -a
+        # shellcheck disable=SC1090
+        source "${INPUT_ENV_FILE}"
+        echo "::endgroup::"
+    else
+        echo "::error::Environment File Not Found: ${INPUT_ENV_FILE}"
+    fi
+else
+    echo "::debug::No environment file specified, skipping export file..."
 fi
 
 ## Docker Login
@@ -110,6 +119,8 @@ if [[ -n "${INPUT_REGISTRY_USER}" && -n "${INPUT_REGISTRY_PASS}" ]];then
         docker login --username "${INPUT_REGISTRY_USER}" --password-stdin "${INPUT_REGISTRY_HOST}"
     INPUT_REGISTRY_AUTH="true"
     echo "::endgroup::"
+else
+    echo "::debug::No registry user or password, skipping docker login..."
 fi
 
 ## Collect Arguments
@@ -143,6 +154,7 @@ else
     read -r -a args <<< "${INPUT_ARGS}"
     EXTRA_ARGS+=("${args[@]}")
 fi
+echo "::debug::EXTRA_ARGS: ${EXTRA_ARGS[*]}"
 
 ## Deploy Stack
 
@@ -169,7 +181,7 @@ echo "::endgroup::"
 if [[ "${INPUT_SUMMARY}" == "true" ]];then
     echo "📝 Writing Job Summary"
     # shellcheck source=/src/summary.sh
-    source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}" ||\
+    source /src/summary.sh >> "${GITHUB_STEP_SUMMARY}" ||
         echo "::error::Failed to Write Job Summary!"
 fi
 
