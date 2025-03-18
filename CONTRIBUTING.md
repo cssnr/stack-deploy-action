@@ -3,7 +3,7 @@
 > [!WARNING]  
 > This guide is a work in progress and may not be complete.
 
-Note: This guide is not updated for Compose but those tests work the same way.
+Note: This guide is not updated for Compose but those tests work similar.
 
 ## Workflow
 
@@ -52,7 +52,7 @@ act -j test -e event.json
 
 The flag `-e event.json` disabled test #2 which tests SSH auth and registry auth.
 
-To test both SSH and authb and registry auth (run test #2) do the following.
+To test both SSH and registry auth (run test #2) do the following.
 
 1. Create a `.vars` file and add the vars and secrets from test #2 under [GitHub](#GitHub).
 
