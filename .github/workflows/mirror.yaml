@@ -6,6 +6,10 @@ on:
     branches: ["**"]
     tags: ["**"]
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   mirror:
     name: "Mirror"
