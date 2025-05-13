@@ -135,8 +135,7 @@ if [[ "${INPUT_MODE}" == "swarm" ]];then
     if [[ "${INPUT_DETACH}" == "true" ]];then
         echo "::debug::Adding: --detach=true"
         EXTRA_ARGS+=("--detach=true")
-    fi
-    if [[ "${INPUT_DETACH}" != "true" ]];then
+    else
         echo "::debug::Adding: --detach=false"
         EXTRA_ARGS+=("--detach=false")
     fi
