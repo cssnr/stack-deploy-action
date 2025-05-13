@@ -132,7 +132,10 @@ if [[ "${INPUT_MODE}" == "swarm" ]];then
         echo "::debug::Adding: --with-registry-auth"
         EXTRA_ARGS+=("--with-registry-auth")
     fi
-    if [[ "${INPUT_DETACH}" != "true" ]];then
+    if [[ "${INPUT_DETACH}" == "true" ]];then
+        echo "::debug::Adding: --detach=true"
+        EXTRA_ARGS+=("--detach=true")
+    else
         echo "::debug::Adding: --detach=false"
         EXTRA_ARGS+=("--detach=false")
     fi
