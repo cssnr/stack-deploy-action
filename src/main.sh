@@ -59,7 +59,11 @@ echo "Deploy Mode: ${INPUT_MODE}"
 
 mkdir -p "${SSH_DIR}" ~/.ssh
 chmod 0700 "${SSH_DIR}" ~/.ssh
-ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
+
+if [[ "${INPUT_DISABLE_KEYSCAN}" != "true" ]];then
+    echo "Running: ssh-keyscan"
+    ssh-keyscan -p "${INPUT_PORT}" -H "${INPUT_HOST}" >> "${SSH_DIR}/known_hosts"
+fi
 echo "::endgroup::"
 
 ## Setup Authentication
