@@ -16,6 +16,7 @@ on:
       - "action.yaml"
 
 env:
+  ACTIONS_STEP_DEBUG: true
   PRIVATE_IMAGE: ${{ vars.PRIVATE_IMAGE || 'smashedr/alpine-private:latest' }}
 
 concurrency:
