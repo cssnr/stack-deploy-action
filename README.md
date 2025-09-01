@@ -44,18 +44,18 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Description&nbsp;of&nbsp;Input            |
+| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
 | :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
 | `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
 | `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*           |
-| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
-| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
+| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode [`swarm`, `compose`] \*       |
+| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional **Compose** Arguments \*       |
 | `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
 | `port`               |      -       | `22`                                | Remote Docker Port                        |
 | `user`               |   **Yes**    | -                                   | Remote Docker Username                    |
 | `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
 | `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
-| `disable_keyscan`    |      -       | `false`                             | Disable SSH Key Scan: `ssh-keyscan` \*    |
+| `disable_keyscan`    |      -       | `false`                             | Disable SSH Keyscan `ssh-keyscan` \*      |
 | `env_file`           |      -       | -                                   | Docker Environment File \*                |
 | `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
 | `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
