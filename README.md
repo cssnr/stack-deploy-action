@@ -6,7 +6,7 @@
 [![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/pulse)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
-[![GitHub Contributors](https://img.shields.io/github/contributors/cssnr/stack-deploy-action)](https://github.com/cssnr/stack-deploy-action/graphs/contributors)
+[![GitHub Contributors](https://img.shields.io/github/contributors/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/graphs/contributors)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/stack-deploy-action?logo=bookstack&logoColor=white&label=size)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=sharp&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/discussions)
@@ -44,27 +44,27 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 
 ## Inputs
 
-| Input&nbsp;Name      | Is&nbsp;Required | Default&nbsp;Value                  | Input&nbsp;Description                    |
-| :------------------- | :--------------: | :---------------------------------- | :---------------------------------------- |
-| `name`               |     **Yes**      | -                                   | Docker Stack/Project Name \*              |
-| `file`               |        -         | `docker-compose.yaml`               | Docker Stack/Compose File                 |
-| `mode`**¹**          |        -         | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
-| `args`**¹**          |        -         | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
-| `host`               |     **Yes**      | -                                   | Remote Docker Hostname or IP \*           |
-| `port`               |        -         | `22`                                | Remote Docker Port                        |
-| `user`               |     **Yes**      | -                                   | Remote Docker Username                    |
-| `pass`               |   or `ssh_key`   | -                                   | Remote Docker Password \*                 |
-| `ssh_key`            |    or `pass`     | -                                   | Remote SSH Key File \*                    |
-| `disable_keyscan`    |        -         | `false`                             | Disable SSH Key Scan: `ssh-keyscan` \*    |
-| `env_file`           |        -         | -                                   | Docker Environment File \*                |
-| `detach`**²**        |        -         | `true`                              | Detach Flag, `false`, to disable \*       |
-| `prune`**²**         |        -         | `false`                             | Prune Flag, `true`, to enable             |
-| `resolve_image`**²** |        -         | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| `registry_auth`**²** |        -         | -                                   | Enable Registry Authentication \*         |
-| `registry_host`      |        -         | -                                   | Registry Authentication Host \*           |
-| `registry_user`      |        -         | -                                   | Registry Authentication Username \*       |
-| `registry_pass`      |        -         | -                                   | Registry Authentication Password \*       |
-| `summary`            |        -         | `true`                              | Add Job Summary \*                        |
+| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
+| :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
+| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
+| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*           |
+| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode [`swarm`, `compose`] \*       |
+| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional **Compose** Arguments \*       |
+| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
+| `port`               |      -       | `22`                                | Remote Docker Port                        |
+| `user`               |   **Yes**    | -                                   | Remote Docker Username                    |
+| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
+| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
+| `disable_keyscan`    |      -       | `false`                             | Disable SSH Keyscan `ssh-keyscan` \*      |
+| `env_file`           |      -       | -                                   | Docker Environment File \*                |
+| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
+| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
+| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
+| `registry_auth`**²** |      -       | -                                   | Enable Registry Authentication \*         |
+| `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
+| `registry_user`      |      -       | -                                   | Registry Authentication Username \*       |
+| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
+| `summary`            |      -       | `true`                              | Add Job Summary \*                        |
 
 > **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
@@ -78,13 +78,18 @@ if [[ "${INPUT_MODE}" == "swarm" ]];then
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 else
     DEPLOY_TYPE="Compose"
-    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+    COMMAND=("docker" "compose" "${STACK_FILES[@]}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 fi
 ```
+
+Compose Note: `"${STACK_FILES[@]}"` is an array of `-f docker-compose.yaml` for every `file` in the argument.
 
 </details>
 
 **name:** Stack name for Swarm and project name for Compose.
+
+**file:** Stack file or Compose file(s). Multiple files can be provided, space seperated, and a `-f` will be prepended to each.
+Example: `web.yaml db.yaml`.
 
 **mode:** _Compose only._ Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts.
 
