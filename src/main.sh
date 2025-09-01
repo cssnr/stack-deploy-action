@@ -168,7 +168,6 @@ echo "::debug::EXTRA_ARGS: ${EXTRA_ARGS[*]}"
 if [[ "${INPUT_MODE}" == "compose" ]];then
     STACK_FILES=()
     read -r -a files <<< "${INPUT_FILE}"
-    echo "::debug::files to add: ${files[*]}"
     for file in "${files[@]}";do
         STACK_FILES+=("-f" "$file")
     done
