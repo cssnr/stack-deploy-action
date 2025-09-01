@@ -11,7 +11,7 @@ function cleanup_trap() {
         ssh -o BatchMode=yes -o ConnectTimeout=30 -p "${INPUT_PORT}" "${INPUT_USER}@${INPUT_HOST}" \
             "sed -i '/docker-stack-deploy-action/d' ~/.ssh/authorized_keys"
     fi
-    if [[ "${_ST}" != "0" ]]; then
+    if [[ "${_ST}" != "0" ]];then
         echo -e "⛔ \u001b[31;1mFailed to deploy stack ${INPUT_NAME}"
         echo "::error::Failed to deploy stack ${INPUT_NAME}. See logs for details..."
     else
@@ -163,6 +163,18 @@ else
 fi
 echo "::debug::EXTRA_ARGS: ${EXTRA_ARGS[*]}"
 
+## Collect Stack Files
+
+if [[ "${INPUT_MODE}" == "compose" ]];then
+    STACK_FILES=()
+    read -r -a files <<< "${INPUT_FILE}"
+    echo "::debug::files to add: ${files[*]}"
+    for file in "${files[@]}";do
+        STACK_FILES+=("-f" "$file")
+    done
+    echo "::debug::STACK_FILES: ${STACK_FILES[*]}"
+fi
+
 ## Deploy Stack
 
 if [[ "${INPUT_MODE}" == "swarm" ]];then
@@ -170,7 +182,7 @@ if [[ "${INPUT_MODE}" == "swarm" ]];then
     COMMAND=("docker" "stack" "deploy" "-c" "${INPUT_FILE}" "${EXTRA_ARGS[@]}" "${INPUT_NAME}")
 else
     DEPLOY_TYPE="Compose"
-    COMMAND=("docker" "compose" "-f" "${INPUT_FILE}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
+    COMMAND=("docker" "compose" "${STACK_FILES[@]}" "-p" "${INPUT_NAME}" "up" "-d" "-y" "${EXTRA_ARGS[@]}")
 fi
 
 echo -e "::group::Deploying Docker ${DEPLOY_TYPE} Stack: \u001b[36;1m${INPUT_NAME}"

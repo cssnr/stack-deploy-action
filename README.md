@@ -47,7 +47,7 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 | Input&nbsp;Name      | Is&nbsp;Required | Default&nbsp;Value                  | Input&nbsp;Description                    |
 | :------------------- | :--------------: | :---------------------------------- | :---------------------------------------- |
 | `name`               |     **Yes**      | -                                   | Docker Stack/Project Name \*              |
-| `file`               |        -         | `docker-compose.yaml`               | Docker Stack/Compose File                 |
+| `file`               |        -         | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*           |
 | `mode`**¹**          |        -         | `swarm`                             | Deploy Mode: [`swarm`, `compose`] \*      |
 | `args`**¹**          |        -         | `--remove-orphans --force-recreate` | Additional Arguments for **Compose** \*   |
 | `host`               |     **Yes**      | -                                   | Remote Docker Hostname or IP \*           |
@@ -85,6 +85,9 @@ fi
 </details>
 
 **name:** Stack name for Swarm and project name for Compose.
+
+**file:** Stack file or Compose file(s). Multiple files can be provided, space seperated, and a `-f` will be prepended to each.
+Example: `web.yaml db.yaml`.
 
 **mode:** _Compose only._ Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts.
 
