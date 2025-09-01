@@ -37,6 +37,9 @@ inputs:
   ssh_key:
     description: "Remote SSH Key File"
     required: false
+  disable_keyscan:
+    description: "Disable SSH Key Scan"
+    required: false
   env_file:
     description: "Environment File"
     required: false
