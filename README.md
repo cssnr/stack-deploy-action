@@ -36,6 +36,20 @@ This allows you to easily prepare your environment for deployment using normal s
 Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
 You can view all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
 
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name' # set to your stack name
+    file: 'docker-compose.yaml' # set to your compose file
+    host: ${{ secrets.DOCKER_HOST }}
+    user: ${{ secrets.DOCKER_USER }}
+    port: 22 # 22 is default, you can remove or change this
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    mode: swarm # if not using swarm set to: compose
+```
+
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Inputs
@@ -184,13 +198,14 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 - name: 'Stack Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
-    name: 'stack-name'
-    file: 'docker-compose-swarm.yaml'
+    name: 'stack-name' # set to your stack name
+    file: 'docker-compose.yaml' # set to your compose file
     host: ${{ secrets.DOCKER_HOST }}
-    port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
+    port: 22 # 22 is default, you can remove or change this
     pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    mode: swarm # if not using swarm set to: compose
 ```
 
 ## Examples
