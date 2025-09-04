@@ -25,22 +25,23 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-> [!TIP]  
-> Now works with Docker **Compose. No&nbsp;Swarm&nbsp;Required!**  
-> ▶️ Set `mode: compose`. See [Inputs](#Inputs) for more details...
-
 This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
 You can also optionally authenticate against a private registry using a username and password.
 
 This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
 
+Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
+for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
+
+For more details see the [src/main.sh](src/main.sh) and [action.yaml](action.yaml).
+
 **Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
 
-> [!NOTE]  
-> Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
-> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
+> [!IMPORTANT]
+> Documentation Site: https://docker-deploy.cssnr.com/
+> Please refer to the website for up-to-date documentation.
 
-For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
+Note: the documentation in this README will be reduced to a minimal version with the bulk of the [documentation](https://github.com/cssnr/stack-deploy-docs) on the [website](https://docker-deploy.cssnr.com/).
 
 ## Inputs
 
@@ -69,6 +70,8 @@ For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
 > **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
 > \* More details below...
+
+View the [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs).
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -194,6 +197,8 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 ```
 
 ## Examples
+
+View more [Examples](https://docker-deploy.cssnr.com/guides/examples).
 
 💡 _Click on an example heading to expand or collapse the example._
 
@@ -485,6 +490,8 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 ## Features
 
+View the [Features](https://docker-deploy.cssnr.com/docs/inputs).
+
 - Deploy to a remote host using SSH or Password authentication.
 - Deploy using a remote context from the current working directory.
 - Deploy from a compose file to either a Docker Swarm or Compose host.
@@ -505,13 +512,15 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 
 - Report an Issue: https://github.com/cssnr/stack-deploy-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy)
+- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy%20Action)
 
 For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.github/blob/master/.github/SUPPORT.md#support).
 
 # Contributing
 
 If you would like to submit a PR, please review the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+To contribute to the [documentation](https://docker-deploy.cssnr.com/) go here: https://github.com/cssnr/stack-deploy-docs
 
 Please consider making a donation to support the development of this project
 and [additional](https://cssnr.com/) open source projects.
