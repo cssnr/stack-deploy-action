@@ -25,23 +25,19 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
-You can also optionally authenticate against a private registry using a username and password.
+Easily Deploy a Docker Swarm or Compose stack from a compose file to a remote Docker host over SSH with keyfile or password authentication.
 
-This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
+Deploy directly from the actions working directory without copying any files using a remote Docker context.
+This allows you to easily prepare your environment for deployment.
 
-Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
-for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
+Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more...
 
-For more details see the [src/main.sh](src/main.sh) and [action.yaml](action.yaml).
+View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) to get up and running.
+
+> [!TIP]  
+> View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) to get up and running.
 
 **Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
-
-> [!IMPORTANT]
-> Documentation Site: https://docker-deploy.cssnr.com/
-> Please refer to the website for up-to-date documentation.
-
-Note: the documentation in this README will be reduced to a minimal version with the bulk of the [documentation](https://github.com/cssnr/stack-deploy-docs) on the [website](https://docker-deploy.cssnr.com/).
 
 ## Inputs
 
