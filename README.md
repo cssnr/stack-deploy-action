@@ -50,6 +50,8 @@ You can view all the [features](https://docker-deploy.cssnr.com/guides/features)
     mode: swarm # if not using swarm set to: compose
 ```
 
+For usage and setup guides, visit the website: https://docker-deploy.cssnr.com/
+
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Inputs
