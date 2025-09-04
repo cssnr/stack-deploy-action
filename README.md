@@ -26,23 +26,37 @@
 - [Contributing](#Contributing)
 
 > [!TIP]  
-> Now works with Docker **Compose. No&nbsp;Swarm&nbsp;Required!**  
-> ▶️ Set `mode: compose`. See [Inputs](#Inputs) for more details...
+> ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
 
-This action deploys a docker stack from a compose file to a remote docker host using SSH Password or Key File Authentication.
-You can also optionally authenticate against a private registry using a username and password.
+Easily Deploy a Docker Swarm or Compose Stack, from a compose file, to a remote Docker host over SSH, with keyfile or password authentication.
 
-This action uses a remote docker context to deploy the stack from the working directory allowing you to easily prepare the workspace for deployment.
+Deploy directly from the actions working directory without copying any files using a remote Docker context.
+This allows you to easily prepare your environment for deployment using normal steps.
 
-**Portainer Users:** You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)
+Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
+You can view all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
 
-> [!NOTE]  
-> Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests)
-> for new features or [Open an Issue](https://github.com/cssnr/stack-deploy-action/issues) if you find any bugs.
+```yaml
+- name: 'Stack Deploy'
+  uses: cssnr/stack-deploy-action@v1
+  with:
+    name: 'stack-name' # set to your stack name
+    file: 'docker-compose.yaml' # set to your compose file
+    host: ${{ secrets.DOCKER_HOST }}
+    user: ${{ secrets.DOCKER_USER }}
+    port: 22 # 22 is default, you can remove or change this
+    pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
+    ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    mode: swarm # if not using swarm set to: compose
+```
 
-For more details see [action.yaml](action.yaml) and [src/main.sh](src/main.sh).
+For usage and setup guides, visit the website: https://docker-deploy.cssnr.com/
+
+_Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Inputs
+
+View the full [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) on the website.
 
 | Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
 | :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
@@ -83,6 +97,8 @@ fi
 ```
 
 Compose Note: `"${STACK_FILES[@]}"` is an array of `-f docker-compose.yaml` for every `file` in the argument.
+
+---
 
 </details>
 
@@ -184,16 +200,19 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 - name: 'Stack Deploy'
   uses: cssnr/stack-deploy-action@v1
   with:
-    name: 'stack-name'
-    file: 'docker-compose-swarm.yaml'
+    name: 'stack-name' # set to your stack name
+    file: 'docker-compose.yaml' # set to your compose file
     host: ${{ secrets.DOCKER_HOST }}
-    port: ${{ secrets.DOCKER_PORT }}
     user: ${{ secrets.DOCKER_USER }}
+    port: 22 # 22 is default, you can remove or change this
     pass: ${{ secrets.DOCKER_PASS }} # not needed with ssh_key
     ssh_key: ${{ secrets.DOCKER_SSH_KEY }} # not needed with pass
+    mode: swarm # if not using swarm set to: compose
 ```
 
 ## Examples
+
+View more [Examples](https://docker-deploy.cssnr.com/guides/examples) on the website.
 
 💡 _Click on an example heading to expand or collapse the example._
 
@@ -485,14 +504,17 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 ## Features
 
-- Deploy to a remote host using SSH or Password authentication.
-- Deploy using a remote context from the current working directory.
-- Deploy from a compose file to either a Docker Swarm or Compose host.
-- Displays output in logs, captures it in the Summary, and checks the status.
-- Allows logging into a private registry and deploying with registry auth.
-- Allows specifying all arguments for both Swarm and Compose deployments.
+View all the [Features](https://docker-deploy.cssnr.com/docs/inputs) on the website.
 
-Don't see your feature here? Request it below in the [Support](#Support) section.
+- Deploy to Docker Swarm or Compose.
+- Deploy over SSH using keyfile or password.
+- Deploy from the current working directory.
+- Deploy from a private registry with credentials.
+- Job Summary with deployment output, including errors.
+- Supports multiple compose file and stack deployments.
+- Allows setting custom arguments for the deployment command.
+
+Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
 # Support
 
@@ -505,13 +527,15 @@ If you are experiencing an issue/bug or getting unexpected results you can:
 
 - Report an Issue: https://github.com/cssnr/stack-deploy-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy)
+- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Stack%20Deploy%20Action)
 
 For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.github/blob/master/.github/SUPPORT.md#support).
 
 # Contributing
 
 If you would like to submit a PR, please review the [CONTRIBUTING.md](CONTRIBUTING.md).
+
+To contribute to the [documentation site](https://docker-deploy.cssnr.com/) go here: https://github.com/cssnr/stack-deploy-docs
 
 Please consider making a donation to support the development of this project
 and [additional](https://cssnr.com/) open source projects.
