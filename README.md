@@ -33,7 +33,7 @@ Easily Deploy a Docker Swarm or Compose stack from a compose file to a remote Do
 Deploy directly from the actions working directory without copying any files using a remote Docker context.
 This allows you to easily prepare your environment for deployment using normal steps.
 
-Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more...
+Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
 You can check out all the [features](https://docker-deploy.cssnr.com/guides/features).
 
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
@@ -487,14 +487,15 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 View the [Features](https://docker-deploy.cssnr.com/docs/inputs).
 
-- Deploy to a remote host using SSH or Password authentication.
-- Deploy using a remote context from the current working directory.
-- Deploy from a compose file to either a Docker Swarm or Compose host.
-- Displays output in logs, captures it in the Summary, and checks the status.
-- Allows logging into a private registry and deploying with registry auth.
-- Allows specifying all arguments for both Swarm and Compose deployments.
+- Deploy to Docker Swarm or Compose.
+- Deploy over SSH using keyfile or password.
+- Deploy from the current working directory.
+- Deploy from a private registry with credentials.
+- Job Summary with deployment output, including errors.
+- Supports multiple compose file and stack deployments.
+- Allows setting custom arguments for the deployment command.
 
-Don't see your feature here? Request it below in the [Support](#Support) section.
+Don't see your feature here? Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
 # Support
 
