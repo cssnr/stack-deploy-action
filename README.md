@@ -28,13 +28,13 @@
 > [!TIP]  
 > ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
 
-Easily Deploy a Docker Swarm or Compose stack from a compose file to a remote Docker host over SSH with keyfile or password authentication.
+Easily Deploy a Docker Swarm or Compose Stack, from a compose file, to a remote Docker host over SSH, with keyfile or password authentication.
 
 Deploy directly from the actions working directory without copying any files using a remote Docker context.
 This allows you to easily prepare your environment for deployment using normal steps.
 
 Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
-You can check out all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
+You can view all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
 
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
@@ -81,6 +81,8 @@ fi
 ```
 
 Compose Note: `"${STACK_FILES[@]}"` is an array of `-f docker-compose.yaml` for every `file` in the argument.
+
+---
 
 </details>
 
@@ -485,6 +487,8 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 ## Features
 
+View all the [Features](https://docker-deploy.cssnr.com/docs/inputs) on the website.
+
 - Deploy to Docker Swarm or Compose.
 - Deploy over SSH using keyfile or password.
 - Deploy from the current working directory.
@@ -493,9 +497,7 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 - Supports multiple compose file and stack deployments.
 - Allows setting custom arguments for the deployment command.
 
-View all the [Features](https://docker-deploy.cssnr.com/docs/inputs) on the website.
-
-Don't see your feature here? Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
+Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
 # Support
 
