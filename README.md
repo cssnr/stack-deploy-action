@@ -34,11 +34,13 @@ Deploy directly from the actions working directory without copying any files usi
 This allows you to easily prepare your environment for deployment using normal steps.
 
 Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
-You can check out all the [features](https://docker-deploy.cssnr.com/guides/features).
+You can check out all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
 
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Inputs
+
+View the full [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) on the website.
 
 | Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
 | :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
@@ -65,8 +67,6 @@ _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-st
 > **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
 > \* More details below...
-
-View the [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs).
 
 <details><summary>📟 Click Here to see how the deployment command is generated</summary>
 
@@ -193,7 +193,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 
 ## Examples
 
-View more [Examples](https://docker-deploy.cssnr.com/guides/examples).
+View more [Examples](https://docker-deploy.cssnr.com/guides/examples) on the website.
 
 💡 _Click on an example heading to expand or collapse the example._
 
@@ -485,8 +485,6 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 ## Features
 
-View the [Features](https://docker-deploy.cssnr.com/docs/inputs).
-
 - Deploy to Docker Swarm or Compose.
 - Deploy over SSH using keyfile or password.
 - Deploy from the current working directory.
@@ -494,6 +492,8 @@ View the [Features](https://docker-deploy.cssnr.com/docs/inputs).
 - Job Summary with deployment output, including errors.
 - Supports multiple compose file and stack deployments.
 - Allows setting custom arguments for the deployment command.
+
+View all the [Features](https://docker-deploy.cssnr.com/docs/inputs) on the website.
 
 Don't see your feature here? Please submit a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
@@ -516,7 +516,7 @@ For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.githu
 
 If you would like to submit a PR, please review the [CONTRIBUTING.md](CONTRIBUTING.md).
 
-To contribute to the [documentation](https://docker-deploy.cssnr.com/) go here: https://github.com/cssnr/stack-deploy-docs
+To contribute to the [documentation site](https://docker-deploy.cssnr.com/) go here: https://github.com/cssnr/stack-deploy-docs
 
 Please consider making a donation to support the development of this project
 and [additional](https://cssnr.com/) open source projects.
