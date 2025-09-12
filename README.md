@@ -1,11 +1,12 @@
 [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
-[![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/tags)
+[![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/stack-deploy-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/releases)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/stack-deploy-action?logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/stack-deploy-action/releases/latest)
-[![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
-[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
-[![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
+[![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/release.yaml?logo=cachet&label=release)](https://github.com/cssnr/stack-deploy-action/actions/workflows/release.yaml)
+[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/test.yaml?logo=cachet&label=test)](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml)
+[![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/stack-deploy-action/lint.yaml?logo=cachet&label=lint)](https://github.com/cssnr/stack-deploy-action/actions/workflows/lint.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/pulse)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
+[![Docs Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-docs?logo=vitepress&logoColor=white&label=docs)](https://docker-deploy.cssnr.com/)
 [![GitHub Contributors](https://img.shields.io/github/contributors/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/graphs/contributors)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/stack-deploy-action?logo=bookstack&logoColor=white&label=size)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=sharp&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
@@ -18,10 +19,10 @@
 
 # Docker Stack Deploy Action
 
+- [Features](#Features)
 - [Inputs](#Inputs)
 - [Examples](#Examples)
 - [Tags](#Tags)
-- [Features](#Features)
 - [Support](#Support)
 - [Contributing](#Contributing)
 
@@ -33,8 +34,8 @@ Easily Deploy a Docker Swarm or Compose Stack, from a compose file, to a remote 
 Deploy directly from the actions working directory without copying any files using a remote Docker context.
 This allows you to easily prepare your environment for deployment using normal steps.
 
-Supports authenticating against a private registry, deploying multiple stack files, setting custom arguments, and much more.
-You can view all the [features](https://docker-deploy.cssnr.com/guides/features) on the website.
+Supports many [features](#features) including authenticating against a private registry, deploying multiple stack files,
+setting custom arguments, and much more.
 
 ```yaml
 - name: 'Stack Deploy'
@@ -50,13 +51,27 @@ You can view all the [features](https://docker-deploy.cssnr.com/guides/features)
     mode: swarm # if not using swarm set to: compose
 ```
 
-For usage and setup guides, visit the website: https://docker-deploy.cssnr.com/
+**Make sure to review the [Inputs](#inputs), available [Tags](#tags) and additional [Examples](#examples).**
 
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
+## Features
+
+- Deploy to Docker Swarm or Compose.
+- Deploy over SSH using keyfile or password.
+- Deploy from the current working directory.
+- Deploy from a private registry with credentials.
+- Job Summary with deployment output, including errors.
+- Supports multiple compose file and stack deployments.
+- Allows setting custom arguments for the deployment command.
+- View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.
+
+Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
+
 ## Inputs
 
-View the full [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) on the website.
+> [!IMPORTANT]  
+> View the [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) for comprehensive, up-to-date documentation.
 
 | Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
 | :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
@@ -74,7 +89,7 @@ View the full [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs
 | `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
 | `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
 | `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| `registry_auth`**²** |      -       | -                                   | Enable Registry Authentication \*         |
+| `registry_auth`**²** |      -       | `false`                             | Enable Registry Authentication \*         |
 | `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
 | `registry_user`      |      -       | -                                   | Registry Authentication Username \*       |
 | `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
@@ -212,7 +227,7 @@ failed to create network test_stack-deploy_default: Error response from daemon: 
 
 ## Examples
 
-View more [Examples](https://docker-deploy.cssnr.com/guides/examples) on the website.
+Additional [Examples](https://docker-deploy.cssnr.com/guides/examples) are available on the website.
 
 💡 _Click on an example heading to expand or collapse the example._
 
@@ -371,7 +386,7 @@ jobs:
 
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 'Stack Deploy'
         uses: cssnr/stack-deploy-action@v1
@@ -415,10 +430,10 @@ jobs:
 
   steps:
     - name: 'Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Setup Buildx'
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
       with:
         platforms: 'linux/amd64,linux/arm64'
 
@@ -502,20 +517,6 @@ You can view the release notes for each version on the [releases](https://github
 The **Major** tag is recommended. It is the most up-to-date and always backwards compatible.
 Breaking changes would result in a **Major** version bump. At a minimum you should use a **Minor** tag.
 
-## Features
-
-View all the [Features](https://docker-deploy.cssnr.com/docs/inputs) on the website.
-
-- Deploy to Docker Swarm or Compose.
-- Deploy over SSH using keyfile or password.
-- Deploy from the current working directory.
-- Deploy from a private registry with credentials.
-- Job Summary with deployment output, including errors.
-- Supports multiple compose file and stack deployments.
-- Allows setting custom arguments for the deployment command.
-
-Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
-
 # Support
 
 For general help or to request a feature see:
@@ -533,9 +534,9 @@ For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.githu
 
 # Contributing
 
-If you would like to submit a PR, please review the [CONTRIBUTING.md](CONTRIBUTING.md).
+If you would like to submit a PR, please review the [CONTRIBUTING.md](#contributing-ov-file).
 
-To contribute to the [documentation site](https://docker-deploy.cssnr.com/) go here: https://github.com/cssnr/stack-deploy-docs
+To contribute to the [documentation site](https://docker-deploy.cssnr.com/) go to [cssnr/stack-deploy-docs](https://github.com/cssnr/stack-deploy-docs).
 
 Please consider making a donation to support the development of this project
 and [additional](https://cssnr.com/) open source projects.
@@ -556,5 +557,6 @@ Additionally, you can support other GitHub Actions I have published:
 - [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
 - [Package Changelog Action](https://github.com/cssnr/package-changelog-action?tab=readme-ov-file#readme)
 - [NPM Outdated Check Action](https://github.com/cssnr/npm-outdated-action?tab=readme-ov-file#readme)
+- [Algolia Crawler Action](https://github.com/cssnr/algolia-crawler-action?tab=readme-ov-file#readme)
 
 For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)
