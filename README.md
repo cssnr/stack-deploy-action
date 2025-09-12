@@ -73,27 +73,27 @@ Don't see your feature here? Please help by submitting a [Feature Request](https
 > [!IMPORTANT]  
 > View the [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) for comprehensive, up-to-date documentation.
 
-| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;Input |
-| :------------------- | :----------: | :---------------------------------- | :---------------------------------------- |
-| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*              |
-| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*           |
-| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode [`swarm`, `compose`] \*       |
-| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional **Compose** Arguments \*       |
-| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*           |
-| `port`               |      -       | `22`                                | Remote Docker Port                        |
-| `user`               |   **Yes**    | -                                   | Remote Docker Username                    |
-| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                 |
-| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                    |
-| `disable_keyscan`    |      -       | `false`                             | Disable SSH Keyscan `ssh-keyscan` \*      |
-| `env_file`           |      -       | -                                   | Docker Environment File \*                |
-| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*       |
-| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable             |
-| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \* |
-| `registry_auth`**²** |      -       | `false`                             | Enable Registry Authentication \*         |
-| `registry_host`      |      -       | -                                   | Registry Authentication Host \*           |
-| `registry_user`      |      -       | -                                   | Registry Authentication Username \*       |
-| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*       |
-| `summary`            |      -       | `true`                              | Add Job Summary \*                        |
+| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;the&nbsp;Input&nbsp;Value |
+| :------------------- | :----------: | :---------------------------------- | :------------------------------------------------------------ |
+| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*                                  |
+| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*                               |
+| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode [`swarm`, `compose`] \*                           |
+| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional **Compose** Arguments \*                           |
+| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*                               |
+| `port`               |      -       | `22`                                | Remote Docker Port                                            |
+| `user`               |   **Yes**    | -                                   | Remote Docker Username                                        |
+| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                                     |
+| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                                        |
+| `disable_keyscan`    |      -       | `false`                             | Disable SSH Keyscan `ssh-keyscan` \*                          |
+| `env_file`           |      -       | -                                   | Docker Environment File \*                                    |
+| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*                           |
+| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable                                 |
+| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \*                     |
+| `registry_auth`**²** |      -       | `false`                             | Enable Registry Authentication \*                             |
+| `registry_host`      |      -       | -                                   | Registry Authentication Host \*                               |
+| `registry_user`      |      -       | -                                   | Registry Authentication Username \*                           |
+| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*                           |
+| `summary`            |      -       | `true`                              | Add Job Summary \*                                            |
 
 > **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
