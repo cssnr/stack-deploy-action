@@ -5,6 +5,8 @@
 
 Note: This guide is not updated for Compose but those tests work similar.
 
+To contribute to the [documentation site](https://docker-deploy.cssnr.com/) go to [cssnr/stack-deploy-docs](https://github.com/cssnr/stack-deploy-docs).
+
 ## Workflow
 
 1. Fork the repository.

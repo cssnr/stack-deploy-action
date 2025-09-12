@@ -58,6 +58,7 @@ inputs:
   registry_auth:
     description: "Enable Registry Auth"
     required: false
+    default: "false"
   registry_host:
     description: "Registry Auth Hostname"
     required: false
