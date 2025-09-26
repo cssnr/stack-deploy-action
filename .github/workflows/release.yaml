@@ -24,10 +24,10 @@ jobs:
           echo "steps.tags.outputs.tags: ${{ steps.tags.outputs.tags }}"
 
       - name: "Update Release Notes Action"
-        uses: smashedr/update-release-notes-action@master
         continue-on-error: true
+        uses: smashedr/update-release-notes-action@master
         with:
-          tags: "${{ steps.tags.outputs.tags }}"
+          tags: ${{ steps.tags.outputs.tags }}
           location: tail
 
       - name: "Send Failure Notification"

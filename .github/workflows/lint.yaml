@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  pull-requests: write
+
 jobs:
   lint:
     name: "Lint"
@@ -18,7 +21,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       #- name: "Debug event.json"
       #  run: |
