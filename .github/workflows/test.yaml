@@ -7,13 +7,13 @@ on:
   push:
     branches: ["**"]
     paths:
+      - ".github/workflows/test.yaml"
       - "dist/**"
       - "src/**"
-      - ".github/workflows/test.yaml"
-      - "Dockerfile"
       - "package*.json"
       - "requirements*.txt"
       - "action.yaml"
+      - "Dockerfile"
 
 env:
   PRIVATE_IMAGE: ${{ vars.PRIVATE_IMAGE || 'smashedr/alpine-private:latest' }}

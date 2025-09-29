@@ -5,6 +5,7 @@ on:
 
 permissions:
   pull-requests: write
+  issues: write
 
 jobs:
   labeler:
@@ -36,7 +37,7 @@ jobs:
 
       - name: "Label Creator"
         continue-on-error: true
-        uses: cssnr/label-creator-action@master
+        uses: cssnr/label-creator-action@v1
         with:
           file: .configs/labels/labels.yaml
 
