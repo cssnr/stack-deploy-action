@@ -7,7 +7,7 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-action?logo=github&label=updated)](https://github.com/cssnr/stack-deploy-action/pulse)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/stack-deploy-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/stack-deploy-action)
 [![Docs Last Commit](https://img.shields.io/github/last-commit/cssnr/stack-deploy-docs?logo=vitepress&logoColor=white&label=docs)](https://docker-deploy.cssnr.com/)
-[![GitHub Contributors](https://img.shields.io/github/contributors/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/graphs/contributors)
+[![GitHub Contributors](https://img.shields.io/github/contributors-anon/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/graphs/contributors)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/stack-deploy-action?logo=bookstack&logoColor=white&label=repo%20size)](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/stack-deploy-action?logo=sharp&logoColor=white)](https://github.com/cssnr/stack-deploy-action)
 [![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/stack-deploy-action?logo=github)](https://github.com/cssnr/stack-deploy-action/discussions)
@@ -26,8 +26,9 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-> [!TIP]  
-> ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
+<p align="center"><a title="Docker Stack Deploy" href="https://docker-deploy.cssnr.com/" target="_blank">
+<img alt="Docker Stack Deploy" width="256" height="auto" src="https://raw.githubusercontent.com/cssnr/stack-deploy-docs/refs/heads/master/docs/public/images/logo/logo512.png" />
+</a></p>
 
 Easily Deploy a Docker Swarm or Compose Stack, from a compose file, to a remote Docker host over SSH, with keyfile or password authentication.
 
@@ -36,6 +37,9 @@ This allows you to easily prepare your environment for deployment using normal s
 
 Supports many [features](#features) including authenticating against a private registry, deploying multiple stack files,
 setting custom arguments, and much more.
+
+> [!TIP]  
+> ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
 
 ```yaml
 - name: 'Stack Deploy'
@@ -53,6 +57,27 @@ setting custom arguments, and much more.
 
 **Make sure to review the [Inputs](#inputs), available [Tags](#tags) and additional [Examples](#examples).**
 
+New [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme) to set up a docker context and run remote `docker` commands in workflow steps.
+
+<details><summary>View Context Action Example</summary>
+
+```yaml
+steps:
+  - name: 'Docker Context'
+    uses: cssnr/docker-context-action@v1
+    with:
+      host: ${{ secrets.DOCKER_HOST }}
+      user: ${{ secrets.DOCKER_USER }}
+      pass: ${{ secrets.DOCKER_PASS }}
+
+  - name: 'Stack Deploy'
+    runs: docker stack deploy -c docker-compose.yaml --detach=false stack-name
+```
+
+See the [README.md](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme) on [GitHub](https://github.com/cssnr/docker-context-action) for more details.
+
+</details>
+
 _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Features
@@ -64,7 +89,7 @@ _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-st
 - Job Summary with deployment output, including errors.
 - Supports multiple compose file and stack deployments.
 - Allows setting custom arguments for the deployment command.
-- View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.
+- **View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.**
 
 Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
@@ -73,27 +98,27 @@ Don't see your feature here? Please help by submitting a [Feature Request](https
 > [!IMPORTANT]  
 > View the [Inputs Documentation](https://docker-deploy.cssnr.com/docs/inputs) for comprehensive, up-to-date documentation.
 
-| Input&nbsp;Name      |   Required   | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;the&nbsp;Input&nbsp;Value |
-| :------------------- | :----------: | :---------------------------------- | :------------------------------------------------------------ |
-| `name`               |   **Yes**    | -                                   | Docker Stack/Project Name \*                                  |
-| `file`               |      -       | `docker-compose.yaml`               | Docker Stack/Compose File(s) \*                               |
-| `mode`**¹**          |      -       | `swarm`                             | Deploy Mode [`swarm`, `compose`] \*                           |
-| `args`**¹**          |      -       | `--remove-orphans --force-recreate` | Additional **Compose** Arguments \*                           |
-| `host`               |   **Yes**    | -                                   | Remote Docker Hostname or IP \*                               |
-| `port`               |      -       | `22`                                | Remote Docker Port                                            |
-| `user`               |   **Yes**    | -                                   | Remote Docker Username                                        |
-| `pass`               | or `ssh_key` | -                                   | Remote Docker Password \*                                     |
-| `ssh_key`            |  or `pass`   | -                                   | Remote SSH Key File \*                                        |
-| `disable_keyscan`    |      -       | `false`                             | Disable SSH Keyscan `ssh-keyscan` \*                          |
-| `env_file`           |      -       | -                                   | Docker Environment File \*                                    |
-| `detach`**²**        |      -       | `true`                              | Detach Flag, `false`, to disable \*                           |
-| `prune`**²**         |      -       | `false`                             | Prune Flag, `true`, to enable                                 |
-| `resolve_image`**²** |      -       | `always`                            | Resolve [`always`, `changed`, `never`] \*                     |
-| `registry_auth`**²** |      -       | `false`                             | Enable Registry Authentication \*                             |
-| `registry_host`      |      -       | -                                   | Registry Authentication Host \*                               |
-| `registry_user`      |      -       | -                                   | Registry Authentication Username \*                           |
-| `registry_pass`      |      -       | -                                   | Registry Authentication Password \*                           |
-| `summary`            |      -       | `true`                              | Add Job Summary \*                                            |
+| Input&nbsp;Name      | Default&nbsp;Value                  | Short&nbsp;Description&nbsp;of&nbsp;the&nbsp;Input&nbsp;Value      |
+| :------------------- | :---------------------------------- | :----------------------------------------------------------------- |
+| `name`               | _Required_                          | Docker Stack/Project Name [⤵️](#name)                              |
+| `file`               | `docker-compose.yaml`               | Docker Stack/Compose File(s) [⤵️](#file)                           |
+| `mode`**¹**          | `swarm`                             | Deploy Mode [`swarm`, `compose`] [⤵️](#mode)                       |
+| `args`**¹**          | `--remove-orphans --force-recreate` | Additional **Compose** Arguments [⤵️](#args)                       |
+| `host`               | _Required_                          | Remote Docker Hostname or IP [⤵️](#host)                           |
+| `port`               | `22`                                | Remote Docker Port **port**                                        |
+| `user`               | _Required_                          | Remote Docker Username **user**                                    |
+| `pass`               | _or ssh_key_                        | Remote Docker Password [⤵️](#passssh_key)                          |
+| `ssh_key`            | _or pass_                           | Remote SSH Key File [⤵️](#passssh_key)                             |
+| `disable_keyscan`    | `false`                             | Disable SSH Keyscan `ssh-keyscan` [⤵️](#disable_keyscan)           |
+| `env_file`           | -                                   | Docker Environment File [⤵️](#env_file)                            |
+| `detach`**²**        | `true`                              | Detach Flag, `false`, to disable [⤵️](#detach)                     |
+| `prune`**²**         | `false`                             | Prune Flag, `true`, to enable prune                                |
+| `resolve_image`**²** | `always`                            | Resolve [`always`, `changed`, `never`] [⤵️](#resolve_image)        |
+| `registry_auth`**²** | `false`                             | Enable Registry Authentication [⤵️](#registry_auth)                |
+| `registry_host`      | -                                   | Registry Authentication Host [⤵️](#registry_host)                  |
+| `registry_user`      | -                                   | Registry Authentication Username [⤵️](#registry_userregistry_pass) |
+| `registry_pass`      | -                                   | Registry Authentication Password [⤵️](#registry_userregistry_pass) |
+| `summary`            | `true`                              | Add Job Summary [⤵️](#summary)                                     |
 
 > **¹** Compose Only, view the [Docs](https://docs.docker.com/reference/cli/docker/compose/up/).  
 > **²** Swarm Only, view the [Docs](https://docs.docker.com/reference/cli/docker/stack/deploy/).  
@@ -113,47 +138,78 @@ fi
 
 Compose Note: `"${STACK_FILES[@]}"` is an array of `-f docker-compose.yaml` for every `file` in the argument.
 
+If you need more control over the deployment command or have a complex deployment,
+see the [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme).
+
 ---
 
 </details>
 
-**name:** Stack name for Swarm and project name for Compose.
+#### name
 
-**file:** Stack file or Compose file(s). Multiple files can be provided, space seperated, and a `-f` will be prepended to each.
+Stack name for Swarm and project name for Compose.
+
+#### file
+
+Stack file or Compose file(s). Multiple files can be provided, space seperated, and a `-f` will be prepended to each.
 Example: `web.yaml db.yaml`.
 
-**mode:** _Compose only._ Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts.
+#### mode
 
-**args:** _Compose only._ Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
+_Compose only._ Set this to `compose` to use `compose up` instead of `stack deploy` for non-swarm hosts.
+
+#### args
+
+_Compose only._ Compose arguments to pass to the `compose up` command. Only used for `mode: compose` deployments.
 The `detach` flag defaults to false for compose. With no args the default is `--remove-orphans --force-recreate`.
 Use an empty string to override. For more details, see the compose
 [docs](https://docs.docker.com/reference/cli/docker/compose/up/).
 
-**host:** The hostname or IP address of the remote docker server to deploy too.
+#### host
+
+The hostname or IP address of the remote docker server to deploy too.
 If your hostname is behind a proxy like Cloudflare you will need to use the IP address.
 
-**pass/ssh_key:** You must provide either a `pass` or `ssh_key`, not both.
+#### pass/ssh_key
 
-**disable_keyscan:** This will disable the `ssh-keyscan` command. Advanced use only.
+You must provide either a `pass` or `ssh_key`, not both.
 
-**env_file:** Variables in this file are exported before running stack deploy.
+#### disable_keyscan
+
+This will disable the `ssh-keyscan` command. Advanced use only.
+
+#### env_file
+
+Variables in this file are exported before running stack deploy.
 To use a docker `env_file` specify it in your compose file and make it available in a previous step.
 If you need compose file templating this can also be done in a previous step.
 If using `mode: compose` you can also add the `compose_arg: --env-file stringArray`.
 
-**detach:** _Swarm only._ Set this to `false` to not exit immediately and wait for the services to converge.
+#### detach
+
+_Swarm only._ Set this to `false` to not exit immediately and wait for the services to converge.
 This will generate extra output in the logs and is useful for debugging deployments.
 Defaults to `false` in `mode: compose`.
 
-**resolve_image:** _Swarm only._ When the default `always` is used, this argument is omitted.
+#### resolve_image
 
-**registry_auth:** _Swarm only._ Set to `true` to deploy with `--with-registry-auth`.
+_Swarm only._ When the default `always` is used, this argument is omitted.
 
-**registry_host:** To run `docker login` on another registry. Example: `ghcr.io`.
+#### registry_auth
 
-**registry_user/registry_pass:** Required to run `docker login` before stack deploy.
+_Swarm only._ Set to `true` to deploy with `--with-registry-auth`.
 
-**summary:** Write a Summary for the job. To disable this set to `false`.
+#### registry_host
+
+To run `docker login` on another registry. Example: `ghcr.io`.
+
+#### registry_user/registry_pass
+
+Required to run `docker login` before stack deploy.
+
+#### summary
+
+Write a Summary for the job. To disable this set to `false`.
 
 To view a workflow run, click on a recent [Test](https://github.com/cssnr/stack-deploy-action/actions/workflows/test.yaml) job _(requires login)_.
 
@@ -547,15 +603,17 @@ and [additional](https://cssnr.com/) open source projects.
 Additionally, you can support other GitHub Actions I have published:
 
 - [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
-- [Portainer Stack Deploy](https://github.com/cssnr/portainer-stack-deploy-action?tab=readme-ov-file#readme)
+- [Portainer Stack Deploy Action](https://github.com/cssnr/portainer-stack-deploy-action?tab=readme-ov-file#readme)
+- [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme)
 - [VirusTotal Action](https://github.com/cssnr/virustotal-action?tab=readme-ov-file#readme)
 - [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action?tab=readme-ov-file#readme)
 - [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action?tab=readme-ov-file#readme)
+- [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
 - [Update JSON Value Action](https://github.com/cssnr/update-json-value-action?tab=readme-ov-file#readme)
+- [JSON Key Value Check Action](https://github.com/cssnr/json-key-value-check-action?tab=readme-ov-file#readme)
 - [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action?tab=readme-ov-file#readme)
 - [Cloudflare Purge Cache Action](https://github.com/cssnr/cloudflare-purge-cache-action?tab=readme-ov-file#readme)
 - [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action?tab=readme-ov-file#readme)
-- [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
 - [Package Changelog Action](https://github.com/cssnr/package-changelog-action?tab=readme-ov-file#readme)
 - [NPM Outdated Check Action](https://github.com/cssnr/npm-outdated-action?tab=readme-ov-file#readme)
 - [Label Creator Action](https://github.com/cssnr/label-creator-action?tab=readme-ov-file#readme)
@@ -563,36 +621,32 @@ Additionally, you can support other GitHub Actions I have published:
 - [Upload Release Action](https://github.com/cssnr/upload-release-action?tab=readme-ov-file#readme)
 - [Check Build Action](https://github.com/cssnr/check-build-action?tab=readme-ov-file#readme)
 - [Web Request Action](https://github.com/cssnr/web-request-action?tab=readme-ov-file#readme)
+- [Get Commit Action](https://github.com/cssnr/get-commit-action?tab=readme-ov-file#readme)
 
-<details><summary>Unpublished Actions ❔</summary>
+<details><summary>❔ Unpublished Actions</summary>
 
-These actions' are not published on the Marketplace, but may be useful.
+These actions are not published on the Marketplace, but may be useful.
 
-Generic Actions:
-
-- [cssnr/draft-release-action](https://github.com/cssnr/draft-release-action) - Keep a draft release ready to publish.
-- [cssnr/env-json-action](https://github.com/cssnr/env-json-action) - Convert env file to json or vice versa.
-- [cssnr/get-commit-action](https://github.com/cssnr/get-commit-action) - Get the current commit with full details.
-
-Specific Actions:
-
-- [cssnr/push-artifacts-action](https://github.com/cssnr/push-artifacts-action) - Sync's artifacts to a remote host.
-- [smashedr/update-release-notes-action](https://github.com/smashedr/update-release-notes-action) - Update release notes.
+- [cssnr/draft-release-action](https://github.com/cssnr/draft-release-action?tab=readme-ov-file#readme) - Keep a draft release ready to publish.
+- [cssnr/env-json-action](https://github.com/cssnr/env-json-action?tab=readme-ov-file#readme) - Convert env file to json or vice versa.
+- [cssnr/push-artifacts-action](https://github.com/cssnr/push-artifacts-action?tab=readme-ov-file#readme) - Sync files to a remote host with rsync.
+- [smashedr/update-release-notes-action](https://github.com/smashedr/update-release-notes-action?tab=readme-ov-file#readme) - Update release notes.
+- [smashedr/combine-release-notes-action](https://github.com/smashedr/combine-release-notes-action?tab=readme-ov-file#readme) - Combine release notes.
 
 ---
 
 </details>
 
-<details><summary>Action Templates 📝</summary>
+<details><summary>📝 Template Actions</summary>
 
-These are basic actions' templates that I use for creating new actions.
+These are basic action templates that I use for creating new actions.
 
 - [js-test-action](https://github.com/smashedr/js-test-action?tab=readme-ov-file#readme) - JavaScript
 - [py-test-action](https://github.com/smashedr/py-test-action?tab=readme-ov-file#readme) - Python
 - [ts-test-action](https://github.com/smashedr/ts-test-action?tab=readme-ov-file#readme) - TypeScript
 - [docker-test-action](https://github.com/smashedr/docker-test-action?tab=readme-ov-file#readme) - Docker Image
 
-Note: The `docker-action` template runs from, builds for, and pushes images to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+Note: The `docker-test-action` builds, runs and pushes images to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 
 ---
 
