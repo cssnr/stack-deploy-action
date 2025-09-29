@@ -89,7 +89,7 @@ _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-st
 - Job Summary with deployment output, including errors.
 - Supports multiple compose file and stack deployments.
 - Allows setting custom arguments for the deployment command.
-- View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.
+- **View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.**
 
 Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
@@ -137,6 +137,9 @@ fi
 ```
 
 Compose Note: `"${STACK_FILES[@]}"` is an array of `-f docker-compose.yaml` for every `file` in the argument.
+
+If you need more control over the deployment command or have a complex deployment,
+see the [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme).
 
 ---
 
