@@ -26,8 +26,9 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-> [!TIP]  
-> ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
+<p align="center"><a title="Docker Stack Deploy" href="https://docker-deploy.cssnr.com/" target="_blank">
+<img alt="Docker Stack Deploy" width="256" height="auto" src="https://raw.githubusercontent.com/cssnr/stack-deploy-docs/refs/heads/master/docs/public/images/logo/logo512.png" />
+</a></p>
 
 Easily Deploy a Docker Swarm or Compose Stack, from a compose file, to a remote Docker host over SSH, with keyfile or password authentication.
 
@@ -36,6 +37,9 @@ This allows you to easily prepare your environment for deployment using normal s
 
 Supports many [features](#features) including authenticating against a private registry, deploying multiple stack files,
 setting custom arguments, and much more.
+
+> [!TIP]  
+> ▶️ View the [Getting Started Guide](https://docker-deploy.cssnr.com/guides/get-started) on the website.
 
 ```yaml
 - name: 'Stack Deploy'
@@ -53,11 +57,7 @@ setting custom arguments, and much more.
 
 **Make sure to review the [Inputs](#inputs), available [Tags](#tags) and additional [Examples](#examples).**
 
-_Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
-
-New: [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme)
-
-Set up a docker context in the current workflow to run `docker` commands in subsequent steps.
+New [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme) to set up a docker context and run remote `docker` commands in workflow steps.
 
 <details><summary>View Context Action Example</summary>
 
@@ -77,6 +77,8 @@ steps:
 See the [README.md](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme) on [GitHub](https://github.com/cssnr/docker-context-action) for more details.
 
 </details>
+
+_Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-stack-deploy-action](https://github.com/cssnr/portainer-stack-deploy-action)_
 
 ## Features
 
