@@ -10,14 +10,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  pull-requests: write
-
 jobs:
   lint:
     name: "Lint"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
+    permissions:
+      pull-requests: write
 
     steps:
       - name: "Checkout"
@@ -42,13 +42,6 @@ jobs:
           npm install prettier
           echo "::endgroup::"
           npx prettier --check .
-
-      - name: "Hadolint"
-        if: ${{ !cancelled() }}
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: Dockerfile
-          ignore: DL3018
 
       - name: "Yamllint"
         if: ${{ !cancelled() }}
@@ -75,6 +68,13 @@ jobs:
           "${RUNNER_TEMP}/actionlint" --version
           echo "::endgroup::"
           "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
+
+      - name: "Hadolint"
+        if: ${{ !cancelled() }}
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          ignore: DL3018
 
       #- name: "Vale"
       #  if: ${{ !cancelled() }}

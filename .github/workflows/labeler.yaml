@@ -3,15 +3,15 @@ name: "PR Labeler"
 on:
   pull_request_target:
 
-permissions:
-  pull-requests: write
-  issues: write
-
 jobs:
   labeler:
     name: "Labeler"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
+    permissions:
+      pull-requests: write
+      issues: write
 
     steps:
       - name: "Checkout Configs"
