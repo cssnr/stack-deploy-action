@@ -33,9 +33,11 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
-      #- name: "Debug event.json"
-      #  run: |
-      #    cat "${GITHUB_EVENT_PATH}"
+      #- name: "Debug CTX github"
+      #  continue-on-error: true
+      #  env:
+      #    GITHUB_CTX: ${{ toJSON(github) }}
+      #  run: echo "$GITHUB_CTX"
 
       - name: "1: Write YAML"
         if: ${{ !cancelled() }}
