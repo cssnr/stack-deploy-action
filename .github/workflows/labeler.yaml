@@ -3,6 +3,10 @@ name: "PR Labeler"
 on:
   pull_request_target:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   labeler:
     name: "Labeler"
@@ -15,7 +19,7 @@ jobs:
 
     steps:
       - name: "Checkout Configs"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: cssnr/configs
           ref: master
@@ -37,7 +41,7 @@ jobs:
 
       - name: "Label Creator"
         continue-on-error: true
-        uses: cssnr/label-creator-action@v1
+        uses: cssnr/label-creator-action@latest
         with:
           file: .configs/labels/labels.yaml
 

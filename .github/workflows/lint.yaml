@@ -2,9 +2,9 @@ name: "Lint"
 
 on:
   workflow_dispatch:
-  pull_request:
   push:
     branches: [master]
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,16 +18,26 @@ jobs:
 
     permissions:
       pull-requests: write
+      statuses: write
+      checks: write
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
+
+      #- name: "Debug event.json"
+      #  continue-on-error: true
+      #  run: cat "${GITHUB_EVENT_PATH}"
 
       #- name: "Debug CTX github"
       #  continue-on-error: true
       #  env:
       #    GITHUB_CTX: ${{ toJSON(github) }}
       #  run: echo "$GITHUB_CTX"
+
+      #- name: "Debug Environment"
+      #  continue-on-error: true
+      #  run: env
 
       - name: "ShellCheck"
         if: ${{ !cancelled() }}
@@ -37,7 +47,7 @@ jobs:
         with:
           scandir: src
 
-      - name: "Prettier"
+      - name: "prettier"
         if: ${{ !cancelled() }}
         run: |
           echo "::group::Install"
@@ -45,7 +55,7 @@ jobs:
           echo "::endgroup::"
           npx prettier --check .
 
-      - name: "Yamllint"
+      - name: "yamllint"
         if: ${{ !cancelled() }}
         env:
           CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
@@ -55,7 +65,7 @@ jobs:
           echo "::endgroup::"
           yamllint -d '${{ env.CONFIG }}' .
 
-      - name: "Actionlint"
+      - name: "actionlint"
         if: ${{ !cancelled() }}
         run: |
           echo "::group::Download"
@@ -71,9 +81,9 @@ jobs:
           echo "::endgroup::"
           "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
 
-      - name: "Hadolint"
+      - name: "hadolint"
         if: ${{ !cancelled() }}
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: Dockerfile
           ignore: DL3018

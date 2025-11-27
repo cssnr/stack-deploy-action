@@ -1,0 +1,50 @@
+name: "Pull"
+
+on:
+  pull_request_target:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pull:
+    name: "Pull"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Checkout Pull"
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: "Debug"
+        continue-on-error: true
+        run: |
+          echo "::group::ls"
+          ls -lAh .
+          echo "::endgroup::"
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"
+
+      #- name: "NPM Outdated Check"
+      #  continue-on-error: true
+      #  uses: cssnr/npm-outdated-action@latest
+
+      - name: "Actions Up"
+        continue-on-error: true
+        uses: cssnr/actions-up-action@latest
+        with:
+          exclude: "cssnr/.*,actions/.*"
