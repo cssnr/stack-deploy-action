@@ -90,6 +90,8 @@ _Portainer Users: You can deploy directly to Portainer with: [cssnr/portainer-st
 - Allows setting custom arguments for the deployment command.
 - **View more the [Features](https://docker-deploy.cssnr.com/guides/features) on the website.**
 
+You can also view an [Action Comparison](https://docker-deploy.cssnr.com/guides/resources#action-comparison) of over 50 actions published on the marketplace.
+
 Don't see your feature here? Please help by submitting a [Feature Request](https://github.com/cssnr/stack-deploy-action/discussions/categories/feature-requests).
 
 ## Inputs
